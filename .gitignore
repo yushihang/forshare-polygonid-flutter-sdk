@@ -219,10 +219,10 @@ gradle
 
 # Project specific
 rust/target
-.env
-.env.dev
-dev_env.g.dart
-prod_env.g.dart
+#.env
+#.env.dev
+#dev_env.g.dart
+#prod_env.g.dart
 
 # Code coverage
 coverage/
