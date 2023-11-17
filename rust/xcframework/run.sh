@@ -2,4 +2,4 @@ lipo /Users/yushihang/Documents/HSBC/polygonID/polygonid-flutter-sdk/rust/xcfram
 
 lipo -create /Users/yushihang/Documents/HSBC/polygonID/polygonid-flutter-sdk/rust/xcframework/ios_simulator-x86_64/libbabyjubjub.a  /Users/yushihang/Documents/HSBC/polygonID/polygonid-flutter-sdk/rust/xcframework/ios-simulator-arm64/libbabyjubjub.a -output  /Users/yushihang/Documents/HSBC/polygonID/polygonid-flutter-sdk/rust/xcframework/ios-simulator-arm64-x86_64/libbabyjubjub.a
 
-xcodebuild -create-xcframework -library ios-simulator-arm64/libbabyjubjub.a  -headers header  -library ios_simulator-x86_64/libbabyjubjub.a  -headers header  -output babyjubjub.xcframework
+xcodebuild -create-xcframework -library ios-simulator-arm64-x86_64/libbabyjubjub.a  -headers header  -library ios-arm64/libbabyjubjub.a  -headers header  -output babyjubjub.xcframework
