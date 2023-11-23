@@ -117,7 +117,8 @@ class PrivateKey {
   /// @returns {PublicKey} PublicKey derived from PrivateKey
   PublicKey public() {
     BabyjubjubLib bjjLib = BabyjubjubLib();
-    String resultString = bjjLib.prv2pub(HexUtils.bytesToHex(sk));
+    String param = HexUtils.bytesToHex(sk);
+    String resultString = bjjLib.prv2pub(param /*HexUtils.bytesToHex(sk)*/);
     final stringList = resultString.split(",");
     stringList[0] = stringList[0].replaceAll("Fr(", "");
     stringList[0] = stringList[0].replaceAll(")", "");
