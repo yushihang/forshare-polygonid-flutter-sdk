@@ -311,6 +311,97 @@ pub extern fn poseidon_hash(input: *const c_char) -> *mut c_char {
 }
 
 #[no_mangle]
+pub extern "C" fn poseidon_hash2_internal(input1: *const c_char, input2: *const c_char) -> *mut c_char {
+    let input_str1 = unsafe { CStr::from_ptr(input1) }.to_str().unwrap();
+    let input_str2 = unsafe { CStr::from_ptr(input2) }.to_str().unwrap();
+
+    let b1: Fr = Fr::from_str(input_str1).unwrap();
+    let b2: Fr = Fr::from_str(input_str2).unwrap();
+
+    let hm_input = vec![b1.clone(), b2.clone()];
+
+    let poseidon = Poseidon::new();
+    let hm = poseidon.hash(hm_input).unwrap();
+
+    return CString::new(to_hex(&hm).as_str()).unwrap().into_raw();
+}
+
+#[no_mangle]
+pub extern "C" fn poseidon_hash2(input1: *const c_char, input2: *const c_char) -> *mut c_char {
+    let result = catch_unwind(|| poseidon_hash2_internal(input1, input2));
+    match result {
+        Ok(res) => res,
+        Err(e) => {
+            println!("poseidon_hash2 Rust Err: {:?}", e);
+            std::ptr::null_mut()
+        }
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn poseidon_hash3_internal(input1: *const c_char, input2: *const c_char, input3: *const c_char) -> *mut c_char {
+    let input_str1 = unsafe { CStr::from_ptr(input1) }.to_str().unwrap();
+    let input_str2 = unsafe { CStr::from_ptr(input2) }.to_str().unwrap();
+    let input_str3 = unsafe { CStr::from_ptr(input3) }.to_str().unwrap();
+
+    let b1: Fr = Fr::from_str(input_str1).unwrap();
+    let b2: Fr = Fr::from_str(input_str2).unwrap();
+    let b3: Fr = Fr::from_str(input_str3).unwrap();
+
+    let hm_input = vec![b1.clone(), b2.clone(), b3.clone()];
+
+    let poseidon = Poseidon::new();
+    let hm = poseidon.hash(hm_input).unwrap();
+
+    return CString::new(to_hex(&hm).as_str()).unwrap().into_raw();
+}
+
+#[no_mangle]
+pub extern "C" fn poseidon_hash3(input1: *const c_char, input2: *const c_char, input3: *const c_char) -> *mut c_char {
+    let result = catch_unwind(|| poseidon_hash3_internal(input1, input2, input3));
+    match result {
+        Ok(res) => res,
+        Err(e) => {
+            println!("poseidon_hash3 Rust Err: {:?}", e);
+            std::ptr::null_mut()
+        }
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn poseidon_hash4_internal(input1: *const c_char, input2: *const c_char, input3: *const c_char, input4: *const c_char) -> *mut c_char {
+    let input_str1 = unsafe { CStr::from_ptr(input1) }.to_str().unwrap();
+    let input_str2 = unsafe { CStr::from_ptr(input2) }.to_str().unwrap();
+    let input_str3 = unsafe { CStr::from_ptr(input3) }.to_str().unwrap();
+    let input_str4 = unsafe { CStr::from_ptr(input4) }.to_str().unwrap();
+
+    let b1: Fr = Fr::from_str(input_str1).unwrap();
+    let b2: Fr = Fr::from_str(input_str2).unwrap();
+    let b3: Fr = Fr::from_str(input_str3).unwrap();
+    let b4: Fr = Fr::from_str(input_str4).unwrap();
+
+    let hm_input = vec![b1.clone(), b2.clone(), b3.clone(), b4.clone()];
+
+    let poseidon = Poseidon::new();
+    let hm = poseidon.hash(hm_input).unwrap();
+
+    return CString::new(to_hex(&hm).as_str()).unwrap().into_raw();
+}
+
+#[no_mangle]
+pub extern "C" fn poseidon_hash4(input1: *const c_char, input2: *const c_char, input3: *const c_char, input4: *const c_char) -> *mut c_char {
+    let result = catch_unwind(|| poseidon_hash4_internal(input1, input2, input3, input4));
+    match result {
+        Ok(res) => res,
+        Err(e) => {
+            println!("poseidon_hash4 Rust Err: {:?}", e);
+            std::ptr::null_mut()
+        }
+    }
+}
+
+
+#[no_mangle]
 //pub extern fn hash_poseidon(tx_compressed_data: *const c_char, to_eth_addr: *const c_char, to_bjj_ay: *const c_char, rq_txcompressed_data_v2: *const c_char, rq_to_eth_addr: *const c_char, rq_to_bjj_ay: *const c_char) -> *mut c_char {
 pub /*extern*/ fn hash_poseidon_internal(claims_tree: *const c_char, revocation_tree: *const c_char, roots_tree_root: *const c_char) -> *mut c_char {
     //let claims_tree_str = unsafe { CStr::from_ptr(claims_tree) }.to_str().unwrap();
