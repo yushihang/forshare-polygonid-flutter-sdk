@@ -92,17 +92,13 @@ pub /*extern*/ fn pack_signature_internal(signature: *const c_char) -> *mut c_ch
     let y_big: BigInt = BigInt::from_bytes_le(Sign::Plus, &r_b8_bytes[15..32]);
     //let y_big = x_big.clone();
 
-    let x:Fr = Fr::from_str(
-            &x_big.to_string(),
-        ).unwrap();
-
-    let y:Fr = Fr::from_str(
-            &y_big.to_string(),
-        ).unwrap();
-
     let r_b8: Point = Point {
-        x: x,
-        y: y,
+        x: Fr::from_str(
+            &x_big.to_string(),
+        ).unwrap(),
+        y: Fr::from_str(
+            &y_big.to_string(),
+        ).unwrap(),
     };
 
     let sig = Signature { r_b8 : r_b8.clone(), s };
