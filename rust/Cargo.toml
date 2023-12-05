@@ -1,4 +1,5 @@
 #https://gist.github.com/surpher/bbf88e191e9d1f01ab2e2bbb85f9b528
+#rm -rf target;CC=/Users/yushihang/Library/Developer/Xcode/DerivedData/myClang-bgbvbtfirelimyeoxcmvtvnahuys/Build/Products/Debug/myCC cargo +nightly build -Z build-std --target aarch64-apple-ios-sim --release -vvvv > cargo.log 2>&1
 
 [package]
 name = "babyjubjub-rs"
@@ -12,7 +13,9 @@ readme = "README.md"
 
 [lib]
 name = "babyjubjub"
-crate-type = ["lib","staticlib"] #, "cdylib"
+crate-type = ["lib", "staticlib"]
+
+#["lib","staticlib", "cdylib"]
 
 [dependencies]
 ff = {package="ff_ce" , version="0.11", features = ["derive"]}
@@ -35,3 +38,7 @@ criterion = "0.3"
 [[bench]]
 name = "bench_babyjubjub"
 harness = false
+
+[build]
+build-stage = 1
+target = ["aarch64-apple-ios-sim"]

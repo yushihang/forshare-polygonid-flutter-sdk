@@ -16,16 +16,22 @@ PolygonID SDK flutter plugin project.
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.static_framework = true
-  s.vendored_libraries = "**/*.a"
+  #s.vendored_libraries = "**/*.a"
   s.dependency 'Flutter'
   s.dependency 'CryptoSwift'
   s.platform = :ios, '9.0'
   s.libraries = ["c++", "z"]
   # s.ios.deployment_target = '9.0'
-  # s.ios.vendored_frameworks = 'Frameworks/Core.xcframework'
+  #s.ios.vendored_frameworks = 'Frameworks/Core.xcframework'
   # Flutter.framework does not contain a i386 nor arm64 slice.
-  s.pod_target_xcconfig = { "OTHER_LDFLAGS" => "-force_load $(PODS_TARGET_SRCROOT)/Frameworks/libbabyjubjub.a -force_load $(PODS_TARGET_SRCROOT)/Frameworks/libpolygonid.a -force_load $(PODS_TARGET_SRCROOT)/Frameworks/librapidsnark.a -force_load $(PODS_TARGET_SRCROOT)/Frameworks/libwitnesscalc_authV2.a -force_load $(PODS_TARGET_SRCROOT)/Frameworks/libwitnesscalc_credentialAtomicQueryMTPV2.a -force_load $(PODS_TARGET_SRCROOT)/Frameworks/libwitnesscalc_credentialAtomicQuerySigV2.a -force_load $(PODS_TARGET_SRCROOT)/Frameworks/libwitnesscalc_credentialAtomicQuerySigV2OnChain.a -force_load $(PODS_TARGET_SRCROOT)/Frameworks/libwitnesscalc_credentialAtomicQueryMTPV2OnChain.a -force_load $(PODS_TARGET_SRCROOT)/Frameworks/libgmp.a -lc++ -lz" }
-  # s.vendored_libraries = "Frameworks/**/*.a"
+  #s.pod_target_xcconfig = { "OTHER_LDFLAGS" => "-force_load $(PODS_TARGET_SRCROOT)/Frameworks/libbabyjubjub.a -force_load $(PODS_TARGET_SRCROOT)/Frameworks/libpolygonid.a -force_load $(PODS_TARGET_SRCROOT)/Frameworks/librapidsnark.a -force_load $(PODS_TARGET_SRCROOT)/Frameworks/libwitnesscalc_authV2.a -force_load $(PODS_TARGET_SRCROOT)/Frameworks/libwitnesscalc_credentialAtomicQueryMTPV2.a -force_load $(PODS_TARGET_SRCROOT)/Frameworks/libwitnesscalc_credentialAtomicQuerySigV2.a -force_load $(PODS_TARGET_SRCROOT)/Frameworks/libwitnesscalc_credentialAtomicQuerySigV2OnChain.a -force_load $(PODS_TARGET_SRCROOT)/Frameworks/libwitnesscalc_credentialAtomicQueryMTPV2OnChain.a -force_load $(PODS_TARGET_SRCROOT)/Frameworks/libgmp.a -lc++ -lz" }
+
+  s.pod_target_xcconfig = { "OTHER_LDFLAGS" =>  "-lc++ -lz " }
+  s.ios.vendored_frameworks = "xcframeworks/*.xcframework"
+
+  #-framework babyjubjub -framework polygonid -framework rapidsnark -framework witnesscalc_authV2 -framework witnesscalc_credentialAtomicQueryMTPV2 -framework witnesscalc_credentialAtomicQuerySigV2 -framework witnesscalc_credentialAtomicQuerySigV2OnChain -framework witnesscalc_credentialAtomicQueryMTPV2OnChain -framework gmp -framework fr -framework fq
+
+  s.preserve_paths = 'xcframeworks/*.xcframework/**/*'
   s.pod_target_xcconfig = {
     'STRIP_STYLE' => 'non-global',
     'DEAD_CODE_STRIPPING' => 'NO',
