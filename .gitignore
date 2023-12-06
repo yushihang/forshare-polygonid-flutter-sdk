@@ -230,3 +230,4 @@ coverage/
 # Generated
 *.mocks.dart
 rust/xcframework/babyjubjub_with_exception_handing/libs
+rust/xcframework/babyjubjub_with_exception_handing/libs_

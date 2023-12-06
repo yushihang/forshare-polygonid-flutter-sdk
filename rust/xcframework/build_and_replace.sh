@@ -4,6 +4,7 @@
 #rustup target add aarch64-apple-ios-sim --toolchain nightly
 #rustup target add aarch64-apple-ios x86_64-apple-ios aarch64-apple-ios-sim
 
+set -e
 
 current_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo "current_directory:$current_directory"
@@ -122,6 +123,7 @@ cp "$babyjubjub_with_exception_handing_libs_path/Release_iphoneos_arm64/$libName
 
 
 lipo -create "$babyjubjub_with_exception_handing_libs_path/Release_iphonesimulator_arm64/$libName" "$babyjubjub_with_exception_handing_libs_path/Release_iphonesimulator_x86_64/$libName" -output "$framework_path/$xcframework_name.xcframework/ios-arm64_x86_64-simulator/$libName"
+
 
 
 
