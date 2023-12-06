@@ -89,11 +89,11 @@ derivedDataPath="$project_directory/DerivedData"
 
 rm -rf "$babyjubjub_with_exception_handing_path/build"
 
-babyjubjub_with_exception_handing_build_path="$babyjubjub_with_exception_handing_path/output"
+babyjubjub_with_exception_handing_libs_path="$babyjubjub_with_exception_handing_path/libs"
 
-rm -rf "$babyjubjub_with_exception_handing_build_path"
+rm -rf "$babyjubjub_with_exception_handing_libs_path"
 
-cp -rf "$framework_path/$xcframework_name.xcframework" "$babyjubjub_with_exception_handing_path/babyjubjub_with_exception_handing_path"
+cp -rf "$framework_path/$xcframework_name.xcframework" "$babyjubjub_with_exception_handing_path/babyjubjub_with_exception_handing"
 
 available_sdks=$(xcodebuild -showsdks)
 ios_simulator_sdk=$(echo "$available_sdks" | grep -o "iphonesimulator[0-9.]*")
@@ -117,11 +117,11 @@ sdk="x86_64"
 xcodebuild -project "$babyjubjub_with_exception_handing_xcode_proj_path" -configuration "$build_configuration" -scheme "$scheme" -derivedDataPath "$derivedDataPath" -sdk "$ios_simulator_sdk" -arch "$sdk"
 
 xcframework_name="babyjubjub_with_exception_handing"
-cp "$babyjubjub_with_exception_handing_path/output/iphoneos_arm64/$libName" "$framework_path/$xcframework_name.xcframework/ios-arm64/$libName"
+cp "$babyjubjub_with_exception_handing_libs_path/Release_iphoneos_arm64/$libName" "$framework_path/$xcframework_name.xcframework/ios-arm64/$libName"
 
 
 
-lipo -create "$babyjubjub_with_exception_handing_path/output/iphonesimulator_arm64/$libName" "$babyjubjub_with_exception_handing_path/output/iphonesimulator_x86_64/$libName" -output "$framework_path/$xcframework_name.xcframework/ios-arm64_x86_64-simulator/$libName"
+lipo -create "$babyjubjub_with_exception_handing_libs_path/Release_iphonesimulator_arm64/$libName" "$babyjubjub_with_exception_handing_libs_path/Release_iphonesimulator_x86_64/$libName" -output "$framework_path/$xcframework_name.xcframework/ios-arm64_x86_64-simulator/$libName"
 
 
 
