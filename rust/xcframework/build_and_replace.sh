@@ -55,15 +55,14 @@ cd "$project_directory"
 myCC_ios_sim_arm64="$parent_directory/xcframework/bin/myCC_ios_sim_arm64"
 myCC_ios_sim_x86_64="$parent_directory/xcframework/bin/myCC_ios_sim_x86_64"
 
-CC="$myCC_ios_sim_arm64" cargo +nightly build -Z build-std --target aarch64-apple-ios-sim --release -vv > "$output_path/cargo.arm64.log"
+CC="$myCC_ios_sim_arm64" RUSTFLAGS="-Zlocation-detail=none" cargo +nightly  build -Z build-std --target aarch64-apple-ios-sim --release -vv > "$output_path/cargo.arm64.log"
 cp "$target_path/aarch64-apple-ios-sim/release/$libName" "$output_path_iphone_simulator_arm64"
 
 
-CC="$myCC_ios_sim_x86_64" cargo build --target=x86_64-apple-ios --release -vv > "$output_path/cargo.x86_64.log"
+CC="$myCC_ios_sim_x86_64" RUSTFLAGS="-Zlocation-detail=none" cargo +nightly build -Z build-std --target=x86_64-apple-ios --release -vv > "$output_path/cargo.x86_64.log"
 cp "$target_path/x86_64-apple-ios/release/$libName" "$output_path_iphone_simulator_x86_64"
 
-cargo lipo --release
-
+RUSTFLAGS="-Zlocation-detail=none" cargo +nightly build -Z build-std --target=aarch64-apple-ios --release -vv  > "$output_path/cargo.iosdevice.log" 2>&1
 cp "$target_path/aarch64-apple-ios/release/$libName" "$output_path_iphoneos_arm64"
 
 xcframework_name="babyjubjub"

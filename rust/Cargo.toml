@@ -42,3 +42,10 @@ harness = false
 [build]
 build-stage = 1
 target = ["aarch64-apple-ios-sim"]
+
+[profile.release]
+debug = false
+opt-level = "z"     # Optimize for size.
+lto = true          # Enable Link Time Optimization
+codegen-units = 1   # Reduce number of codegen units to increase optimizations.
+strip = true        # Automatically strip symbols from the binary.
