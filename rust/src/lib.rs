@@ -36,6 +36,7 @@ use rustc_hex::{FromHex, ToHex};
 use num::Zero;
 use std::panic::catch_unwind;
 
+
 /*lazy_static! {
  static ref B8: Point = Point {
         x: Fr::from_str(
@@ -49,6 +50,23 @@ use std::panic::catch_unwind;
         // z: Fr::one(),
     };
 }*/
+
+pub fn fr_to_decimal(input: &str) -> String {
+    if let (Some(start), Some(end)) = (input.find('('), input.find(')')) {
+        let hex_str = &input[start + 1..end];
+
+        // Remove the "0x" prefix from the hex string
+        let hex_digits = if hex_str.starts_with("0x") { &hex_str[2..] } else { hex_str };
+
+        // Parse the hex string into a BigUint
+        return BigInt::from_str_radix(hex_digits, 16).unwrap().to_string();
+    }
+
+    let hex_digits = if input.starts_with("0x") { &input[2..] } else { input };
+
+    // If no '(' and ')' found, use the entire string
+    BigInt::from_str_radix(hex_digits, 16).unwrap().to_string()
+}
 
 #[no_mangle]
 pub /*extern*/ fn pack_signature_internal(signature: *const c_char) -> *mut c_char {
@@ -299,8 +317,12 @@ pub /*extern*/ fn poseidon_hash_internal(input: *const c_char) -> *mut c_char {
     //let hm_input = vec![x.clone(), y.clone(), z.clone()];
     let poseidon = Poseidon::new();
     let hm = poseidon.hash(hm_input).unwrap();
+
+    let decimal_str = fr_to_decimal(to_hex(&hm).as_str());
+    return CString::new(decimal_str).unwrap().into_raw();
+
     //hm.to_string: Fr(0x29176100eaa962bdc1fe6c654d6a3c130e96a4d1168b33848b897dc502820133)
-    return CString::new(to_hex(&hm).as_str()).unwrap().into_raw();
+    //return CString::new(to_hex(&hm).as_str()).unwrap().into_raw();
     //return CString::new(hm.to_string()).unwrap().into_raw();
 }
 
@@ -329,7 +351,12 @@ pub extern "C" fn poseidon_hash2_internal(input1: *const c_char, input2: *const 
     let poseidon = Poseidon::new();
     let hm = poseidon.hash(hm_input).unwrap();
 
-    return CString::new(to_hex(&hm).as_str()).unwrap().into_raw();
+    let decimal_str = fr_to_decimal(to_hex(&hm).as_str());
+    return CString::new(decimal_str).unwrap().into_raw();
+    
+    //hm.to_string: Fr(0x29176100eaa962bdc1fe6c654d6a3c130e96a4d1168b33848b897dc502820133)
+    //return CString::new(to_hex(&hm).as_str()).unwrap().into_raw();
+    //return CString::new(hm.to_string()).unwrap().into_raw();
 }
 
 #[no_mangle]
@@ -359,7 +386,12 @@ pub extern "C" fn poseidon_hash3_internal(input1: *const c_char, input2: *const 
     let poseidon = Poseidon::new();
     let hm = poseidon.hash(hm_input).unwrap();
 
-    return CString::new(to_hex(&hm).as_str()).unwrap().into_raw();
+    let decimal_str = fr_to_decimal(to_hex(&hm).as_str());
+    return CString::new(decimal_str).unwrap().into_raw();
+    
+    //hm.to_string: Fr(0x29176100eaa962bdc1fe6c654d6a3c130e96a4d1168b33848b897dc502820133)
+    //return CString::new(to_hex(&hm).as_str()).unwrap().into_raw();
+    //return CString::new(hm.to_string()).unwrap().into_raw();
 }
 
 #[no_mangle]
@@ -391,7 +423,12 @@ pub extern "C" fn poseidon_hash4_internal(input1: *const c_char, input2: *const 
     let poseidon = Poseidon::new();
     let hm = poseidon.hash(hm_input).unwrap();
 
-    return CString::new(to_hex(&hm).as_str()).unwrap().into_raw();
+    let decimal_str = fr_to_decimal(to_hex(&hm).as_str());
+    return CString::new(decimal_str).unwrap().into_raw();
+    
+    //hm.to_string: Fr(0x29176100eaa962bdc1fe6c654d6a3c130e96a4d1168b33848b897dc502820133)
+    //return CString::new(to_hex(&hm).as_str()).unwrap().into_raw();
+    //return CString::new(hm.to_string()).unwrap().into_raw();
 }
 
 #[no_mangle]
@@ -493,7 +530,12 @@ pub /*extern*/ fn hash_poseidon_internal(claims_tree: *const c_char, revocation_
     //let hm_input = vec![x.clone(), y.clone(), z.clone()];
     let poseidon = Poseidon::new();
     let hm = poseidon.hash(hm_input).unwrap();
-    return CString::new(to_hex(&hm).as_str()).unwrap().into_raw();
+    let decimal_str = fr_to_decimal(to_hex(&hm).as_str());
+    return CString::new(decimal_str).unwrap().into_raw();
+    
+    //hm.to_string: Fr(0x29176100eaa962bdc1fe6c654d6a3c130e96a4d1168b33848b897dc502820133)
+    //return CString::new(to_hex(&hm).as_str()).unwrap().into_raw();
+    //return CString::new(hm.to_string()).unwrap().into_raw();
 }
 
 
@@ -587,3 +629,41 @@ pub extern fn cstring_free(str: *mut c_char) {
         CString::from_raw(str)
     };
 }
+
+/*
+
+https://play.rust-lang.org/?version=stable&mode=debug&edition=2021
+use num::{BigInt, Num};
+
+
+pub fn fr_to_decimal(input: &str) -> String {
+    if let (Some(start), Some(end)) = (input.find('('), input.find(')')) {
+        let hex_str = &input[start + 1..end];
+
+        // Remove the "0x" prefix from the hex string
+        let hex_digits = if hex_str.starts_with("0x") { &hex_str[2..] } else { hex_str };
+
+        // Parse the hex string into a BigUint
+        return BigInt::from_str_radix(hex_digits, 16).unwrap().to_string();
+    }
+
+    let hex_digits = if input.starts_with("0x") { &input[2..] } else { input };
+
+    // If no '(' and ')' found, use the entire string
+    BigInt::from_str_radix(hex_digits, 16).unwrap().to_string()
+}
+
+fn main() {
+    let hex_str = "Fr(0x978d54b635d7a829d5e3d9bee5a56018ba5e01c10)";
+    let dec_str = fr_to_decimal(hex_str);
+    println!("{}", dec_str);
+    
+    let hex_str2 = "78d54b635d7a829d5e3d9bee5a56018ba5e01c10";
+    let dec_str2 = fr_to_decimal(hex_str2);
+    println!("{}", dec_str2);
+    
+    let hex_str3 = "0x78d54b635d7a829d5e3d9bee5a56018ba5e01c10";
+    let dec_str3 = fr_to_decimal(hex_str3);
+    println!("{}", dec_str3);
+}
+*/

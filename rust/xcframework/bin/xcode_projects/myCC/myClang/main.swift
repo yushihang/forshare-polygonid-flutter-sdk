@@ -32,6 +32,25 @@ func appendLogToFile(_ logString: String, fileURL: URL = URL(fileURLWithPath: "/
     }
 }
 
+func getSysRootPath(sdk:String) -> String { //iphonesimulator iphoneos
+    
+    let process = Process()
+    process.launchPath = "/usr/bin/env"
+    process.arguments = ["xcrun", "--sdk", "\(sdk)", "--show-sdk-path"]
+    
+    let pipe = Pipe()
+    process.standardOutput = pipe
+    
+    process.launch()
+    
+    let data = pipe.fileHandleForReading.readDataToEndOfFile()
+    let output = String(data: data, encoding: .utf8) ?? ""
+    
+    let trimmedString = output.trimmingCharacters(in: .whitespacesAndNewlines)
+    print("getSysRootPath: \(trimmedString)")
+    return trimmedString
+}
+
 extension String {
     func appendLineToURL(fileURL: URL) throws {
         try (self + "\n").write(to: fileURL, atomically: true, encoding: .utf8)
@@ -68,7 +87,8 @@ for (_, argument) in arguments.enumerated() {
 filteredArguments.remove(at: 0)
 
 filteredArguments.insert("-isysroot", at: 0)
-filteredArguments.insert("/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator17.0.sdk", at: 1)
+var sysRoot = getSysRootPath(sdk: "iphonesimulator")
+filteredArguments.insert(sysRoot, at: 1)
 
 filteredArguments.insert("-arch", at: 0)
 filteredArguments.insert("arm64", at: 1)
