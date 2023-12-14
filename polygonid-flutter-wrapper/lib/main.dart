@@ -22,7 +22,7 @@ Future<void> init(List? env) {
       if (circuitsBucketUrl != null &&
           circuitsBucketUrl.isNotEmpty &&
           circuitsBucketUrl is String) {
-        OHGlobalVariables.circuitsBucketUrl = json['circuitsBucketUrl'];
+        OHGlobalVariables.circuitsBucketUrl = circuitsBucketUrl;
         print('circuitsBucketUrl: $circuitsBucketUrl');
       }
     }
