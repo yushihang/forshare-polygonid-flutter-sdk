@@ -9,10 +9,9 @@ import 'package:polygonid_flutter_sdk/common/domain/entities/filter_entity.dart'
 import 'package:polygonid_flutter_sdk/credential/domain/entities/claim_entity.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/authorization/request/auth_request_iden3_message_entity.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/common/iden3_message_entity.dart';
-import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/common/request/proof_scope_request.dart';
+import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/credential/request/offer_iden3_message_entity.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/interaction/interaction_base_entity.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/interaction/interaction_entity.dart';
-import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/credential/request/offer_iden3_message_entity.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/proof/response/iden3comm_proof_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/entities/did_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/entities/identity_entity.dart';
@@ -69,6 +68,7 @@ class PolygonIdFlutterChannel
   }
 
   Future<void> _closeSubscription(String name) async {
+    print("launch test: _closeSubscription");
     await _streamSubscriptions[name]?.cancel();
     _streamSubscriptions.remove(name);
   }
@@ -524,6 +524,7 @@ class PolygonIdFlutterChannel
       List<InteractionType>? types,
       List<InteractionState>? states,
       List<FilterEntity>? filters}) {
+    print("launch test: getInteractions");
     return _polygonIdSdk.iden3comm.getInteractions(
         genesisDid: genesisDid,
         profileNonce: profileNonce,
@@ -731,6 +732,7 @@ class PolygonIdFlutterChannel
       {required List<String> claimIds,
       required String genesisDid,
       required String privateKey}) {
+    print("launch test: removeClaims");
     return _polygonIdSdk.credential.removeClaims(
         claimIds: claimIds, genesisDid: genesisDid, privateKey: privateKey);
   }

@@ -7,13 +7,11 @@ import 'package:polygonid_flutter_sdk/common/domain/use_cases/get_env_use_case.d
 import 'package:polygonid_flutter_sdk/common/domain/use_cases/get_package_name_use_case.dart';
 import 'package:polygonid_flutter_sdk/common/infrastructure/stacktrace_stream_manager.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/authorization/request/auth_request_iden3_message_entity.dart';
-import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/authorization/response/auth_response_iden3_message_entity.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/proof/response/iden3comm_proof_entity.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/repositories/iden3comm_repository.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/use_cases/check_profile_and_did_current_env.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/use_cases/get_auth_token_use_case.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/use_cases/get_iden3comm_proofs_use_case.dart';
-import 'package:polygonid_flutter_sdk/identity/domain/use_cases/get_current_env_did_identifier_use_case.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/use_cases/get_did_identifier_use_case.dart';
 import 'package:polygonid_flutter_sdk/proof/domain/exceptions/proof_generation_exceptions.dart';
 import 'package:polygonid_flutter_sdk/proof/infrastructure/proof_generation_stream_manager.dart';
@@ -65,6 +63,7 @@ class AuthenticateUseCase extends FutureUseCase<AuthenticateParam, void> {
   @override
   Future<void> execute({required AuthenticateParam param}) async {
     try {
+      print("launch test: authenticate");
       // we want to misure the time of the whole process
       Stopwatch stopwatch = Stopwatch()..start();
       logger().i("stopwatch started");
@@ -159,8 +158,8 @@ class AuthenticateUseCase extends FutureUseCase<AuthenticateParam, void> {
       if (error is NullAtomicQueryInputsException) {
         _stacktraceManager.addTrace(
             "[AuthenticateUseCase] Error: $error\nerror: ${error.errorMessage}");
-        _stacktraceManager.addError(
-            "[AuthenticateUseCase] error: ${error.errorMessage}");
+        _stacktraceManager
+            .addError("[AuthenticateUseCase] error: ${error.errorMessage}");
         logger().d(
             "[AuthenticateUseCase] Error: $error\nerror: ${error.errorMessage}");
       } else {

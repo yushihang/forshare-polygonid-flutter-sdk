@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:polygonid_flutter_sdk/common/domain/use_case.dart';
 import 'package:polygonid_flutter_sdk/common/infrastructure/stacktrace_stream_manager.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/authorization/request/auth_request_iden3_message_entity.dart';
@@ -21,6 +22,7 @@ class GetIden3MessageUseCase extends FutureUseCase<String, Iden3MessageEntity> {
 
   @override
   Future<Iden3MessageEntity> execute({required String param}) {
+    print("launch test: getIden3Message");
     try {
       Map<String, dynamic> json = jsonDecode(param);
 

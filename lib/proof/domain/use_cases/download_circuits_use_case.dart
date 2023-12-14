@@ -13,6 +13,7 @@ class DownloadCircuitsUseCase extends StreamUseCase<void, DownloadInfo> {
 
   @override
   Stream<DownloadInfo> execute({void param}) async* {
+    print("launch test: startDownloadCircuits");
     yield* await _proofRepository.circuitsFilesExist().then((exist) {
       if (exist) {
         return Stream.value(

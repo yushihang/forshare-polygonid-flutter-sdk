@@ -8,7 +8,6 @@ import 'package:polygonid_flutter_sdk/credential/domain/use_cases/get_claim_revo
 import 'package:polygonid_flutter_sdk/credential/domain/use_cases/get_claims_use_case.dart';
 import 'package:polygonid_flutter_sdk/credential/domain/use_cases/remove_claims_use_case.dart';
 import 'package:polygonid_flutter_sdk/credential/domain/use_cases/update_claim_use_case.dart';
-import 'package:polygonid_flutter_sdk/iden3comm/domain/exceptions/iden3comm_exceptions.dart';
 
 import '../credential/domain/use_cases/save_claims_use_case.dart';
 
@@ -146,6 +145,7 @@ class Credential implements PolygonIdSdkCredential {
       {List<FilterEntity>? filters,
       required String genesisDid,
       required String privateKey}) {
+    print("launch test: getClaims");
     _stacktraceManager.clear();
     _stacktraceManager.addTrace("PolygonIdSdk.Credential.getClaims called");
     return _getClaimsUseCase.execute(
@@ -165,6 +165,7 @@ class Credential implements PolygonIdSdkCredential {
     _stacktraceManager.clear();
     _stacktraceManager
         .addTrace("PolygonIdSdk.Credential.getClaimsByIds called");
+    print("launch test: getClaimsByIds");
     return _getClaimsUseCase.execute(
         param: GetClaimsParam(
       filters: [
@@ -209,6 +210,7 @@ class Credential implements PolygonIdSdkCredential {
       required String privateKey}) {
     _stacktraceManager.clear();
     _stacktraceManager.addTrace("PolygonIdSdk.Credential.removeClaims called");
+    print("launch test: removeClaims");
     return _removeClaimsUseCase.execute(
         param: RemoveClaimsParam(
       claimIds: claimIds,
@@ -224,6 +226,7 @@ class Credential implements PolygonIdSdkCredential {
       required String privateKey}) {
     _stacktraceManager.clear();
     _stacktraceManager.addTrace("PolygonIdSdk.Credential.removeClaim called");
+    print("launch test: removeClaim");
     return _removeClaimsUseCase.execute(
         param: RemoveClaimsParam(
       claimIds: [claimId],

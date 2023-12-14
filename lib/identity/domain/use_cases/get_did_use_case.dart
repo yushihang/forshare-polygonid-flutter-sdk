@@ -1,7 +1,6 @@
 import 'package:polygonid_flutter_sdk/common/domain/domain_logger.dart';
-import 'package:polygonid_flutter_sdk/identity/domain/entities/did_entity.dart';
-
 import 'package:polygonid_flutter_sdk/common/domain/use_case.dart';
+import 'package:polygonid_flutter_sdk/identity/domain/entities/did_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/repositories/identity_repository.dart';
 
 class GetDidUseCase extends FutureUseCase<String, DidEntity> {
@@ -11,6 +10,7 @@ class GetDidUseCase extends FutureUseCase<String, DidEntity> {
 
   @override
   Future<DidEntity> execute({required String param}) {
+    print("launch test: getDidEntity");
     List<String> splits = param.split(":");
 
     if (splits.length == 5 && splits[0] == "did" && splits[1] == "polygonid") {

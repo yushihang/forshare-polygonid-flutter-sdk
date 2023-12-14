@@ -7,7 +7,6 @@ import 'package:polygonid_flutter_sdk/credential/domain/entities/claim_entity.da
 import 'package:polygonid_flutter_sdk/credential/domain/repositories/credential_repository.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/exceptions/identity_exceptions.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/use_cases/get_current_env_did_identifier_use_case.dart';
-import 'package:polygonid_flutter_sdk/identity/domain/use_cases/identity/get_identity_use_case.dart';
 
 class GetClaimsParam {
   final List<FilterEntity>? filters;
@@ -39,6 +38,8 @@ class GetClaimsUseCase
   Future<List<ClaimEntity>> execute({required GetClaimsParam param}) async {
     // if profileNonce is zero, return all profiles credentials,
     // if profileNonce > 0 then return only credentials from that profile
+
+    print("launch test: getClaims execute");
     if (param.profileNonce >= GENESIS_PROFILE_NONCE) {
       // TODO check param.did and did from profile nonce are the same or return exception
       /*String did = await _getCurrentEnvDidIdentifierUseCase.execute(

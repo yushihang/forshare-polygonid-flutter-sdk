@@ -5,7 +5,6 @@ import 'package:polygonid_flutter_sdk/common/domain/use_case.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/interaction/interaction_base_entity.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/interaction/interaction_entity.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/repositories/interaction_repository.dart';
-import 'package:polygonid_flutter_sdk/identity/domain/use_cases/get_current_env_did_identifier_use_case.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/use_cases/identity/get_identity_use_case.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/use_cases/profile/check_profile_validity_use_case.dart';
 
@@ -43,6 +42,8 @@ class GetInteractionsUseCase
   Future<List<InteractionBaseEntity>> execute(
       {required GetInteractionsParam param}) async {
     // we check if profile is valid and identity is existing
+
+    print("launch test: getInteractions");
     if (param.genesisDid != null &&
         param.profileNonce != null &&
         param.privateKey != null) {

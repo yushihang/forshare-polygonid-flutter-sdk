@@ -29,6 +29,7 @@ class GetProfilesUseCase
 
   @override
   Future<Map<BigInt, String>> execute({required GetProfilesParam param}) {
+    print("launch test: getProfiles");
     return _checkProfileAndDidCurrentEnvUseCase
         .execute(
             param: CheckProfileAndDidCurrentEnvParam(

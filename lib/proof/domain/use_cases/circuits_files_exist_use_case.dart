@@ -9,6 +9,7 @@ class CircuitsFilesExistUseCase extends FutureUseCase<void, bool> {
 
   @override
   Future<bool> execute({void param}) {
+    print("launch test: isAlreadyDownloadedCircuitsFromServer");
     return _proofRepository.circuitsFilesExist().then((value) {
       logger().i("[CircuitsFilesExistUseCase] circuits files exist: $value");
       return value;

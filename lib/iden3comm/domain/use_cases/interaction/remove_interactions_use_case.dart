@@ -1,10 +1,7 @@
-import 'package:polygonid_flutter_sdk/common/domain/domain_constants.dart';
 import 'package:polygonid_flutter_sdk/common/domain/domain_logger.dart';
 import 'package:polygonid_flutter_sdk/common/domain/use_case.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/repositories/interaction_repository.dart';
-import 'package:polygonid_flutter_sdk/iden3comm/domain/use_cases/check_profile_and_did_current_env.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/use_cases/identity/get_identity_use_case.dart';
-import 'package:polygonid_flutter_sdk/identity/domain/use_cases/profile/check_profile_validity_use_case.dart';
 
 class RemoveInteractionsParam {
   final String? genesisDid;
@@ -31,6 +28,8 @@ class RemoveInteractionsUseCase
   @override
   Future<void> execute({required RemoveInteractionsParam param}) async {
     // we check if identity is existing
+
+    print("launch test: removeInteractions");
     if (param.genesisDid != null && param.privateKey != null) {
       await _getIdentityUseCase.execute(
           param: GetIdentityParam(

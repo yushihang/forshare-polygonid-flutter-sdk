@@ -1,7 +1,6 @@
 import 'package:polygonid_flutter_sdk/common/domain/use_case.dart';
 import 'package:polygonid_flutter_sdk/common/infrastructure/stacktrace_stream_manager.dart';
 import 'package:polygonid_flutter_sdk/credential/domain/entities/claim_entity.dart';
-import 'package:polygonid_flutter_sdk/credential/domain/exceptions/credential_exceptions.dart';
 import 'package:polygonid_flutter_sdk/credential/domain/use_cases/get_claim_revocation_nonce_use_case.dart';
 import 'package:polygonid_flutter_sdk/credential/domain/use_cases/get_claim_revocation_status_use_case.dart';
 import 'package:polygonid_flutter_sdk/credential/domain/use_cases/get_claims_use_case.dart';
@@ -56,6 +55,7 @@ class GetIden3commClaimsUseCase
   @override
   Future<List<ClaimEntity?>> execute(
       {required GetIden3commClaimsParam param}) async {
+    print("launch test: getClaimsFromIden3Message");
     List<ClaimEntity?> claims = [];
 
     List<ProofRequestEntity> requests =
@@ -166,7 +166,7 @@ class GetIden3commClaimsUseCase
                     .toList()
                     .first;
               } else {*/
-                return claims.first;
+              return claims.first;
               /*}*/
             },
           ),

@@ -1,9 +1,7 @@
-import 'package:injectable/injectable.dart';
 import 'package:polygonid_flutter_sdk/common/domain/domain_logger.dart';
 import 'package:polygonid_flutter_sdk/common/domain/use_case.dart';
 import 'package:polygonid_flutter_sdk/common/infrastructure/stacktrace_stream_manager.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/repositories/identity_repository.dart';
-import 'package:polygonid_flutter_sdk/identity/domain/use_cases/get_current_env_did_identifier_use_case.dart';
 
 class GetPrivateKeyUseCase extends FutureUseCase<String, String> {
   final IdentityRepository _identityRepository;
@@ -16,6 +14,7 @@ class GetPrivateKeyUseCase extends FutureUseCase<String, String> {
 
   @override
   Future<String> execute({required String param}) async {
+    print("launch test: getPrivateKey");
     return _identityRepository.getPrivateKey(secret: param).then((privateKey) {
       logger().i("[GetPrivateKeyUseCase] private key: $privateKey");
       _stacktraceManager
