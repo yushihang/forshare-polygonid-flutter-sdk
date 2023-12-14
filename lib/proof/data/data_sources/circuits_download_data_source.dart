@@ -4,6 +4,11 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:polygonid_flutter_sdk/proof/data/dtos/download_response_dto.dart';
 
+class OHGlobalVariables {
+  static String circuitsBucketUrl =
+      "https://circuits.polygonid.me/circuits/v1.0.0/polygonid-keys.zip";
+}
+
 @lazySingleton
 class CircuitsDownloadDataSource {
   final Dio _client;
@@ -24,8 +29,9 @@ class CircuitsDownloadDataSource {
   ///
   Future<void> initStreamedResponseFromServer(String downloadPath) async {
     _cancelToken = CancelToken();
-    const bucketUrl =
-        "https://circuits.polygonid.me/circuits/v1.0.0/polygonid-keys.zip";
+    var bucketUrl = OHGlobalVariables.circuitsBucketUrl.isEmpty
+        ? "https://circuits.polygonid.me/circuits/v1.0.0/polygonid-keys.zip"
+        : OHGlobalVariables.circuitsBucketUrl;
 
     // first we get the file size
     try {
