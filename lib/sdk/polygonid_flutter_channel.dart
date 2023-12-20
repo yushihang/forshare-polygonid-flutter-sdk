@@ -203,7 +203,7 @@ class PolygonIdFlutterChannel
           return removeInteractions(
               genesisDid: call.arguments['genesisDid'] as String?,
               privateKey: call.arguments['privateKey'] as String?,
-              ids: call.arguments['ids'] as List<String>);
+              ids: (call.arguments['ids'] as List<dynamic>).cast<String>());
 
         case 'updateInteraction':
           return updateInteraction(
