@@ -7,6 +7,11 @@ import 'package:polygonid_flutter_sdk/proof/data/dtos/download_response_dto.dart
 class OHGlobalVariables {
   static String circuitsBucketUrl =
       "https://circuits.polygonid.me/circuits/v1.0.0/polygonid-keys.zip";
+
+  static int circuitsFileLen = 148475322;
+
+  static String circuitsFileSHA256 =
+      "c68c8f271edf7628b0379b3175896f694f4cdae2edd86309377179d3d75b743a";
 }
 
 @lazySingleton
