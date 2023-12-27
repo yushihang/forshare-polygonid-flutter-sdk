@@ -20,10 +20,28 @@ Future<void> init(List? env) {
     if (json.containsKey('circuitsBucketUrl')) {
       var circuitsBucketUrl = json['circuitsBucketUrl'];
       if (circuitsBucketUrl != null &&
-          circuitsBucketUrl.isNotEmpty &&
-          circuitsBucketUrl is String) {
+          circuitsBucketUrl is String &&
+          circuitsBucketUrl.isNotEmpty) {
         OHGlobalVariables.circuitsBucketUrl = circuitsBucketUrl;
         print('circuitsBucketUrl: $circuitsBucketUrl');
+      }
+    }
+
+    if (json.containsKey('circuitsFileLen')) {
+      var circuitsFileLen = json['circuitsFileLen'];
+      if (circuitsFileLen != null && circuitsFileLen is num) {
+        OHGlobalVariables.circuitsFileLen = circuitsFileLen.toInt();
+        print('circuitsFileLen: $circuitsFileLen');
+      }
+    }
+
+    if (json.containsKey('circuitsFileSHA256')) {
+      var circuitsFileSHA256 = json['circuitsFileSHA256'];
+      if (circuitsFileSHA256 != null &&
+          circuitsFileSHA256 is String &&
+          circuitsFileSHA256.isNotEmpty) {
+        OHGlobalVariables.circuitsFileSHA256 = circuitsFileSHA256;
+        print('circuitsFileSHA256: $circuitsFileSHA256');
       }
     }
   }
