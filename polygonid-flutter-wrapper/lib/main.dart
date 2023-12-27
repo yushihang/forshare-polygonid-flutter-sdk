@@ -16,7 +16,7 @@ void main() {
 @pragma('vm:entry-point')
 Future<void> init(List? env) async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  print('Polygon flutter(dart) framework init');
   bool enabled = false;
   String? host;
   int? port;
@@ -25,6 +25,7 @@ Future<void> init(List? env) async {
     enabled = settings.enabled;
     host = settings.host;
     port = settings.port;
+    print('read system proxy $host:$port enabled:$enabled');
   } catch (e) {
     print(e);
   }

@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
+import 'package:native_flutter_proxy/custom_proxy.dart';
+import 'package:native_flutter_proxy/native_proxy_reader.dart';
 import 'package:polygonid_flutter_sdk/common/domain/domain_logger.dart';
 import 'package:polygonid_flutter_sdk/common/domain/entities/env_entity.dart';
 import 'package:polygonid_flutter_sdk/common/domain/entities/filter_entity.dart';
@@ -416,6 +419,38 @@ class PolygonIdFlutterChannel
             challenge: call.arguments['challenge'] as String?,
             treeState: call.arguments['treeState'] as Map<String, dynamic>?,
           ).then((proof) => jsonEncode(proof));
+
+        case 'useSystemProxy':
+          return () async {
+            bool enabled = false;
+            String? host;
+            int? port;
+            try {
+              ProxySetting settings = await NativeProxyReader.proxySetting;
+              enabled = settings.enabled;
+              host = settings.host;
+              port = settings.port;
+            } catch (e) {
+              print(e);
+            }
+            if (enabled && host != null) {
+              final proxy = CustomProxy(ipAddress: host, port: port);
+              proxy.enable();
+              print("proxy enabled: $host:$port");
+              return "proxy enabled: $host:$port";
+            } else {
+              HttpOverrides.global = null;
+              print("No system proxy, proxy disabled");
+              return "No system proxy, proxy disabled";
+            }
+          }();
+
+        case 'disableProxy':
+          return () async {
+            HttpOverrides.global = null;
+            print("Proxy disabled");
+            return "Proxy disabled";
+          }();
 
         default:
           throw PlatformException(
