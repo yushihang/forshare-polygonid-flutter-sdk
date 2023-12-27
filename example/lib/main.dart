@@ -26,7 +26,7 @@ Future<void> main() async {
   if (enabled && host != null) {
     final proxy = CustomProxy(ipAddress: host, port: port);
     proxy.enable();
-    print("proxy enabled");
+    print("proxy enabled: $host:$port");
   }
 
   final bjj = LibBabyJubJubDataSource(BabyjubjubLib());

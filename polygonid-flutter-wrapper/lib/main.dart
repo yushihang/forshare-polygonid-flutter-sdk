@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:native_flutter_proxy/custom_proxy.dart';
+import 'package:native_flutter_proxy/native_proxy_reader.dart';
 import 'package:polygonid_flutter_sdk/common/domain/entities/env_entity.dart';
 import 'package:polygonid_flutter_sdk/proof/data/data_sources/circuits_download_data_source.dart';
 import 'package:polygonid_flutter_sdk/sdk/polygon_id_sdk.dart';
@@ -12,8 +14,25 @@ void main() {
 /// Initialize the Flutter SDK wrapper
 /// This method is called from the native side
 @pragma('vm:entry-point')
-Future<void> init(List? env) {
+Future<void> init(List? env) async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  bool enabled = false;
+  String? host;
+  int? port;
+  try {
+    ProxySetting settings = await NativeProxyReader.proxySetting;
+    enabled = settings.enabled;
+    host = settings.host;
+    port = settings.port;
+  } catch (e) {
+    print(e);
+  }
+  if (enabled && host != null) {
+    final proxy = CustomProxy(ipAddress: host, port: port);
+    proxy.enable();
+    print("proxy enabled: $host:$port");
+  }
 
   if (env != null && env.isNotEmpty) {
     var json = jsonDecode(env[0]);
