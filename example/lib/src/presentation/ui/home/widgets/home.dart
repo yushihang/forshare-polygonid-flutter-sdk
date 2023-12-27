@@ -1,10 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/authorization/request/auth_request_iden3_message_entity.dart';
-import 'package:polygonid_flutter_sdk/sdk/polygon_id_sdk.dart';
 import 'package:polygonid_flutter_sdk_example/src/presentation/dependency_injection/dependencies_provider.dart';
 import 'package:polygonid_flutter_sdk_example/src/presentation/navigations/routes.dart';
 import 'package:polygonid_flutter_sdk_example/src/presentation/ui/common/widgets/button_next_action.dart';
@@ -27,17 +23,6 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class Person {
-  String name;
-  int age;
-
-  Person({required this.name, required this.age});
-
-  Map<String, dynamic> toJson() {
-    return {'name': name, 'age': age};
-  }
-}
-
 class _HomeScreenState extends State<HomeScreen> {
   late final HomeBloc _bloc;
   @override
@@ -51,83 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          const Text('\n\n\n\n'),
-          const Text('A random idea:'),
-          const Text('A random idea:'),
-          TextButton(
-            onPressed: () {
-              // http.get(Uri.parse(' https://ipfs.io/ipfs/QmdH1Vu79p2NcZLFbHxzJnLuUHJiMZnBeT7SNpLaqK7k9X'))
-              // .then((result) {
-              //         print(result);
-              //       });
-
-              PolygonIdSdk.I.channel.addIdentity().then((result) {
-                print(result);
-
-                String jsonString3 = """
-                        {
-                            "id":"2dd99e29-b387-4096-935d-3c3979d88b5e",
-                            "typ":"application/iden3comm-plain-json",
-                            "type":"https://iden3-communication.io/authorization/1.0/request",
-                            "thid":"2dd99e29-b387-4096-935d-3c3979d88b5e",
-                            "body":{
-                                "callbackUrl":"https://self-hosted-demo-backend-platform.polygonid.me/api/callback?sessionId=271535",
-                                "reason":"test flow",
-                                "scope":[
-                                    {
-                                        "id":1,
-                                        "circuitId":"credentialAtomicQuerySigV2",
-                                        "query":{
-                                            "allowedIssuers":[
-                                                "*"
-                                            ],
-                                            "context":"ipfs://QmdH1Vu79p2NcZLFbHxzJnLuUHJiMZnBeT7SNpLaqK7k9X",
-                                            "credentialSubject":{
-                                                "city":{
-                                                    "\$eq":"Guangzhou"
-                                                }
-                                            },
-                                            "type":"POAP01"
-                                        }
-                                    }
-                                ]
-                            },
-                            "from":"did:polygonid:polygon:mumbai:2qH7TstpRRJHXNN4o49Fu9H2Qismku8hQeUxDVrjqT"
-                        }
-                """;
-
-                Map<String, dynamic> json3 = jsonDecode(jsonString3);
-                AuthIden3MessageEntity messsage3;
-
-                try {
-                  messsage3 = AuthIden3MessageEntity.fromJson(json3);
-                } catch (e) {
-                  messsage3 = AuthIden3MessageEntity.fromJson(json3);
-                }
-                PolygonIdSdk.I.channel
-                    .getProofs(
-                        message: messsage3,
-                        genesisDid: result.did,
-                        privateKey: result.privateKey)
-                    .then((message) {
-                  return jsonEncode(message);
-                }).then((result) {
-                  print(result);
-                });
-              });
-            },
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.red, // 指定文本颜色为红色
-            ),
-            child: const Text('Click Me'),
-          )
-        ],
-      ),
-    );
-
     return Scaffold(
       backgroundColor: CustomColors.background,
       body: SafeArea(

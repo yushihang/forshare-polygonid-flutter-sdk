@@ -69,8 +69,6 @@ class PolygonIdSdk {
     _ref!.iden3comm = await getItSdk.getAsync<Iden3comm>();
     _ref!.errorHandling = getItSdk.get<ErrorHandling>();
 
-    _ref!.channel = getItSdk.get<PolygonIdFlutterChannel>();
-
     // Channel
     getItSdk<PolygonIdFlutterChannel>();
 
@@ -83,8 +81,6 @@ class PolygonIdSdk {
   late Proof proof;
   late Iden3comm iden3comm;
   late ErrorHandling errorHandling;
-
-  late PolygonIdFlutterChannel channel;
 
   PolygonIdSdk._();
 
