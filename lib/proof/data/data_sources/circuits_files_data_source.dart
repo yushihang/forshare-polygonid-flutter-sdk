@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -40,8 +39,7 @@ class CircuitsFilesDataSource {
   }
 */
 
-  String calculateSHA256(String input) {
-    var bytes = utf8.encode(input);
+  String calculateSHA256(Uint8List bytes) {
     var digest = sha256.convert(bytes);
     return digest.toString();
   }
@@ -56,18 +54,20 @@ class CircuitsFilesDataSource {
       int fileLength = await file.length();
 
       // 读取文件内容并计算SHA-256哈希值
-      String fileContent = await file.readAsString();
+      Uint8List fileContent = await file.readAsBytes();
       String sha256 = calculateSHA256(fileContent);
 
       // 比较文件长度和SHA-256值是否符合预期
       if (fileLength == OHGlobalVariables.circuitsFileLen &&
           sha256 == OHGlobalVariables.circuitsFileSHA256) {
+        print('${file.absolute.path} File length matched.');
+        print('${file.absolute.path} File SHA-256 matched.');
         return true;
       } else {
         print(
-            'Maybe File length mismatch. Expected: $OHGlobalVariables.circuitsFileLen, Actual: $fileLength');
+            '${file.absolute.path} Maybe File length mismatch. Expected: $OHGlobalVariables.circuitsFileLen, Actual: $fileLength');
         print(
-            'Maybe SHA-256 mismatch. Expected: $OHGlobalVariables.circuitsFileSHA256, Actual: $sha256');
+            '${file.absolute.path} Maybe SHA-256 mismatch. Expected: $OHGlobalVariables.circuitsFileSHA256, Actual: $sha256');
 
         try {
           await file.delete();
