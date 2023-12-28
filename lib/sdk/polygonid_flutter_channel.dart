@@ -199,6 +199,9 @@ class PolygonIdFlutterChannel
                   profileNonce: BigInt.tryParse(
                       call.arguments['profileNonce'] as String? ?? ''),
                   privateKey: call.arguments['privateKey'] as String,
+                  ethereumUrl: call.arguments['ethereumUrl'] as String?,
+                  stateContractAddr: call.arguments['stateContractAddr'] as String?,
+                  ipfsNodeUrl: call.arguments['ipfsNodeUrl'] as String?,
                   challenge: call.arguments['challenge'] as String?))
               .then((message) => jsonEncode(message));
 
@@ -206,7 +209,7 @@ class PolygonIdFlutterChannel
           return removeInteractions(
               genesisDid: call.arguments['genesisDid'] as String?,
               privateKey: call.arguments['privateKey'] as String?,
-              ids: (call.arguments['ids'] as List<dynamic>).cast<String>());
+              ids: call.arguments['ids'] as List<String>);
 
         case 'updateInteraction':
           return updateInteraction(

@@ -78,6 +78,8 @@ class GetIden3commProofsUseCase
       logger().i(
           "STOPPE after _getProofRequestsUseCase ${stopwatch.elapsedMilliseconds}");
 
+          print("launch test: getProofs requests: $requests");
+
       List<ClaimEntity?> claims = await _getIden3commClaimsUseCase.execute(
           param: GetIden3commClaimsParam(
               message: param.message,
@@ -89,6 +91,8 @@ class GetIden3commProofsUseCase
           "[GetIden3commProofsUseCase] claims found: ${claims.length}");
       logger().i(
           "STOPPE after _getIden3commClaimsUseCase ${stopwatch.elapsedMilliseconds}");
+
+          print("launch test: getProofs claims found: $claims");
 
       if ((requests.isNotEmpty &&
               claims.isNotEmpty &&
@@ -126,6 +130,9 @@ class GetIden3commProofsUseCase
 
             _proofGenerationStepsStreamManager
                 .add("Generating proof for ${claim.type}");
+
+                print("Generating proof begin");
+  
             // Generate proof
             proofs.add(await _generateIden3commProofUseCase.execute(
                 param: GenerateIden3commProofParam(
@@ -143,6 +150,8 @@ class GetIden3commProofsUseCase
             )));
             logger().i(
                 "STOPPE after _generateIden3commProofUseCase $i ${stopwatch.elapsedMilliseconds}");
+            print("Generating proof end");
+                
           }
         }
       } else {

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi' as ffi;
 import 'dart:ffi';
 
@@ -44,8 +45,13 @@ class PolygonIdCoreProof extends PolygonIdCore {
         malloc<ffi.Pointer<ffi.Char>>();
     ffi.Pointer<ffi.Pointer<PLGNStatus>> status =
         malloc<ffi.Pointer<PLGNStatus>>();
+
+        Map<String, dynamic> json = jsonDecode(input);
+        print(json);
+        
     int res = PolygonIdCore.nativePolygonIdCoreLib
         .PLGNAtomicQuerySigV2Inputs(response, in1, cfg, status);
+
     if (res == 0) {
       String? consumedStatus = consumeStatus(status, "");
       if (consumedStatus != null) {

@@ -7,7 +7,9 @@ class AtomicQueryInputsConfigParam {
     required this.ethereumUrl,
     required this.stateContractAddr,
     required this.ipfsNodeURL,
-  });
+  }) {
+    print("object");
+  }
 
   Map<String, dynamic> toJson() => {
         "ethereumUrl": ethereumUrl,

@@ -72,6 +72,7 @@ class RemoteIden3commDataSource {
       if (response.statusCode == 200) {
         FetchClaimResponseDTO fetchResponse =
             FetchClaimResponseDTO.fromJson(json.decode(response.body));
+        //  fetchResponse.credential.context[2] = "https://ipfs.io/ipfs/QmdH1Vu79p2NcZLFbHxzJnLuUHJiMZnBeT7SNpLaqK7k9X";
 
         if (fetchResponse.type == FetchClaimResponseType.issuance) {
           return ClaimDTO(
@@ -110,6 +111,37 @@ class RemoteIden3commDataSource {
       var schemaUri = Uri.parse(schemaUrl);
       _stacktraceManager.addTrace(
           "[RemoteIden3commDataSource] fetchSchema original url: $url");
+
+                String jsonString = """
+                        {
+                          "@context":[
+                              {
+                                  "@protected":true,
+                                  "@version":1.1,
+                                  "id":"@id",
+                                  "type":"@type",
+                                  "POAP01":{
+                                      "@context":{
+                                          "@propagate":true,
+                                          "@protected":true,
+                                          "polygon-vocab":"urn:uuid:e9b5e5c4-e56c-4f60-b85b-2974378b0e23#",
+                                          "xsd":"http://www.w3.org/2001/XMLSchema#",
+                                          "city":{
+                                              "@id":"polygon-vocab:city",
+                                              "@type":"xsd:string"
+                                          }
+                                      },
+                                      "@id":"urn:uuid:6585bbfe-e479-4d8a-afd9-4c7088c72b34"
+                                  }
+                              }
+                          ]
+                      }
+                """;
+
+      Map<String, dynamic> schema = {};
+      schema = json.decode(jsonString);
+      return schema;
+
 
       Dio dio = Dio();
       final dir = await getApplicationDocumentsDirectory();

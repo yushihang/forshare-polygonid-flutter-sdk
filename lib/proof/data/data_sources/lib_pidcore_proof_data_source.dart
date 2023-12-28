@@ -54,8 +54,18 @@ class LibPolygonIdCoreWrapper {
               jsonEncode(computeParam.configParam?.toJson()));
           break;
         case AtomicQueryInputsType.sig:
+          Map<String, dynamic> json = computeParam.param.toJson();
+          List<String> context = json["verifiableCredentials"]["@context"];
+          
+          print(context);
+
+          context[2] = """
+            https://tqtancafe-1251451115.cos.ap-guangzhou.myqcloud.com/dev/getProof.json
+          """;
+
+          json["verifiableCredentials"]["@context"] = context;
           result = _polygonIdCoreProof.getSigProofInputs(
-              jsonEncode(computeParam.param.toJson()),
+              jsonEncode(json),
               jsonEncode(computeParam.configParam?.toJson()));
           break;
         case AtomicQueryInputsType.mtponchain:
