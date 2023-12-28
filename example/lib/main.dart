@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:native_flutter_proxy/custom_proxy.dart';
@@ -15,18 +18,24 @@ Future<void> main() async {
   bool enabled = false;
   String? host;
   int? port;
-  try {
-    ProxySetting settings = await NativeProxyReader.proxySetting;
-    enabled = settings.enabled;
-    host = settings.host;
-    port = settings.port;
-  } catch (e) {
-    print(e);
-  }
-  if (enabled && host != null) {
-    final proxy = CustomProxy(ipAddress: host, port: port);
-    proxy.enable();
-    print("proxy enabled: $host:$port");
+  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  if (Platform.isIOS) {
+    var iosInfo = await deviceInfo.iosInfo;
+    if (!iosInfo.isPhysicalDevice) {
+      try {
+        ProxySetting settings = await NativeProxyReader.proxySetting;
+        enabled = settings.enabled;
+        host = settings.host;
+        port = settings.port;
+      } catch (e) {
+        print(e);
+      }
+      if (enabled && host != null) {
+        final proxy = CustomProxy(ipAddress: host, port: port);
+        proxy.enable();
+        print("proxy enabled: $host:$port");
+      }
+    }
   }
 
   final bjj = LibBabyJubJubDataSource(BabyjubjubLib());
