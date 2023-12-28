@@ -170,6 +170,7 @@ class GetIden3commProofsUseCase
             "[GetIden3commProofsUseCase] ProofsNotFoundException - requests: $requests");
         throw ProofsNotFoundException(requests);
       }
+      print("proof: $proofs");
 
       return proofs;
     } catch (e) {

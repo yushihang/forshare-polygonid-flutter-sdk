@@ -143,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> authenticate( String genesisDid, String privateKey) async {
     String jsonString = """
-            {"id":"0977e1df-9c72-4c5f-9bb0-7b4d9f5d608e","typ":"application/iden3comm-plain-json","type":"https://iden3-communication.io/authorization/1.0/request","thid":"0977e1df-9c72-4c5f-9bb0-7b4d9f5d608e","body":{"callbackUrl":"https://self-hosted-testing-testnet-backend-platform.polygonid.me/api/callback?sessionId=983270","reason":"test flow","scope":[]},"from":"did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9"}
+            {"id":"e945d90d-503c-4b1b-8824-cf6292691984","typ":"application/iden3comm-plain-json","type":"https://iden3-communication.io/authorization/1.0/request","thid":"e945d90d-503c-4b1b-8824-cf6292691984","body":{"callbackUrl":"https://self-hosted-testing-testnet-backend-platform.polygonid.me/api/callback?sessionId=660332","reason":"test flow","scope":[]},"from":"did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9"}
     """;
     Map<String, dynamic> json = jsonDecode(jsonString);
     AuthIden3MessageEntity message = AuthIden3MessageEntity.fromJson(json);
@@ -153,15 +153,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<List<ClaimEntity>> fetchAndSaveClaims( String genesisDid, String privateKey) async {
     String jsonString = """
 {
-"id": "be777afe-4f4f-417d-a390-298292c7f103",
+"id": "acf1ddc4-70ee-48af-8ba6-4b42f0526cf5",
 "typ": "application/iden3comm-plain-json",
 "type": "https://iden3-communication.io/credentials/1.0/offer",
-"thid": "be777afe-4f4f-417d-a390-298292c7f103",
+"thid": "acf1ddc4-70ee-48af-8ba6-4b42f0526cf5",
 "body": {
 "url": "https://issuer-admin.polygonid.me/v1/agent",
 "credentials": [
 {
-"id": "47c4392f-a4a3-11ee-93b5-0242ac120009",
+"id": "552fa0ce-a532-11ee-93b5-0242ac120009",
 "description": "POAP01"
 }
 ]
@@ -221,7 +221,9 @@ class _HomeScreenState extends State<HomeScreen> {
         privateKey: privateKey,
          ethereumUrl: "https://polygon-mumbai.infura.io/v3/5a438c5b50094ee3b0ed1df8f4bb3f44", 
          stateContractAddr: "0x134B1BE34911E39A8397ec6289782989729807a4", 
-         ipfsNodeUrl: "https://ipfs.io")
+         // https://service-jqy0qonc-1257310193.gz.tencentapigw.com/
+         // http://localhost:8080
+         ipfsNodeUrl: "https://service-jqy0qonc-1257310193.gz.tencentapigw.com") 
         .then((message) => jsonEncode(message))
         .then((result) {
             print(result);

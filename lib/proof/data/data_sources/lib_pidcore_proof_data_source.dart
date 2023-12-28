@@ -59,11 +59,9 @@ class LibPolygonIdCoreWrapper {
           
           print(context);
 
-          context[2] = """
-            https://tqtancafe-1251451115.cos.ap-guangzhou.myqcloud.com/dev/getProof.json
-          """;
+          // context[2] = "https://tqtancafe-1251451115.cos.ap-guangzhou.myqcloud.com/dev/getProof.json";
 
-          json["verifiableCredentials"]["@context"] = context;
+          // json["verifiableCredentials"]["@context"] = context;
           result = _polygonIdCoreProof.getSigProofInputs(
               jsonEncode(json),
               jsonEncode(computeParam.configParam?.toJson()));
