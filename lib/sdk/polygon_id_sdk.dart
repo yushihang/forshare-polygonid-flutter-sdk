@@ -117,8 +117,6 @@ class PolygonIdSdk {
       Logger.level = Level.info;
     } else if (_level == "fatal") {
       Logger.level = Level.fatal;
-    } else if (_level == "off") {
-      Logger.level = Level.off;
     }
   }
 }
