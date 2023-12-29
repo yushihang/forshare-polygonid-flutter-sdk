@@ -22,7 +22,7 @@ class GetFiltersUseCase
   @override
   Future<List<FilterEntity>> execute(
       {required Iden3MessageEntity param}) async {
-    print("launch test: getFilters");
+    print("method channel execute: getFilters");
     List<FilterEntity> filters = [];
 
     List<ProofRequestEntity> requests =

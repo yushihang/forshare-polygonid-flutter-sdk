@@ -112,7 +112,7 @@ class Proof implements PolygonIdSdkProof {
   /// Returns a [Stream] of [String] of proof generation steps
   @override
   Stream<String> proofGenerationStepsStream() {
-    print("launch test: proofGenerationStepsStream");
+    print("method channel execute: proofGenerationStepsStream");
     return _proofGenerationStepsStreamManager.proofGenerationStepsStream;
   }
 

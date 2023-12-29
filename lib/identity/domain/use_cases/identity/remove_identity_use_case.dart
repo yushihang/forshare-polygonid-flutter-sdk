@@ -42,7 +42,7 @@ class RemoveIdentityUseCase extends FutureUseCase<RemoveIdentityParam, void> {
   @override
   Future<void> execute({required RemoveIdentityParam param}) async {
     try {
-      print("launch test: removeIdentity");
+      print("method channel execute: removeIdentity");
       await _checkProfileAndDidCurrentEnvUseCase.execute(
           param: CheckProfileAndDidCurrentEnvParam(
               did: param.genesisDid,

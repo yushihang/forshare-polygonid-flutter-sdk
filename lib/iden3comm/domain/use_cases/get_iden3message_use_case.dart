@@ -22,7 +22,7 @@ class GetIden3MessageUseCase extends FutureUseCase<String, Iden3MessageEntity> {
 
   @override
   Future<Iden3MessageEntity> execute({required String param}) {
-    print("launch test: getIden3Message");
+    print("method channel execute: getIden3Message");
     try {
       Map<String, dynamic> json = jsonDecode(param);
 

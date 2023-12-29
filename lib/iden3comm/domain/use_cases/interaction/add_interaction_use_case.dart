@@ -32,7 +32,7 @@ class AddInteractionUseCase
   @override
   Future<InteractionBaseEntity> execute(
       {required AddInteractionParam param}) async {
-    print("launch test: addInteraction");
+    print("method channel execute: addInteraction");
     // we check if identity is existing
     if (param.genesisDid != null && param.privateKey != null) {
       await _getIdentityUseCase.execute(

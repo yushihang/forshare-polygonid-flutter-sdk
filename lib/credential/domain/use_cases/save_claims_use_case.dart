@@ -28,7 +28,7 @@ class SaveClaimsUseCase
 
   @override
   Future<List<ClaimEntity>> execute({required SaveClaimsParam param}) {
-    print("launch test: saveClaims");
+    print("method channel execute: saveClaims");
     return _credentialRepository
         .saveClaims(
       claims: param.claims,

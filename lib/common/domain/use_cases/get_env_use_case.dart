@@ -15,7 +15,7 @@ class GetEnvUseCase extends FutureUseCase<void, EnvEntity> {
 
   @override
   Future<EnvEntity> execute({dynamic param}) {
-    print("launch test: getEnv");
+    print("method channel execute: getEnv");
     return _configRepository.getEnv().then((env) {
       logger().i("[GetEnvUseCase] Current env is: $env");
 

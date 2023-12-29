@@ -32,7 +32,7 @@ class GetDidIdentifierUseCase
 
   @override
   Future<String> execute({required GetDidIdentifierParam param}) {
-    print("launch test: getDidIdentifier");
+    print("method channel execute: getDidIdentifier");
     return _getGenesisStateUseCase
         .execute(param: param.privateKey)
         .then(

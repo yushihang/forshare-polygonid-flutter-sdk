@@ -39,7 +39,7 @@ class GetClaimsUseCase
     // if profileNonce is zero, return all profiles credentials,
     // if profileNonce > 0 then return only credentials from that profile
 
-    print("launch test: getClaims execute");
+    print("method channel execute: getClaims execute");
     if (param.profileNonce >= GENESIS_PROFILE_NONCE) {
       // TODO check param.did and did from profile nonce are the same or return exception
       /*String did = await _getCurrentEnvDidIdentifierUseCase.execute(

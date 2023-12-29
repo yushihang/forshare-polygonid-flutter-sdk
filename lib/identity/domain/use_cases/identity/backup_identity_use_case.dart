@@ -35,7 +35,7 @@ class BackupIdentityUseCase extends FutureUseCase<BackupIdentityParam, String> {
         param: GetIdentityParam(
             genesisDid: param.genesisDid,
             privateKey: param.privateKey)) as PrivateIdentityEntity;
-    print("launch test: backupIdentity");
+    print("method channel execute: backupIdentity");
     return _identityRepository
         .exportIdentity(
       did: identity.did,

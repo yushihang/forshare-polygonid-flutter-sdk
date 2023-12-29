@@ -27,7 +27,7 @@ class RemoveClaimsUseCase extends FutureUseCase<RemoveClaimsParam, void> {
 
   @override
   Future<void> execute({required RemoveClaimsParam param}) async {
-    print("launch test: removeClaim execute");
+    print("method channel execute: removeClaim execute");
     return _credentialRepository
         .removeClaims(
       claimIds: param.claimIds,

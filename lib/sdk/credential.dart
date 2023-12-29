@@ -145,7 +145,7 @@ class Credential implements PolygonIdSdkCredential {
       {List<FilterEntity>? filters,
       required String genesisDid,
       required String privateKey}) {
-    print("launch test: getClaims");
+    print("method channel execute: getClaims");
     _stacktraceManager.clear();
     _stacktraceManager.addTrace("PolygonIdSdk.Credential.getClaims called");
     return _getClaimsUseCase.execute(
@@ -165,7 +165,7 @@ class Credential implements PolygonIdSdkCredential {
     _stacktraceManager.clear();
     _stacktraceManager
         .addTrace("PolygonIdSdk.Credential.getClaimsByIds called");
-    print("launch test: getClaimsByIds");
+    print("method channel execute: getClaimsByIds");
     return _getClaimsUseCase.execute(
         param: GetClaimsParam(
       filters: [
@@ -210,7 +210,7 @@ class Credential implements PolygonIdSdkCredential {
       required String privateKey}) {
     _stacktraceManager.clear();
     _stacktraceManager.addTrace("PolygonIdSdk.Credential.removeClaims called");
-    print("launch test: removeClaims");
+    print("method channel execute: removeClaims");
     return _removeClaimsUseCase.execute(
         param: RemoveClaimsParam(
       claimIds: claimIds,
@@ -226,7 +226,7 @@ class Credential implements PolygonIdSdkCredential {
       required String privateKey}) {
     _stacktraceManager.clear();
     _stacktraceManager.addTrace("PolygonIdSdk.Credential.removeClaim called");
-    print("launch test: removeClaim");
+    print("method channel execute: removeClaim");
     return _removeClaimsUseCase.execute(
         param: RemoveClaimsParam(
       claimIds: [claimId],

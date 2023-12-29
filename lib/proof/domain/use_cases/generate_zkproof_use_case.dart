@@ -61,7 +61,7 @@ class GenerateZKProofUseCase
 
   @override
   Future<ZKProofEntity> execute({required GenerateZKProofParam param}) async {
-    print("launch test: prover");
+    print("method channel execute: prover");
     // Prepare atomic query inputs
     Uint8List res = await _proofRepository
         .calculateAtomicQueryInputs(

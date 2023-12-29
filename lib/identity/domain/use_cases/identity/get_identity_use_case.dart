@@ -37,7 +37,7 @@ class GetIdentityUseCase
   @override
   Future<IdentityEntity> execute({required GetIdentityParam param}) async {
     try {
-      print("launch test: getIdentity");
+      print("method channel execute: getIdentity");
       IdentityEntity identity;
 
       // Check if we want [PrivateIdentityEntity] or [IdentityEntity]

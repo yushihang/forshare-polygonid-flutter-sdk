@@ -55,7 +55,7 @@ class GetIden3commClaimsUseCase
   @override
   Future<List<ClaimEntity?>> execute(
       {required GetIden3commClaimsParam param}) async {
-    print("launch test: getClaimsFromIden3Message");
+    print("method channel execute: getClaimsFromIden3Message");
     List<ClaimEntity?> claims = [];
 
     List<ProofRequestEntity> requests =

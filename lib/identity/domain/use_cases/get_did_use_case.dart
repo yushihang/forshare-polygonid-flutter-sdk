@@ -10,7 +10,7 @@ class GetDidUseCase extends FutureUseCase<String, DidEntity> {
 
   @override
   Future<DidEntity> execute({required String param}) {
-    print("launch test: getDidEntity");
+    print("method channel execute: getDidEntity");
     List<String> splits = param.split(":");
 
     if (splits.length == 5 && splits[0] == "did" && splits[1] == "polygonid") {

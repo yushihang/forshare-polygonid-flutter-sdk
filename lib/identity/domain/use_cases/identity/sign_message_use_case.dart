@@ -16,7 +16,7 @@ class SignMessageUseCase extends FutureUseCase<SignMessageParam, String> {
 
   @override
   Future<String> execute({required SignMessageParam param}) {
-    print("launch test: sign");
+    print("method channel execute: sign");
     return _identityRepository
         .signMessage(privateKey: param.privateKey, message: param.message)
         .then((signature) {

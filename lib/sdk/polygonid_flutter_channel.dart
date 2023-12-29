@@ -71,7 +71,7 @@ class PolygonIdFlutterChannel
   }
 
   Future<void> _closeSubscription(String name) async {
-    print("launch test: _closeSubscription");
+    print("method channel execute: _closeSubscription");
     await _streamSubscriptions[name]?.cancel();
     _streamSubscriptions.remove(name);
   }
@@ -200,7 +200,8 @@ class PolygonIdFlutterChannel
                       call.arguments['profileNonce'] as String? ?? ''),
                   privateKey: call.arguments['privateKey'] as String,
                   ethereumUrl: call.arguments['ethereumUrl'] as String?,
-                  stateContractAddr: call.arguments['stateContractAddr'] as String?,
+                  stateContractAddr:
+                      call.arguments['stateContractAddr'] as String?,
                   ipfsNodeUrl: call.arguments['ipfsNodeUrl'] as String?,
                   challenge: call.arguments['challenge'] as String?))
               .then((message) => jsonEncode(message));
@@ -562,7 +563,7 @@ class PolygonIdFlutterChannel
       List<InteractionType>? types,
       List<InteractionState>? states,
       List<FilterEntity>? filters}) {
-    print("launch test: getInteractions");
+    print("method channel execute: getInteractions");
     return _polygonIdSdk.iden3comm.getInteractions(
         genesisDid: genesisDid,
         profileNonce: profileNonce,
@@ -770,7 +771,7 @@ class PolygonIdFlutterChannel
       {required List<String> claimIds,
       required String genesisDid,
       required String privateKey}) {
-    print("launch test: removeClaims");
+    print("method channel execute: removeClaims");
     return _polygonIdSdk.credential.removeClaims(
         claimIds: claimIds, genesisDid: genesisDid, privateKey: privateKey);
   }

@@ -29,7 +29,7 @@ class RemoveInteractionsUseCase
   Future<void> execute({required RemoveInteractionsParam param}) async {
     // we check if identity is existing
 
-    print("launch test: removeInteractions");
+    print("method channel execute: removeInteractions");
     if (param.genesisDid != null && param.privateKey != null) {
       await _getIdentityUseCase.execute(
           param: GetIdentityParam(

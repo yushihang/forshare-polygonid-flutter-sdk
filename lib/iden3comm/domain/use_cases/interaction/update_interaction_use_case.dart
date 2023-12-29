@@ -41,7 +41,7 @@ class UpdateInteractionUseCase
   Future<InteractionBaseEntity> execute(
       {required UpdateInteractionParam param}) async {
     // we check if profile is valid and identity is existing
-    print("launch test: updateInteraction");
+    print("method channel execute: updateInteraction");
     if (param.genesisDid != null &&
         param.profileNonce != null &&
         param.privateKey != null) {

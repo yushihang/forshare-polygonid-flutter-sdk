@@ -15,7 +15,7 @@ class GetIdentitiesUseCase extends FutureUseCase<void, List<IdentityEntity>> {
 
   @override
   Future<List<IdentityEntity>> execute({void param}) {
-    print("launch test: getIdentities");
+    print("method channel execute: getIdentities");
     return _identityRepository.getIdentities().then((identities) {
       logger().i("[GetIdentitiesUseCase] identities: $identities");
       _stacktraceManager

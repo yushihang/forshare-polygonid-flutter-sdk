@@ -37,7 +37,7 @@ class AddProfileUseCase extends FutureUseCase<AddProfileParam, void> {
 
   @override
   Future<void> execute({required AddProfileParam param}) async {
-    print("launch test: addProfile");
+    print("method channel execute: addProfile");
     await _checkProfileAndDidCurrentEnvUseCase.execute(
         param: CheckProfileAndDidCurrentEnvParam(
             did: param.genesisDid,

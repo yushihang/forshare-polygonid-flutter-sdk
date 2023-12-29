@@ -14,7 +14,7 @@ class GetPrivateKeyUseCase extends FutureUseCase<String, String> {
 
   @override
   Future<String> execute({required String param}) async {
-    print("launch test: getPrivateKey");
+    print("method channel execute: getPrivateKey");
     return _identityRepository.getPrivateKey(secret: param).then((privateKey) {
       logger().i("[GetPrivateKeyUseCase] private key: $privateKey");
       _stacktraceManager

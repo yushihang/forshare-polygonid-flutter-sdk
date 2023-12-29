@@ -20,7 +20,7 @@ class FetchIdentityStateUseCase extends FutureUseCase<String, String> {
 
   @override
   Future<String> execute({required String param}) async {
-    print("launch test: getState");
+    print("method channel execute: getState");
     return _getEnvUseCase
         .execute()
         .then((env) => _getDidUseCase

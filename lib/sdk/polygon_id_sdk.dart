@@ -97,7 +97,7 @@ class PolygonIdSdk {
   }
 
   Future<void> switchLog({required bool enabled}) async {
-    print("launch test: switchLog");
+    print("method channel execute: switchLog");
     Domain.logEnabled = enabled;
   }
 }

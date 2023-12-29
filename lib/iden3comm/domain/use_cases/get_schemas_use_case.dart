@@ -13,7 +13,7 @@ class GetSchemasUseCase
   @override
   Future<List<Map<String, dynamic>>> execute(
       {required Iden3MessageEntity param}) async {
-    print("launch test: getSchemas");
+    print("method channel execute: getSchemas");
     if (![
       Iden3MessageType.authRequest,
       Iden3MessageType.proofContractInvokeRequest

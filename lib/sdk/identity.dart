@@ -396,7 +396,7 @@ class Identity implements PolygonIdSdkIdentity {
       required BigInt profileNonce}) {
     _stacktraceManager.clear();
     _stacktraceManager.addTrace("PolygonIdSdk.Identity.removeProfile called");
-    print("launch test: removeProfile");
+    print("method channel execute: removeProfile");
     return _removeProfileUseCase.execute(
         param: RemoveProfileParam(
             genesisDid: genesisDid,

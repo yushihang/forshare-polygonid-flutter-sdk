@@ -60,7 +60,7 @@ class FetchAndSaveClaimsUseCase
     /// With the auth token, fetch the [ClaimEntity]
     /// Then save the list of [ClaimEntity]
     ///
-    print("launch test: fetchAndSaveClaims");
+    print("method channel execute: fetchAndSaveClaims");
     await _checkProfileAndDidCurrentEnvUseCase.execute(
         param: CheckProfileAndDidCurrentEnvParam(
             did: param.genesisDid,

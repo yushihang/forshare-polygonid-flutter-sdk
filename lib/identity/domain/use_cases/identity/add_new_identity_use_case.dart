@@ -19,7 +19,7 @@ class AddNewIdentityUseCase
 
   @override
   Future<PrivateIdentityEntity> execute({String? param}) {
-    print("launch test: addIdentity");
+    print("method channel execute: addIdentity");
     // Get the privateKey
     return _identityRepository
         .getPrivateKey(secret: param)

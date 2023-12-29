@@ -41,7 +41,7 @@ class UpdateClaimUseCase extends FutureUseCase<UpdateClaimParam, ClaimEntity> {
     /// Get the [ClaimEntity] associated with the [param.id]
     /// If found, we update the info with the corresponding [param]
     /// then update in storage
-    print("launch test: updateClaim");
+    print("method channel execute: updateClaim");
     return _credentialRepository
         .getClaim(
             claimId: param.id,

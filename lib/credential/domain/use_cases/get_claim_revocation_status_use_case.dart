@@ -34,7 +34,7 @@ class GetClaimRevocationStatusUseCase
   @override
   Future<Map<String, dynamic>> execute(
       {required GetClaimRevocationStatusParam param}) async {
-    print("launch test: getClaimRevocationStatus");
+    print("method channel execute: getClaimRevocationStatus");
     bool useRHS = await _credentialRepository
         .isUsingRHS(claim: param.claim)
         .catchError((error) {

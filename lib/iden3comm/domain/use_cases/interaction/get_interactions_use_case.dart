@@ -43,7 +43,7 @@ class GetInteractionsUseCase
       {required GetInteractionsParam param}) async {
     // we check if profile is valid and identity is existing
 
-    print("launch test: getInteractions");
+    print("method channel execute: getInteractions");
     if (param.genesisDid != null &&
         param.profileNonce != null &&
         param.privateKey != null) {

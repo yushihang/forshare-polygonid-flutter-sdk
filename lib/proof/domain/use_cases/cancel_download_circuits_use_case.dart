@@ -9,7 +9,7 @@ class CancelDownloadCircuitsUseCase extends FutureUseCase<void, void> {
 
   @override
   Future<void> execute({void param}) {
-    print("launch test: cancelDownloadCircuits");
+    print("method channel execute: cancelDownloadCircuits");
     return _proofRepository.cancelDownloadCircuits().then((value) {
       logger().i("[CancelDownloadCircuitsUseCase] circuits download cancelled");
     });

@@ -44,7 +44,7 @@ class RestoreIdentityUseCase
     late PrivateIdentityEntity privateIdentity;
 
     try {
-      print("launch test: restoreIdentity");
+      print("method channel execute: restoreIdentity");
       String genesisDid = await _getCurrentEnvDidIdentifierUseCase.execute(
           param: GetCurrentEnvDidIdentifierParam(
               privateKey: param.privateKey,
