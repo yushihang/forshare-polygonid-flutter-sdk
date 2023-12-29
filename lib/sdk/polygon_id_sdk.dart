@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:logger/logger.dart';
 import 'package:polygonid_flutter_sdk/common/domain/domain_logger.dart';
 import 'package:polygonid_flutter_sdk/common/domain/entities/env_entity.dart';
 import 'package:polygonid_flutter_sdk/common/domain/use_cases/get_env_use_case.dart';
@@ -97,7 +98,27 @@ class PolygonIdSdk {
   }
 
   Future<void> switchLog({required bool enabled}) async {
-    print("method channel execute: switchLog");
+    print("method channel execute: switchLog: $enabled");
     Domain.logEnabled = enabled;
+  }
+
+  Future<void> changeLogLevel({required String level}) async {
+    print("method channel execute: changeLogLevel: $level");
+    var _level = level.toLowerCase();
+    if (_level == "debug" || _level == "d") {
+      Logger.level = Level.debug;
+    } else if (_level == "verbose" || _level == "v" || _level == "trace") {
+      Logger.level = Level.trace;
+    } else if (_level == "warn" || _level == "w" || _level == "waring") {
+      Logger.level = Level.warning;
+    } else if (_level == "error" || _level == "e") {
+      Logger.level = Level.error;
+    } else if (_level == "info" || _level == "i") {
+      Logger.level = Level.info;
+    } else if (_level == "fatal") {
+      Logger.level = Level.fatal;
+    } else if (_level == "off") {
+      Logger.level = Level.off;
+    }
   }
 }

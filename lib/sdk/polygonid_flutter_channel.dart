@@ -104,6 +104,9 @@ class PolygonIdFlutterChannel
         case 'switchLog':
           return _polygonIdSdk.switchLog(enabled: call.arguments['enabled']);
 
+        case 'changeLogLevel':
+          return _polygonIdSdk.changeLogLevel(level: call.arguments['level']);
+
         /// Iden3comm
         case 'addInteraction':
           Map<String, dynamic> json = jsonDecode(call.arguments['interaction']);
