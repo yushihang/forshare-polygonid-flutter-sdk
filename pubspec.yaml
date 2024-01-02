@@ -25,7 +25,7 @@ dependencies:
   get_it: ^7.2.0
   injectable: ^2.1.2
   # Path provider 2.0.12 is giving problems with iOS, forced to use 2.0.11
-  path_provider: ^2.0.15
+  path_provider: ^2.1.1
   archive: ^3.3.7
   sembast: 3.5.0+1
   fast_base58: 0.2.1
