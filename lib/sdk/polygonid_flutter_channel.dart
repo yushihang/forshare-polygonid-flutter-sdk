@@ -427,6 +427,21 @@ class PolygonIdFlutterChannel
             treeState: call.arguments['treeState'] as Map<String, dynamic>?,
           ).then((proof) => jsonEncode(proof));
 
+        case 'setCustomSystemProxy':
+          return () async {
+            HttpOverrides.global = null;
+            var proxyHost = call.arguments['host'] as String;
+            var proxyPort = call.arguments['port'] as int;
+            print('setCustomSystemProxy: $proxyHost:$proxyPort');
+            final proxy = CustomProxy(
+                ipAddress: proxyHost,
+                port: proxyPort,
+                allowBadCertificates: true);
+            proxy.enable();
+            print("proxy enabled: $proxyHost:$proxyPort");
+            return "proxy enabled: $proxyHost:$proxyPort";
+          }();
+
         case 'useSystemProxy':
           return () async {
             bool enabled = false;
