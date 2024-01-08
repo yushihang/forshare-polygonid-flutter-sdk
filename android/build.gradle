@@ -1,7 +1,7 @@
 apply from: 'sdk.properties'
 
 group 'io.github.0xpolygonid.polygonid_flutter_sdk'
-version sdkVersion
+//version sdkVersion
 
 buildscript {
     ext.kotlin_version = '1.8.0'
