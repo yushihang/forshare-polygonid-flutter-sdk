@@ -96,7 +96,7 @@ publishing {
         sdkDebug(MavenPublication) {
             groupId = 'io.github.0xpolygonid.polygonid_flutter_sdk'
             artifactId = 'polygonid_flutter_sdk_debug'
-            version = version
+            //version = version
 
             pom {
                 name = 'PolygonID Flutter SDK'
