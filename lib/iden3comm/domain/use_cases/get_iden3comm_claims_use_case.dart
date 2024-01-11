@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:polygonid_flutter_sdk/common/domain/use_case.dart';
 import 'package:polygonid_flutter_sdk/common/infrastructure/stacktrace_stream_manager.dart';
 import 'package:polygonid_flutter_sdk/credential/domain/entities/claim_entity.dart';
@@ -90,7 +91,7 @@ class GetIden3commClaimsUseCase
                 return null;
               }
 
-              bool hasValidProofType = claims.any((element) {
+              var validClaim = claims.firstWhereOrNull((element) {
                 List<Map<String, dynamic>> proofs = element.info["proof"];
                 List<String> proofTypes =
                     proofs.map((e) => e["type"] as String).toList();
@@ -117,7 +118,7 @@ class GetIden3commClaimsUseCase
                 return false;
               });
 
-              if (!hasValidProofType) {
+              if (validClaim == null) {
                 _stacktraceManager.addTrace(
                     "[GetIden3commClaimsUseCase] claims has no valid proof type");
                 return null;
