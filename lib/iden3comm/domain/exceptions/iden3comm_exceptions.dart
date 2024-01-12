@@ -1,45 +1,75 @@
 import 'package:polygonid_flutter_sdk/common/domain/error_exception.dart';
+import 'package:polygonid_flutter_sdk/common/utils/polygonid_exceptions.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/authorization/request/auth_request_iden3_message_entity.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/common/iden3_message_entity.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/common/request/proof_request_entity.dart';
 
-class UnsupportedIden3MsgTypeException implements Exception {
+class UnsupportedIden3MsgTypeException extends PolygonIdException {
   final Iden3MessageType type;
 
   UnsupportedIden3MsgTypeException(this.type);
+
+  @override
+  String exceptionInfo() {
+    return "type: $type";
+  }
 }
 
-class InvalidIden3MsgTypeException implements Exception {
+class InvalidIden3MsgTypeException extends PolygonIdException {
   final Iden3MessageType expected;
   final Iden3MessageType actual;
 
   InvalidIden3MsgTypeException(this.expected, this.actual);
+
+  @override
+  String exceptionInfo() {
+    return "expected: $expected, actual: $actual";
+  }
 }
 
-class InvalidProofReqException implements Exception {
+class InvalidProofReqException extends PolygonIdException {
   final String message;
 
   InvalidProofReqException(this.message);
+
+  @override
+  String exceptionInfo() {
+    return "message: $message";
+  }
 }
 
-class ProofsNotFoundException implements Exception {
+class ProofsNotFoundException extends PolygonIdException {
   final List<ProofRequestEntity> proofRequests;
 
   ProofsNotFoundException(this.proofRequests);
+
+  @override
+  String exceptionInfo() {
+    return "proofRequests:\n${proofRequests.join("\n")}";
+  }
 }
 
-class CredentialsNotFoundException implements Exception {
+class CredentialsNotFoundException extends PolygonIdException {
   final List<ProofRequestEntity> proofRequests;
 
   CredentialsNotFoundException(this.proofRequests);
+  @override
+  String exceptionInfo() {
+    return "proofRequests:\n${proofRequests.join("\n")}";
+  }
 }
 
-class UnsupportedSchemaException implements Exception {}
+class UnsupportedSchemaException extends PolygonIdException {}
 
-class NullAuthenticateCallbackException implements Exception {
+class NullAuthenticateCallbackException extends PolygonIdException {
   final AuthIden3MessageEntity authRequest;
 
   NullAuthenticateCallbackException(this.authRequest);
+
+  @override
+  String exceptionInfo() {
+    return "authRequest: $authRequest";
+  }
 }
 
 class FetchClaimException extends ErrorException {

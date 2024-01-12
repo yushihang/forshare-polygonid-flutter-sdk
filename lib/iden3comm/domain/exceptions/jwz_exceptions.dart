@@ -1,5 +1,7 @@
-class NullJWZHeaderException implements Exception {}
+import 'package:polygonid_flutter_sdk/common/utils/polygonid_exceptions.dart';
 
-class NullJWZProofException implements Exception {}
+class NullJWZHeaderException extends PolygonIdException {}
 
-class NullJWZPayloadException implements Exception {}
+class NullJWZProofException extends PolygonIdException {}
+
+class NullJWZPayloadException extends PolygonIdException {}
