@@ -7,6 +7,7 @@ import 'package:polygonid_flutter_sdk/common/domain/domain_logger.dart';
 import 'package:polygonid_flutter_sdk/common/domain/entities/env_entity.dart';
 import 'package:polygonid_flutter_sdk/common/domain/use_cases/get_env_use_case.dart';
 import 'package:polygonid_flutter_sdk/common/domain/use_cases/set_env_use_case.dart';
+import 'package:polygonid_flutter_sdk/common/utils/polygonid_exceptions.dart';
 import 'package:polygonid_flutter_sdk/sdk/di/injector.dart';
 import 'package:polygonid_flutter_sdk/sdk/error_handling.dart';
 import 'package:polygonid_flutter_sdk/sdk/polygonid_flutter_channel.dart';
@@ -16,10 +17,15 @@ import 'iden3comm.dart';
 import 'identity.dart';
 import 'proof.dart';
 
-class PolygonIsSdkNotInitializedException implements Exception {
+class PolygonIsSdkNotInitializedException extends PolygonIdException {
   String message;
 
   PolygonIsSdkNotInitializedException(this.message);
+
+  @override
+  String exceptionInfo() {
+    return "message: $message";
+  }
 }
 
 class PolygonIdSdk {

@@ -1,15 +1,22 @@
-class SMTNotFoundException implements Exception {
+import 'package:polygonid_flutter_sdk/common/utils/polygonid_exceptions.dart';
+
+class SMTNotFoundException extends PolygonIdException {
   final String storeName;
 
   SMTNotFoundException(this.storeName);
+
+  @override
+  String exceptionInfo() {
+    return "profileNonce: $storeName";
+  }
 }
 
-class SMTNodeKeyAlreadyExistsException implements Exception {}
+class SMTNodeKeyAlreadyExistsException extends PolygonIdException {}
 
-class SMTEntryIndexAlreadyExistsException implements Exception {}
+class SMTEntryIndexAlreadyExistsException extends PolygonIdException {}
 
-class SMTReachedMaxLevelException implements Exception {}
+class SMTReachedMaxLevelException extends PolygonIdException {}
 
-class SMTInvalidNodeFoundException implements Exception {}
+class SMTInvalidNodeFoundException extends PolygonIdException {}
 
-class SMTKeyNotFoundException implements Exception {}
+class SMTKeyNotFoundException extends PolygonIdException {}
