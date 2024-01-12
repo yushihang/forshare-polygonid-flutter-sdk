@@ -1,5 +1,4 @@
-import 'package:polygonid_flutter_sdk/common/domain/entities/env_entity.dart';
-import 'package:polygonid_flutter_sdk/identity/domain/entities/did_entity.dart';
+import 'package:polygonid_flutter_sdk/common/utils/polygonid_exceptions.dart';
 
 import '../../../../common/domain/error_exception.dart';
 
@@ -7,45 +6,65 @@ class IdentityException extends ErrorException {
   IdentityException(error) : super(error);
 }
 
-class TooLongPrivateKeyException implements Exception {}
+class TooLongPrivateKeyException extends PolygonIdException {}
 
-class IdentityAlreadyExistsException implements Exception {
+class IdentityAlreadyExistsException extends PolygonIdException {
   final String did;
 
   IdentityAlreadyExistsException(this.did);
 }
 
-class ProfileAlreadyExistsException implements Exception {
+class ProfileAlreadyExistsException extends PolygonIdException {
   final String genesisDid;
   final BigInt profileNonce;
 
   ProfileAlreadyExistsException(this.genesisDid, this.profileNonce);
+
+  @override
+  String exceptionInfo() {
+    return "genesisDid: $genesisDid, profileNonce: $profileNonce";
+  }
 }
 
-class UnknownProfileException implements Exception {
+class UnknownProfileException extends PolygonIdException {
   final BigInt profileNonce;
 
   UnknownProfileException(this.profileNonce);
+
+  @override
+  String exceptionInfo() {
+    return "profileNonce: $profileNonce";
+  }
 }
 
-class UnknownIdentityException implements Exception {
+class UnknownIdentityException extends PolygonIdException {
   final String did;
 
   UnknownIdentityException(this.did);
+
+  @override
+  String exceptionInfo() {
+    return "did: $did";
+  }
 }
 
-class InvalidPrivateKeyException implements Exception {
+class InvalidPrivateKeyException extends PolygonIdException {
   final String privateKey;
 
   InvalidPrivateKeyException(this.privateKey);
+
+  @override
+  String exceptionInfo() {
+    return "privateKey: $privateKey";
+  }
 }
 
-class InvalidProfileException extends ErrorException {
+class InvalidProfileException extends PolygonIdException {
   final BigInt profileNonce;
 
   InvalidProfileException(this.profileNonce) : super(null);
 
-  dynamic get error {
+  String get error {
     if (profileNonce == BigInt.zero) {
       return "Genesis profile can't be modified";
     } else if (profileNonce.isNegative) {
@@ -53,6 +72,11 @@ class InvalidProfileException extends ErrorException {
     }
 
     return "Invalid profile";
+  }
+
+  @override
+  String exceptionInfo() {
+    return "profileNonce: $profileNonce, error: $error";
   }
 }
 
@@ -68,9 +92,14 @@ class NonRevProofException extends ErrorException {
   NonRevProofException(error) : super(error);
 }
 
-class DidNotMatchCurrentEnvException implements Exception {
+class DidNotMatchCurrentEnvException extends PolygonIdException {
   final String did;
   final String rightDid;
 
   DidNotMatchCurrentEnvException(this.did, this.rightDid);
+
+  @override
+  String exceptionInfo() {
+    return "profileNonce: $did, error: $rightDid";
+  }
 }
