@@ -65,9 +65,9 @@ class CircuitsFilesDataSource {
         return true;
       } else {
         print(
-            '${file.absolute.path} Maybe File length mismatch. Expected: $OHGlobalVariables.circuitsFileLen, Actual: $fileLength');
+            '${file.absolute.path} Maybe File length mismatch. Expected: ${OHGlobalVariables.circuitsFileLen}, Actual: $fileLength');
         print(
-            '${file.absolute.path} Maybe SHA-256 mismatch. Expected: $OHGlobalVariables.circuitsFileSHA256, Actual: $sha256');
+            '${file.absolute.path} Maybe SHA-256 mismatch. Expected: ${OHGlobalVariables.circuitsFileSHA256}, Actual: $sha256');
 
         try {
           await file.delete();
