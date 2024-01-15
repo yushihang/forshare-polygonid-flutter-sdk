@@ -132,6 +132,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   ///
   void _startDownload() {
+    //PolygonIdFlutterChannel.checkCircuitsInBundle();
     _bloc.add(const SplashEvent.startDownload());
   }
 }

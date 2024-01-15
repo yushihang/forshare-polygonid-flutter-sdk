@@ -9,7 +9,9 @@ import 'package:polygonid_flutter_sdk/sdk/di/injector.dart';
 class CircuitsFilesDataSource {
   final Directory directory;
 
-  CircuitsFilesDataSource(this.directory);
+  CircuitsFilesDataSource(this.directory) {
+    print(directory);
+  }
 
   Future<List<Uint8List>> loadCircuitFiles(String circuitId) async {
     String path = directory.path;
@@ -39,7 +41,7 @@ class CircuitsFilesDataSource {
   }
 */
 
-  String calculateSHA256(Uint8List bytes) {
+  static String calculateSHA256(Uint8List bytes) {
     var digest = sha256.convert(bytes);
     return digest.toString();
   }
@@ -134,6 +136,8 @@ class CircuitsFilesDataSource {
     required String path,
     required String zipPath,
   }) async {
+    print("path: $path");
+    print("zipPath: $zipPath");
     var zipFile = File(zipPath);
     Uint8List zipBytes = zipFile.readAsBytesSync();
     final zipDecoder = getItSdk.get<ZipDecoder>();

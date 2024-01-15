@@ -10,3 +10,14 @@ class ErrorException extends PolygonIdException {
     return "error: $error";
   }
 }
+
+class CircuitFileErrorException extends PolygonIdException {
+  final String fileName;
+
+  CircuitFileErrorException(this.fileName);
+
+  @override
+  String exceptionInfo() {
+    return "fileName: $fileName";
+  }
+}

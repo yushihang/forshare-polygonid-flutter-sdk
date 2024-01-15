@@ -6,9 +6,12 @@ import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
 import 'package:native_flutter_proxy/custom_proxy.dart';
 import 'package:native_flutter_proxy/native_proxy_reader.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:polygonid_flutter_sdk/common/domain/domain_logger.dart';
 import 'package:polygonid_flutter_sdk/common/domain/entities/env_entity.dart';
 import 'package:polygonid_flutter_sdk/common/domain/entities/filter_entity.dart';
+import 'package:polygonid_flutter_sdk/common/domain/error_exception.dart';
 import 'package:polygonid_flutter_sdk/credential/domain/entities/claim_entity.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/authorization/request/auth_request_iden3_message_entity.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/common/iden3_message_entity.dart';
@@ -19,6 +22,8 @@ import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/proof/response/i
 import 'package:polygonid_flutter_sdk/identity/domain/entities/did_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/entities/identity_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/entities/private_identity_entity.dart';
+import 'package:polygonid_flutter_sdk/proof/data/data_sources/circuits_download_data_source.dart';
+import 'package:polygonid_flutter_sdk/proof/data/data_sources/circuits_files_data_source.dart';
 import 'package:polygonid_flutter_sdk/proof/domain/entities/circuit_data_entity.dart';
 import 'package:polygonid_flutter_sdk/proof/domain/entities/download_info_entity.dart';
 import 'package:polygonid_flutter_sdk/proof/domain/entities/gist_mtproof_entity.dart';
@@ -388,6 +393,9 @@ class PolygonIdFlutterChannel
                 _closeSubscription('downloadCircuits')
                     .then((_) => downloadCircuitsName);
               });
+
+        case 'checkCircuitsInBundle':
+          return checkCircuitsInBundle();
 
         case 'isAlreadyDownloadedCircuitsFromServer':
           return isAlreadyDownloadedCircuitsFromServer();
@@ -931,5 +939,81 @@ class PolygonIdFlutterChannel
   }) {
     // TODO: implement restoreProfiles
     throw UnimplementedError();
+  }
+
+  static bool _checkCircuitsFileMatched(
+      Uint8List fileData, CircuitFilesInfo fileInfo) {
+    if (fileData.length != fileInfo.fileSize) {
+      return false;
+    }
+
+    String sha256 = CircuitsFilesDataSource.calculateSHA256(fileData);
+    if (sha256 != fileInfo.sha256) {
+      return false;
+    }
+
+    return true;
+  }
+
+  static Future<bool> checkCircuitsInBundle() async {
+    try {
+      var assets = await rootBundle.loadString('AssetManifest.json');
+      print('AssetManifest.json: $assets');
+      Map assetsMap = json.decode(assets);
+
+      Map<String, String> circuitAssetsPathMap = {};
+      const keyString = "assets/circuits/";
+      for (final entry in assetsMap.entries) {
+        String assetPath = entry.key;
+        var index = assetPath.indexOf(keyString);
+        if (index < 0) {
+          continue;
+        }
+
+        var circuitName = assetPath.substring(index + keyString.length);
+        if (circuitName == ".DS_Store") {
+          continue;
+        }
+        circuitAssetsPathMap[circuitName] = assetPath;
+      }
+
+      var circuitFilesInfoMap = OHGlobalVariables.circuitFilesInfoMap;
+      final rootPath = await getApplicationDocumentsDirectory();
+      for (final entry in circuitAssetsPathMap.entries) {
+        print(
+            'checkCircuitsInBundle circuitAssetsPathMap:(${entry.key}, ${entry.value})');
+        var fileName = entry.key;
+        var circuitFilesInfo = circuitFilesInfoMap[fileName];
+        if (circuitFilesInfo == null) {
+          print(
+              'checkCircuitsInBundle $fileName not found in circuitFilesInfoMap');
+          continue;
+        }
+
+        var circultPathInDocumentDir = p.join(rootPath.path, entry.key);
+        File circultFileInDocumentDir = File(circultPathInDocumentDir);
+        bool exist = circultFileInDocumentDir.existsSync();
+
+        if (!exist) {
+          var bundlePath = entry.value;
+          print("bundlePath: $bundlePath");
+          ByteData bytes = await rootBundle.load(bundlePath);
+          Uint8List uint8List = bytes.buffer.asUint8List(bytes.offsetInBytes,
+              bytes.lengthInBytes); //convert ByteData to Uint8List
+
+          await circultFileInDocumentDir.writeAsBytes(uint8List);
+        }
+
+        var bytes = await circultFileInDocumentDir.readAsBytes();
+        var matched = _checkCircuitsFileMatched(bytes, circuitFilesInfo);
+        if (!matched) {
+          throw CircuitFileErrorException(fileName);
+        }
+      }
+    } catch (e) {
+      throw ErrorException(e);
+    }
+
+    return true;
   }
 }
