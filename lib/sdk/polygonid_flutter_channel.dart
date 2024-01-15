@@ -993,7 +993,7 @@ class PolygonIdFlutterChannel
         var circultPathInDocumentDir = p.join(rootPath.path, entry.key);
         File circultFileInDocumentDir = File(circultPathInDocumentDir);
         bool exist = circultFileInDocumentDir.existsSync();
-
+        print('checkCircuitsInBundle $circultFileInDocumentDir exists: $exist');
         if (!exist) {
           var bundlePath = entry.value;
           print("bundlePath: $bundlePath");
@@ -1002,6 +1002,8 @@ class PolygonIdFlutterChannel
               bytes.lengthInBytes); //convert ByteData to Uint8List
 
           await circultFileInDocumentDir.writeAsBytes(uint8List);
+          print(
+              'checkCircuitsInBundle copied $bundlePath to $circultFileInDocumentDir');
         }
 
         var bytes = await circultFileInDocumentDir.readAsBytes();
