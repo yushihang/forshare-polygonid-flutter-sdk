@@ -501,7 +501,9 @@ class PolygonIdFlutterChannel
   PolygonIdFlutterChannel(this._polygonIdSdk, this._methodChannel) {
     _methodChannel.setMethodCallHandler((call) {
       LogHelper.markCurrentMethod(call.method);
+      print("method channel execute: ${call.method}");
       var returnValue = _methodCallHandler(call);
+      print("method channel execute Finished: ${call.method}");
       LogHelper.markCurrentMethod("");
       return returnValue;
     });
