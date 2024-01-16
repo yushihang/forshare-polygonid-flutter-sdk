@@ -23,6 +23,8 @@ class ProverLib {
 
   Future<Map<String, dynamic>?> prove(
       String circuitId, Uint8List zkeyBytes, Uint8List wtnsBytes) async {
+    print(
+        "ProverLib Future<Map<String, dynamic>?> prove(String circuitId, Uint8List zKeyBytes, Uint8List wtnsBytes)");
     Map<String, dynamic> map = {};
 
     Stopwatch stopwatch = Stopwatch()..start();

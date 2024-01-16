@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:typed_data';
+
 import 'package:polygonid_flutter_sdk/common/domain/domain_logger.dart';
 import 'package:polygonid_flutter_sdk/common/domain/use_case.dart';
 import 'package:polygonid_flutter_sdk/common/infrastructure/stacktrace_stream_manager.dart';
@@ -27,11 +27,13 @@ class ProveUseCase extends FutureUseCase<ProveParam, ZKProofEntity> {
   Future<ZKProofEntity> execute({required ProveParam param}) async {
     try {
       // Calculate witness
+      logger().i("[ProveUseCase] proof: before Calculate witness");
       Uint8List wtnsBytes = await _proofRepository.calculateWitness(
         param.circuitData,
         param.inputs,
       );
 
+      logger().i("[ProveUseCase] proof: before prove");
       // Generate proof
       ZKProofEntity zkProofEntity = await _proofRepository.prove(
         param.circuitData,

@@ -25,6 +25,8 @@ class ProverLibDataSource {
   ///
   Future<Map<String, dynamic>?> prove(
       String circuitId, Uint8List zKeyBytes, Uint8List wtnsBytes) async {
+    print(
+        "ProverLibWrapper Future<Map<String, dynamic>?> prove(String circuitId, Uint8List zKeyBytes, Uint8List wtnsBytes)");
     return _proverLibWrapper.prover(circuitId, zKeyBytes, wtnsBytes);
   }
 }
