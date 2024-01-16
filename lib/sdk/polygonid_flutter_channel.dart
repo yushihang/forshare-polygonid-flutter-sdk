@@ -81,412 +81,427 @@ class PolygonIdFlutterChannel
     _streamSubscriptions.remove(name);
   }
 
-  PolygonIdFlutterChannel(this._polygonIdSdk, this._methodChannel) {
-    _methodChannel.setMethodCallHandler((call) {
-      logger().d(call.method);
+  Future<dynamic> _methodCallHandler(MethodCall call) {
+    logger().d(call.method);
 
-      switch (call.method) {
-        /// Internal
-        case 'closeStream':
-          return call.arguments['key'] != null
-              ? _closeSubscription(call.arguments['key'] as String)
-              : Future.value();
+    switch (call.method) {
+      /// Internal
+      case 'closeStream':
+        return call.arguments['key'] != null
+            ? _closeSubscription(call.arguments['key'] as String)
+            : Future.value();
 
-        /// SDK
-        case 'init':
-          return PolygonIdSdk.init(
-              env: call.arguments['env'] != null
-                  ? EnvEntity.fromJson(jsonDecode(call.arguments['env']))
-                  : null);
+      /// SDK
+      case 'init':
+        return PolygonIdSdk.init(
+            env: call.arguments['env'] != null
+                ? EnvEntity.fromJson(jsonDecode(call.arguments['env']))
+                : null);
 
-        case 'setEnv':
-          return _polygonIdSdk.setEnv(
-              env: EnvEntity.fromJson(jsonDecode(call.arguments['env'])));
+      case 'setEnv':
+        return _polygonIdSdk.setEnv(
+            env: EnvEntity.fromJson(jsonDecode(call.arguments['env'])));
 
-        case 'getEnv':
-          return _polygonIdSdk.getEnv().then((env) => jsonEncode(env));
+      case 'getEnv':
+        return _polygonIdSdk.getEnv().then((env) => jsonEncode(env));
 
-        case 'switchLog':
-          return _polygonIdSdk.switchLog(enabled: call.arguments['enabled']);
+      case 'switchLog':
+        return _polygonIdSdk.switchLog(enabled: call.arguments['enabled']);
 
-        case 'changeLogLevel':
-          return _polygonIdSdk.changeLogLevel(level: call.arguments['level']);
+      case 'changeLogLevel':
+        return _polygonIdSdk.changeLogLevel(level: call.arguments['level']);
 
-        /// Iden3comm
-        case 'addInteraction':
-          Map<String, dynamic> json = jsonDecode(call.arguments['interaction']);
-          InteractionBaseEntity interaction;
+      /// Iden3comm
+      case 'addInteraction':
+        Map<String, dynamic> json = jsonDecode(call.arguments['interaction']);
+        InteractionBaseEntity interaction;
 
-          try {
-            interaction = InteractionEntity.fromJson(json);
-          } catch (e) {
-            interaction = InteractionBaseEntity.fromJson(json);
-          }
+        try {
+          interaction = InteractionEntity.fromJson(json);
+        } catch (e) {
+          interaction = InteractionBaseEntity.fromJson(json);
+        }
 
-          return addInteraction(
-                  interaction: interaction,
-                  genesisDid: call.arguments['genesisDid'] as String?,
-                  privateKey: call.arguments['privateKey'] as String?)
-              .then((interaction) => jsonEncode(interaction.toJson()));
+        return addInteraction(
+                interaction: interaction,
+                genesisDid: call.arguments['genesisDid'] as String?,
+                privateKey: call.arguments['privateKey'] as String?)
+            .then((interaction) => jsonEncode(interaction.toJson()));
 
-        case 'authenticate':
-          return authenticate(
-              message: AuthIden3MessageEntity.fromJson(
-                  jsonDecode(call.arguments['message'])),
-              genesisDid: call.arguments['genesisDid'] as String,
-              profileNonce: BigInt.tryParse(
-                  call.arguments['profileNonce'] as String? ?? ''),
-              privateKey: call.arguments['privateKey'] as String,
-              pushToken: call.arguments['pushToken'] as String?);
-
-        case 'fetchAndSaveClaims':
-          return fetchAndSaveClaims(
-                  message: OfferIden3MessageEntity.fromJson(
-                      jsonDecode(call.arguments['message'])),
-                  genesisDid: call.arguments['genesisDid'] as String,
-                  profileNonce: BigInt.tryParse(
-                      call.arguments['profileNonce'] as String? ?? ''),
-                  privateKey: call.arguments['privateKey'] as String)
-              .then((claims) =>
-                  claims.map((claim) => jsonEncode(claim)).toList());
-
-        case 'getClaimsFromIden3Message':
-          return getIden3Message(message: call.arguments['message']).then(
-            (message) => getClaimsFromIden3Message(
-                    message: message,
-                    genesisDid: call.arguments['genesisDid'] as String,
-                    profileNonce: BigInt.tryParse(
-                        call.arguments['profileNonce'] as String? ?? ''),
-                    privateKey: call.arguments['privateKey'] as String)
-                .then((claims) => claims
-                    .map((claim) => jsonEncode(claim?.toJson()))
-                    .toList()),
-          );
-
-        case 'getFilters':
-          return getIden3Message(message: call.arguments['message'])
-              .then((message) => getFilters(message: message))
-              .then((filters) =>
-                  filters.map((filter) => jsonEncode(filter)).toList());
-
-        case 'getIden3Message':
-          return getIden3Message(message: call.arguments['message'])
-              .then((message) => jsonEncode(message));
-
-        case 'getSchemas':
-          return getIden3Message(message: call.arguments['message']).then(
-              (message) => getSchemas(message: message)
-                  .then((schemas) => jsonEncode(schemas)));
-
-        case 'getInteractions':
-          return getInteractions(
-            genesisDid: call.arguments['genesisDid'] as String?,
+      case 'authenticate':
+        return authenticate(
+            message: AuthIden3MessageEntity.fromJson(
+                jsonDecode(call.arguments['message'])),
+            genesisDid: call.arguments['genesisDid'] as String,
             profileNonce: BigInt.tryParse(
                 call.arguments['profileNonce'] as String? ?? ''),
-            privateKey: call.arguments['privateKey'] as String?,
-            types: (call.arguments['types'] as List?)
-                ?.map((type) => InteractionType.values
-                    .firstWhere((interactionType) => interactionType == type))
-                .toList(),
-            states: (call.arguments['states'] as List?)
-                ?.map((state) => InteractionState.values.firstWhere(
-                    (interactionState) => interactionState == state))
-                .toList(),
-            filters: (call.arguments['filters'] as List?)
-                ?.map((filter) => FilterEntity.fromJson(jsonDecode(filter)))
-                .toList(),
-          ).then((interactions) => interactions
-              .map((interaction) => jsonEncode(interaction.toJson()))
-              .toList());
+            privateKey: call.arguments['privateKey'] as String,
+            pushToken: call.arguments['pushToken'] as String?);
 
-        case 'getProofs':
-          return getIden3Message(message: call.arguments['message'])
-              .then((message) => getProofs(
+      case 'fetchAndSaveClaims':
+        return fetchAndSaveClaims(
+                message: OfferIden3MessageEntity.fromJson(
+                    jsonDecode(call.arguments['message'])),
+                genesisDid: call.arguments['genesisDid'] as String,
+                profileNonce: BigInt.tryParse(
+                    call.arguments['profileNonce'] as String? ?? ''),
+                privateKey: call.arguments['privateKey'] as String)
+            .then(
+                (claims) => claims.map((claim) => jsonEncode(claim)).toList());
+
+      case 'getClaimsFromIden3Message':
+        return getIden3Message(message: call.arguments['message']).then(
+          (message) => getClaimsFromIden3Message(
                   message: message,
                   genesisDid: call.arguments['genesisDid'] as String,
                   profileNonce: BigInt.tryParse(
                       call.arguments['profileNonce'] as String? ?? ''),
-                  privateKey: call.arguments['privateKey'] as String,
-                  ethereumUrl: call.arguments['ethereumUrl'] as String?,
-                  stateContractAddr:
-                      call.arguments['stateContractAddr'] as String?,
-                  ipfsNodeUrl: call.arguments['ipfsNodeUrl'] as String?,
-                  challenge: call.arguments['challenge'] as String?))
-              .then((message) => jsonEncode(message));
+                  privateKey: call.arguments['privateKey'] as String)
+              .then((claims) =>
+                  claims.map((claim) => jsonEncode(claim?.toJson())).toList()),
+        );
 
-        case 'removeInteractions':
-          return removeInteractions(
-              genesisDid: call.arguments['genesisDid'] as String?,
-              privateKey: call.arguments['privateKey'] as String?,
-              ids: (call.arguments['ids'] as List<dynamic>).cast<String>());
+      case 'getFilters':
+        return getIden3Message(message: call.arguments['message'])
+            .then((message) => getFilters(message: message))
+            .then((filters) =>
+                filters.map((filter) => jsonEncode(filter)).toList());
 
-        case 'updateInteraction':
-          return updateInteraction(
-                  id: call.arguments['id'] as String,
-                  genesisDid: call.arguments['genesisDid'] as String?,
-                  privateKey: call.arguments['privateKey'] as String?,
-                  state: call.arguments['state'] != null
-                      ? InteractionState.values.firstWhere((interactionState) =>
-                          interactionState == call.arguments['state'] ||
-                          interactionState.toString() ==
-                              call.arguments['state'].toString() ||
-                          interactionState.name ==
-                              call.arguments['state'].toString())
-                      : null)
-              .then((interaction) => jsonEncode(interaction.toJson()));
+      case 'getIden3Message':
+        return getIden3Message(message: call.arguments['message'])
+            .then((message) => jsonEncode(message));
 
-        /// Identity
-        case 'addIdentity':
-          return addIdentity(secret: call.arguments['secret'] as String?)
-              .then((identity) => jsonEncode(identity.toJson()));
+      case 'getSchemas':
+        return getIden3Message(message: call.arguments['message']).then(
+            (message) => getSchemas(message: message)
+                .then((schemas) => jsonEncode(schemas)));
 
-        case 'addProfile':
-          return addProfile(
+      case 'getInteractions':
+        return getInteractions(
+          genesisDid: call.arguments['genesisDid'] as String?,
+          profileNonce:
+              BigInt.tryParse(call.arguments['profileNonce'] as String? ?? ''),
+          privateKey: call.arguments['privateKey'] as String?,
+          types: (call.arguments['types'] as List?)
+              ?.map((type) => InteractionType.values
+                  .firstWhere((interactionType) => interactionType == type))
+              .toList(),
+          states: (call.arguments['states'] as List?)
+              ?.map((state) => InteractionState.values
+                  .firstWhere((interactionState) => interactionState == state))
+              .toList(),
+          filters: (call.arguments['filters'] as List?)
+              ?.map((filter) => FilterEntity.fromJson(jsonDecode(filter)))
+              .toList(),
+        ).then((interactions) => interactions
+            .map((interaction) => jsonEncode(interaction.toJson()))
+            .toList());
+
+      case 'getProofs':
+        return getIden3Message(message: call.arguments['message'])
+            .then((message) => getProofs(
+                message: message,
+                genesisDid: call.arguments['genesisDid'] as String,
+                profileNonce: BigInt.tryParse(
+                    call.arguments['profileNonce'] as String? ?? ''),
+                privateKey: call.arguments['privateKey'] as String,
+                ethereumUrl: call.arguments['ethereumUrl'] as String?,
+                stateContractAddr:
+                    call.arguments['stateContractAddr'] as String?,
+                ipfsNodeUrl: call.arguments['ipfsNodeUrl'] as String?,
+                challenge: call.arguments['challenge'] as String?))
+            .then((message) => jsonEncode(message));
+
+      case 'removeInteractions':
+        return removeInteractions(
+            genesisDid: call.arguments['genesisDid'] as String?,
+            privateKey: call.arguments['privateKey'] as String?,
+            ids: (call.arguments['ids'] as List<dynamic>).cast<String>());
+
+      case 'updateInteraction':
+        return updateInteraction(
+                id: call.arguments['id'] as String,
+                genesisDid: call.arguments['genesisDid'] as String?,
+                privateKey: call.arguments['privateKey'] as String?,
+                state: call.arguments['state'] != null
+                    ? InteractionState.values.firstWhere((interactionState) =>
+                        interactionState == call.arguments['state'] ||
+                        interactionState.toString() ==
+                            call.arguments['state'].toString() ||
+                        interactionState.name ==
+                            call.arguments['state'].toString())
+                    : null)
+            .then((interaction) => jsonEncode(interaction.toJson()));
+
+      /// Identity
+      case 'addIdentity':
+        return addIdentity(secret: call.arguments['secret'] as String?)
+            .then((identity) => jsonEncode(identity.toJson()));
+
+      case 'addProfile':
+        return addProfile(
+          genesisDid: call.arguments['genesisDid'] as String,
+          privateKey: call.arguments['privateKey'] as String,
+          profileNonce: BigInt.parse(call.arguments['profileNonce'] as String),
+        );
+
+      case 'backupIdentity':
+        return backupIdentity(
+            genesisDid: call.arguments['genesisDid'] as String,
+            privateKey: call.arguments['privateKey'] as String);
+
+      case 'checkIdentityValidity':
+        return checkIdentityValidity(
+            secret: call.arguments['secret'] as String);
+
+      case 'getDidEntity':
+        return getDidEntity(did: call.arguments['did'] as String)
+            .then((DidEntity did) => jsonEncode(did.toJson()));
+
+      case 'getDidIdentifier':
+        return getDidIdentifier(
+            privateKey: call.arguments['privateKey'] as String,
+            blockchain: call.arguments['blockchain'] as String,
+            network: call.arguments['network'] as String,
+            profileNonce: BigInt.tryParse(
+                call.arguments['profileNonce'] as String? ?? ''));
+
+      case 'getIdentities':
+        return getIdentities().then((identities) => identities
+            .map((identity) => jsonEncode(identity.toJson()))
+            .toList());
+
+      case 'getIdentity':
+        return getIdentity(
+                genesisDid: call.arguments['genesisDid'] as String,
+                privateKey: call.arguments['privateKey'] as String?)
+            .then((identity) => jsonEncode(identity.toJson()));
+
+      case 'getPrivateKey':
+        return getPrivateKey(secret: call.arguments['secret'] as String);
+
+      case 'getProfiles':
+        return getProfiles(
+                genesisDid: call.arguments['genesisDid'] as String,
+                privateKey: call.arguments['privateKey'] as String)
+            .then((profiles) =>
+                profiles.map((key, value) => MapEntry(key.toString(), value)));
+
+      case 'getState':
+        return getState(did: call.arguments['did'] as String);
+
+      case 'removeIdentity':
+        return removeIdentity(
+            genesisDid: call.arguments['genesisDid'] as String,
+            privateKey: call.arguments['privateKey'] as String);
+
+      case 'removeProfile':
+        return removeProfile(
             genesisDid: call.arguments['genesisDid'] as String,
             privateKey: call.arguments['privateKey'] as String,
             profileNonce:
-                BigInt.parse(call.arguments['profileNonce'] as String),
-          );
+                BigInt.parse(call.arguments['profileNonce'] as String));
 
-        case 'backupIdentity':
-          return backupIdentity(
-              genesisDid: call.arguments['genesisDid'] as String,
-              privateKey: call.arguments['privateKey'] as String);
+      case 'restoreIdentity':
+        return restoreIdentity(
+                genesisDid: call.arguments['genesisDid'] as String,
+                privateKey: call.arguments['privateKey'] as String,
+                encryptedDb: call.arguments['encryptedDb'] as String?)
+            .then((identity) => jsonEncode(identity));
 
-        case 'checkIdentityValidity':
-          return checkIdentityValidity(
-              secret: call.arguments['secret'] as String);
+      case 'sign':
+        return sign(
+            message: call.arguments['message'] as String,
+            privateKey: call.arguments['privateKey'] as String);
 
-        case 'getDidEntity':
-          return getDidEntity(did: call.arguments['did'] as String)
-              .then((DidEntity did) => jsonEncode(did.toJson()));
+      /// Credential
+      case 'getClaims':
+        return getClaims(
+                filters: (call.arguments['filters'] as List?)
+                    ?.map((filter) =>
+                        FilterEntity.fromJson(jsonDecode(filter as String)))
+                    .toList(),
+                genesisDid: call.arguments['genesisDid'] as String,
+                privateKey: call.arguments['privateKey'] as String)
+            .then((claims) =>
+                claims.map((claim) => jsonEncode(claim.toJson())).toList());
 
-        case 'getDidIdentifier':
-          return getDidIdentifier(
-              privateKey: call.arguments['privateKey'] as String,
-              blockchain: call.arguments['blockchain'] as String,
-              network: call.arguments['network'] as String,
-              profileNonce: BigInt.tryParse(
-                  call.arguments['profileNonce'] as String? ?? ''));
+      case 'getClaimsByIds':
+        return getClaimsByIds(
+                claimIds: (call.arguments['claimIds'] as List)
+                    .map((e) => e as String)
+                    .toList(),
+                genesisDid: call.arguments['genesisDid'] as String,
+                privateKey: call.arguments['privateKey'] as String)
+            .then(
+                (claims) => claims.map((claim) => jsonEncode(claim)).toList());
 
-        case 'getIdentities':
-          return getIdentities().then((identities) => identities
-              .map((identity) => jsonEncode(identity.toJson()))
-              .toList());
+      case 'getClaimRevocationStatus':
+        return getClaimRevocationStatus(
+                claimId: call.arguments['claimId'] as String,
+                genesisDid: call.arguments['genesisDid'] as String,
+                privateKey: call.arguments['privateKey'] as String)
+            .then((revStatus) => jsonEncode(revStatus));
 
-        case 'getIdentity':
-          return getIdentity(
-                  genesisDid: call.arguments['genesisDid'] as String,
-                  privateKey: call.arguments['privateKey'] as String?)
-              .then((identity) => jsonEncode(identity.toJson()));
+      case 'removeClaim':
+        return removeClaim(
+            claimId: call.arguments['claimId'] as String,
+            genesisDid: call.arguments['genesisDid'] as String,
+            privateKey: call.arguments['privateKey'] as String);
 
-        case 'getPrivateKey':
-          return getPrivateKey(secret: call.arguments['secret'] as String);
-
-        case 'getProfiles':
-          return getProfiles(
-                  genesisDid: call.arguments['genesisDid'] as String,
-                  privateKey: call.arguments['privateKey'] as String)
-              .then((profiles) => profiles
-                  .map((key, value) => MapEntry(key.toString(), value)));
-
-        case 'getState':
-          return getState(did: call.arguments['did'] as String);
-
-        case 'removeIdentity':
-          return removeIdentity(
-              genesisDid: call.arguments['genesisDid'] as String,
-              privateKey: call.arguments['privateKey'] as String);
-
-        case 'removeProfile':
-          return removeProfile(
-              genesisDid: call.arguments['genesisDid'] as String,
-              privateKey: call.arguments['privateKey'] as String,
-              profileNonce:
-                  BigInt.parse(call.arguments['profileNonce'] as String));
-
-        case 'restoreIdentity':
-          return restoreIdentity(
-                  genesisDid: call.arguments['genesisDid'] as String,
-                  privateKey: call.arguments['privateKey'] as String,
-                  encryptedDb: call.arguments['encryptedDb'] as String?)
-              .then((identity) => jsonEncode(identity));
-
-        case 'sign':
-          return sign(
-              message: call.arguments['message'] as String,
-              privateKey: call.arguments['privateKey'] as String);
-
-        /// Credential
-        case 'getClaims':
-          return getClaims(
-                  filters: (call.arguments['filters'] as List?)
-                      ?.map((filter) =>
-                          FilterEntity.fromJson(jsonDecode(filter as String)))
-                      .toList(),
-                  genesisDid: call.arguments['genesisDid'] as String,
-                  privateKey: call.arguments['privateKey'] as String)
-              .then((claims) =>
-                  claims.map((claim) => jsonEncode(claim.toJson())).toList());
-
-        case 'getClaimsByIds':
-          return getClaimsByIds(
-                  claimIds: (call.arguments['claimIds'] as List)
-                      .map((e) => e as String)
-                      .toList(),
-                  genesisDid: call.arguments['genesisDid'] as String,
-                  privateKey: call.arguments['privateKey'] as String)
-              .then((claims) =>
-                  claims.map((claim) => jsonEncode(claim)).toList());
-
-        case 'getClaimRevocationStatus':
-          return getClaimRevocationStatus(
-                  claimId: call.arguments['claimId'] as String,
-                  genesisDid: call.arguments['genesisDid'] as String,
-                  privateKey: call.arguments['privateKey'] as String)
-              .then((revStatus) => jsonEncode(revStatus));
-
-        case 'removeClaim':
-          return removeClaim(
-              claimId: call.arguments['claimId'] as String,
-              genesisDid: call.arguments['genesisDid'] as String,
-              privateKey: call.arguments['privateKey'] as String);
-
-        case 'removeClaims':
-          return removeClaims(
-              claimIds: (call.arguments['claimIds'] as List)
-                  .map((e) => e as String)
-                  .toList(),
-              genesisDid: call.arguments['genesisDid'] as String,
-              privateKey: call.arguments['privateKey'] as String);
-
-        case 'saveClaims':
-          return saveClaims(
-                  claims: (call.arguments['claims'] as List)
-                      .map((claim) => ClaimEntity.fromJson(jsonDecode(claim)))
-                      .toList(),
-                  genesisDid: call.arguments['genesisDid'] as String,
-                  privateKey: call.arguments['privateKey'] as String)
-              .then((claims) =>
-                  claims.map((claim) => jsonEncode(claim)).toList());
-
-        case 'updateClaim':
-          return updateClaim(
-                  claimId: call.arguments['claimId'] as String,
-                  issuer: call.arguments['issuer'] as String?,
-                  genesisDid: call.arguments['genesisDid'] as String,
-                  state: call.arguments['state'] != null
-                      ? ClaimState.values.firstWhere(
-                          (claimState) => claimState == call.arguments['state'])
-                      : null,
-                  expiration: call.arguments['expiration'] as String?,
-                  type: call.arguments['type'] as String?,
-                  data: call.arguments['data'] as Map<String, dynamic>?,
-                  privateKey: call.arguments['privateKey'] as String)
-              .then((claim) => jsonEncode(claim));
-
-        case 'startDownloadCircuits':
-          return _listen(
-              name: downloadCircuitsName,
-              stream: initCircuitsDownloadAndGetInfoStream,
-              onDone: () {
-                _closeSubscription('downloadCircuits')
-                    .then((_) => downloadCircuitsName);
-              });
-
-        case 'checkCircuitsInBundle':
-          return checkCircuitsInBundle();
-
-        case 'isAlreadyDownloadedCircuitsFromServer':
-          return isAlreadyDownloadedCircuitsFromServer();
-
-        case 'cancelDownloadCircuits':
-          return cancelDownloadCircuits()
-              .then((_) => _closeSubscription('downloadCircuits'));
-
-        case 'proofGenerationStepsStream':
-          return _listen(
-              name: proofGenerationStepsName,
-              stream: proofGenerationStepsStream(),
-              onDone: () {
-                _closeSubscription('proofGenerationSteps')
-                    .then((_) => proofGenerationStepsName);
-              });
-
-        case 'prove':
-          // TODO: finish this params
-          return prove(
-            identifier: call.arguments['identifier'] as String,
-            profileNonce:
-                BigInt.parse(call.arguments['profileNonce'] as String),
-            claimSubjectProfileNonce: BigInt.parse(
-                call.arguments['claimSubjectProfileNonce'] as String),
-            credential: ClaimEntity.fromJson(
-                jsonDecode(call.arguments['credential'] as String)),
-            circuitData: CircuitDataEntity.fromJson(
-                jsonDecode(call.arguments['circuitData'] as String)),
-            proofScopeRequest:
-                call.arguments['proofScopeRequest'] as Map<String, dynamic>,
-            authClaim: (call.arguments['authClaim'] as List?)
-                ?.map((e) => e as String)
+      case 'removeClaims':
+        return removeClaims(
+            claimIds: (call.arguments['claimIds'] as List)
+                .map((e) => e as String)
                 .toList(),
-            signature: call.arguments['signature'] as String?,
-            challenge: call.arguments['challenge'] as String?,
-            treeState: call.arguments['treeState'] as Map<String, dynamic>?,
-          ).then((proof) => jsonEncode(proof));
+            genesisDid: call.arguments['genesisDid'] as String,
+            privateKey: call.arguments['privateKey'] as String);
 
-        case 'setCustomSystemProxy':
-          return () async {
-            HttpOverrides.global = null;
-            var proxyHost = call.arguments['host'] as String;
-            var proxyPort = call.arguments['port'] as int;
-            print('setCustomSystemProxy: $proxyHost:$proxyPort');
-            final proxy = CustomProxy(
-                ipAddress: proxyHost,
-                port: proxyPort,
-                allowBadCertificates: true);
+      case 'saveClaims':
+        return saveClaims(
+                claims: (call.arguments['claims'] as List)
+                    .map((claim) => ClaimEntity.fromJson(jsonDecode(claim)))
+                    .toList(),
+                genesisDid: call.arguments['genesisDid'] as String,
+                privateKey: call.arguments['privateKey'] as String)
+            .then(
+                (claims) => claims.map((claim) => jsonEncode(claim)).toList());
+
+      case 'updateClaim':
+        return updateClaim(
+                claimId: call.arguments['claimId'] as String,
+                issuer: call.arguments['issuer'] as String?,
+                genesisDid: call.arguments['genesisDid'] as String,
+                state: call.arguments['state'] != null
+                    ? ClaimState.values.firstWhere(
+                        (claimState) => claimState == call.arguments['state'])
+                    : null,
+                expiration: call.arguments['expiration'] as String?,
+                type: call.arguments['type'] as String?,
+                data: call.arguments['data'] as Map<String, dynamic>?,
+                privateKey: call.arguments['privateKey'] as String)
+            .then((claim) => jsonEncode(claim));
+
+      case 'startDownloadCircuits':
+        return _listen(
+            name: downloadCircuitsName,
+            stream: initCircuitsDownloadAndGetInfoStream,
+            onDone: () {
+              _closeSubscription('downloadCircuits')
+                  .then((_) => downloadCircuitsName);
+            });
+
+      case 'checkCircuitsInBundle':
+        return checkCircuitsInBundle();
+
+      case 'isAlreadyDownloadedCircuitsFromServer':
+        return isAlreadyDownloadedCircuitsFromServer();
+
+      case 'cancelDownloadCircuits':
+        return cancelDownloadCircuits()
+            .then((_) => _closeSubscription('downloadCircuits'));
+
+      case 'proofGenerationStepsStream':
+        return _listen(
+            name: proofGenerationStepsName,
+            stream: proofGenerationStepsStream(),
+            onDone: () {
+              _closeSubscription('proofGenerationSteps')
+                  .then((_) => proofGenerationStepsName);
+            });
+
+      case 'prove':
+        // TODO: finish this params
+        return prove(
+          identifier: call.arguments['identifier'] as String,
+          profileNonce: BigInt.parse(call.arguments['profileNonce'] as String),
+          claimSubjectProfileNonce: BigInt.parse(
+              call.arguments['claimSubjectProfileNonce'] as String),
+          credential: ClaimEntity.fromJson(
+              jsonDecode(call.arguments['credential'] as String)),
+          circuitData: CircuitDataEntity.fromJson(
+              jsonDecode(call.arguments['circuitData'] as String)),
+          proofScopeRequest:
+              call.arguments['proofScopeRequest'] as Map<String, dynamic>,
+          authClaim: (call.arguments['authClaim'] as List?)
+              ?.map((e) => e as String)
+              .toList(),
+          signature: call.arguments['signature'] as String?,
+          challenge: call.arguments['challenge'] as String?,
+          treeState: call.arguments['treeState'] as Map<String, dynamic>?,
+        ).then((proof) => jsonEncode(proof));
+
+      case 'setCustomSystemProxy':
+        return () async {
+          HttpOverrides.global = null;
+          var proxyHost = call.arguments['host'] as String;
+          var proxyPort = call.arguments['port'] as int;
+          print('setCustomSystemProxy: $proxyHost:$proxyPort');
+          final proxy = CustomProxy(
+              ipAddress: proxyHost,
+              port: proxyPort,
+              allowBadCertificates: true);
+          proxy.enable();
+          print("proxy enabled: $proxyHost:$proxyPort");
+          return "proxy enabled: $proxyHost:$proxyPort";
+        }();
+
+      case 'useSystemProxy':
+        return () async {
+          bool enabled = false;
+          String? host;
+          int? port;
+          try {
+            ProxySetting settings = await NativeProxyReader.proxySetting;
+            enabled = settings.enabled;
+            host = settings.host;
+            port = settings.port;
+          } catch (e) {
+            print(e);
+          }
+          if (enabled && host != null) {
+            final proxy = CustomProxy(ipAddress: host, port: port);
             proxy.enable();
-            print("proxy enabled: $proxyHost:$proxyPort");
-            return "proxy enabled: $proxyHost:$proxyPort";
-          }();
-
-        case 'useSystemProxy':
-          return () async {
-            bool enabled = false;
-            String? host;
-            int? port;
-            try {
-              ProxySetting settings = await NativeProxyReader.proxySetting;
-              enabled = settings.enabled;
-              host = settings.host;
-              port = settings.port;
-            } catch (e) {
-              print(e);
-            }
-            if (enabled && host != null) {
-              final proxy = CustomProxy(ipAddress: host, port: port);
-              proxy.enable();
-              print("proxy enabled: $host:$port");
-              return "proxy enabled: $host:$port";
-            } else {
-              HttpOverrides.global = null;
-              print("No system proxy, proxy disabled");
-              return "No system proxy, proxy disabled";
-            }
-          }();
-
-        case 'disableProxy':
-          return () async {
+            print("proxy enabled: $host:$port");
+            return "proxy enabled: $host:$port";
+          } else {
             HttpOverrides.global = null;
-            print("Proxy disabled");
-            return "Proxy disabled";
-          }();
+            print("No system proxy, proxy disabled");
+            return "No system proxy, proxy disabled";
+          }
+        }();
 
-        default:
-          throw PlatformException(
-              code: 'not_implemented',
-              message: 'Method ${call.method} not implemented');
-      }
+      case 'disableProxy':
+        return () async {
+          HttpOverrides.global = null;
+          print("Proxy disabled");
+          return "Proxy disabled";
+        }();
+
+      case 'generateJwzAuthTokenFromZKProof':
+        return () async {
+          try {
+            var authResponseDTO = AuthResponseDTO.fromJson(
+                jsonDecode(call.arguments['authResponseDTO']));
+
+            return await generateJwzAuthTokenFromZKProof(call.arguments);
+          } catch (e) {
+            throw ErrorException(e);
+          }
+        }();
+
+      default:
+        throw PlatformException(
+            code: 'not_implemented',
+            message: 'Method ${call.method} not implemented');
+    }
+  }
+
+  PolygonIdFlutterChannel(this._polygonIdSdk, this._methodChannel) {
+    _methodChannel.setMethodCallHandler((call) {
+      LogHelper.markCurrentMethod(call.method);
+      _methodCallHandler(call);
+      LogHelper.markCurrentMethod("");
     });
   }
 
@@ -1017,5 +1032,10 @@ class PolygonIdFlutterChannel
     }
 
     return true;
+  }
+
+  Future<String> generateJwzAuthTokenFromZKProof(
+      AuthResponseDTO authResponseDTO) async {
+    return "";
   }
 }

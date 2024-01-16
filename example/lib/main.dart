@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
@@ -13,38 +14,48 @@ import 'package:polygonid_flutter_sdk_example/src/presentation/dependency_inject
     as di;
 
 Future<void> main() async {
-  //Dependency Injection initialization
-  WidgetsFlutterBinding.ensureInitialized();
-  bool enabled = false;
-  String? host;
-  int? port;
-  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-  if (Platform.isIOS) {
-    var iosInfo = await deviceInfo.iosInfo;
-    if (!iosInfo.isPhysicalDevice) {
-      try {
-        ProxySetting settings = await NativeProxyReader.proxySetting;
-        enabled = settings.enabled;
-        host = settings.host;
-        port = settings.port;
-      } catch (e) {
-        print(e);
+  runZoned(
+    () async {
+      //Dependency Injection initialization
+      WidgetsFlutterBinding.ensureInitialized();
+      bool enabled = false;
+      String? host;
+      int? port;
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      if (Platform.isIOS) {
+        var iosInfo = await deviceInfo.iosInfo;
+        if (!iosInfo.isPhysicalDevice) {
+          try {
+            ProxySetting settings = await NativeProxyReader.proxySetting;
+            enabled = settings.enabled;
+            host = settings.host;
+            port = settings.port;
+          } catch (e) {
+            print(e);
+          }
+          if (enabled && host != null) {
+            final proxy = CustomProxy(ipAddress: host, port: port);
+            proxy.enable();
+            print("proxy enabled: $host:$port");
+          }
+        }
       }
-      if (enabled && host != null) {
-        final proxy = CustomProxy(ipAddress: host, port: port);
-        proxy.enable();
-        print("proxy enabled: $host:$port");
-      }
-    }
-  }
 
-  final bjj = LibBabyJubJubDataSource(BabyjubjubLib());
-  final result = await bjj.hashPoseidon("1");
-  await di.init();
-  PolygonIdSdk.I.switchLog(enabled: true);
-
-  // App UI locked in portrait mode
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
-  runApp(const App());
+      final bjj = LibBabyJubJubDataSource(BabyjubjubLib());
+      final result = await bjj.hashPoseidon("1");
+      await di.init();
+      PolygonIdSdk.I.switchLog(enabled: true);
+      //LogHelper.markCurrentMethod("testmethod");
+      // App UI locked in portrait mode
+      await SystemChrome.setPreferredOrientations(
+          [DeviceOrientation.portraitUp]);
+      runApp(const App());
+    },
+    zoneSpecification: ZoneSpecification(
+        print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
+      var newLine = LogHelper.getLogString(line);
+      parent.print(zone, newLine);
+    }),
+  );
+  //runApp(const App());
 }

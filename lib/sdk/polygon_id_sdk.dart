@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -16,6 +17,63 @@ import 'credential.dart';
 import 'iden3comm.dart';
 import 'identity.dart';
 import 'proof.dart';
+
+class LogHelper {
+  static String _currentMethod = "";
+  static int _millisecondsSinceEpochForCurrentMethod = 0;
+  static int _millisecondsSinceEpochForLastPrint = 0;
+
+  static void markCurrentMethod(String methodName) {
+    _currentMethod = methodName;
+    var now = DateTime.now();
+    var millisecondsSinceEpoch = now.millisecondsSinceEpoch;
+    _millisecondsSinceEpochForCurrentMethod = millisecondsSinceEpoch;
+    _millisecondsSinceEpochForLastPrint = millisecondsSinceEpoch;
+  }
+
+  static String getLogString(String line) {
+    DateTime now = DateTime.now();
+    String formattedTime =
+        "${now.hour}:${now.minute}:${now.second}.${now.millisecond}";
+
+    if (_currentMethod.isEmpty) {
+      return "[$formattedTime]: $line";
+    }
+    var millisecondsSinceEpoch = now.millisecondsSinceEpoch;
+
+    var millisecondsSinceMethodBegin =
+        millisecondsSinceEpoch - _millisecondsSinceEpochForCurrentMethod;
+
+    String durationSinceMethodBegin =
+        _formatMilliseconds(millisecondsSinceMethodBegin);
+
+    var millisecondsSinceLastPrint =
+        millisecondsSinceEpoch - _millisecondsSinceEpochForLastPrint;
+
+    String durationSinceLastPrint =
+        _formatMilliseconds(millisecondsSinceLastPrint);
+
+    _millisecondsSinceEpochForLastPrint = millisecondsSinceEpoch;
+
+    String newLine =
+        "[$formattedTime]: <$_currentMethod> ($durationSinceMethodBegin) ($durationSinceLastPrint) $line";
+    return newLine;
+  }
+
+  static String _formatMilliseconds(int milliseconds) {
+    Duration duration = Duration(milliseconds: milliseconds);
+
+    int hours = duration.inHours;
+    int minutes = (duration.inMinutes % 60);
+    int seconds = (duration.inSeconds % 60);
+    int milliSeconds = (duration.inMilliseconds % 1000);
+
+    String formattedTime =
+        '$hours:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}.${milliSeconds.toString().padLeft(3, '0')}';
+
+    return formattedTime;
+  }
+}
 
 class PolygonIsSdkNotInitializedException extends PolygonIdException {
   String message;
