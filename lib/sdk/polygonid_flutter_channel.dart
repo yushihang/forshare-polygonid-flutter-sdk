@@ -501,8 +501,9 @@ class PolygonIdFlutterChannel
   PolygonIdFlutterChannel(this._polygonIdSdk, this._methodChannel) {
     _methodChannel.setMethodCallHandler((call) {
       LogHelper.markCurrentMethod(call.method);
-      _methodCallHandler(call);
+      var returnValue = _methodCallHandler(call);
       LogHelper.markCurrentMethod("");
+      return returnValue;
     });
   }
 
