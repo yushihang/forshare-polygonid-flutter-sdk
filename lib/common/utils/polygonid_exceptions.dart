@@ -1,7 +1,7 @@
 abstract class PolygonIdException implements Exception {
-  StackTrace? _stackTrace;
+  StackTrace? stackTrace;
   PolygonIdException([StackTrace? stackTrace]) {
-    _stackTrace = stackTrace ?? StackTrace.current;
+    this.stackTrace = stackTrace ?? StackTrace.current;
   }
 
   String exceptionInfo() {
@@ -9,6 +9,6 @@ abstract class PolygonIdException implements Exception {
   }
 
   String toString() {
-    return "[PolygonId Flutter Exception]: $runtimeType\n[info]:\t${exceptionInfo()} \n[StackTrace]:\n$_stackTrace\n";
+    return "[PolygonId Flutter Exception]: $runtimeType\n[info]:\t${exceptionInfo()} \n[StackTrace]:\n$stackTrace\n";
   }
 }

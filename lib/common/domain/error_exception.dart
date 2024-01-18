@@ -11,6 +11,17 @@ class ErrorException extends PolygonIdException {
   }
 }
 
+class WrapperForException extends PolygonIdException {
+  Object exception;
+
+  WrapperForException(this.exception);
+
+  @override
+  String exceptionInfo() {
+    return "exception: $exception";
+  }
+}
+
 class CircuitFileErrorException extends PolygonIdException {
   final String fileName;
 

@@ -1,10 +1,11 @@
 import 'dart:convert';
 
+import 'package:polygonid_flutter_sdk/assets/state.g.dart';
 import 'package:polygonid_flutter_sdk/common/domain/domain_logger.dart';
 import 'package:polygonid_flutter_sdk/common/domain/entities/env_entity.dart';
+import 'package:polygonid_flutter_sdk/common/domain/error_exception.dart';
 import 'package:polygonid_flutter_sdk/common/domain/use_cases/get_env_use_case.dart';
 import 'package:polygonid_flutter_sdk/common/utils/uint8_list_utils.dart';
-import 'package:polygonid_flutter_sdk/assets/state.g.dart';
 import 'package:polygonid_flutter_sdk/sdk/di/injector.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
@@ -95,7 +96,7 @@ class RPCDataSource {
       return "";
     } catch (e) {
       logger().e(e.toString());
-      rethrow;
+      throw WrapperForException(e);
     }
   }
 
