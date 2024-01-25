@@ -20,13 +20,16 @@ class GetIden3commClaimsParam {
   final BigInt profileNonce;
   final String privateKey;
   final Map<int, Map<String, dynamic>> nonRevocationProofs;
+  final List<ProofRequestEntity>? requests;
 
-  GetIden3commClaimsParam(
-      {required this.message,
-      required this.genesisDid,
-      required this.profileNonce,
-      required this.privateKey,
-      required this.nonRevocationProofs});
+  GetIden3commClaimsParam({
+    required this.message,
+    required this.genesisDid,
+    required this.profileNonce,
+    required this.privateKey,
+    required this.nonRevocationProofs,
+    required this.requests,
+  });
 }
 
 class GetIden3commClaimsUseCase
@@ -59,7 +62,7 @@ class GetIden3commClaimsUseCase
     print("method channel execute: getClaimsFromIden3Message");
     List<ClaimEntity?> claims = [];
 
-    List<ProofRequestEntity> requests =
+    List<ProofRequestEntity> requests = param.requests ??
         await _getProofRequestsUseCase.execute(param: param.message);
     _stacktraceManager
         .addTrace("[GetIden3commClaimsUseCase] requests: $requests");

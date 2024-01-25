@@ -34,16 +34,23 @@ class GetProofRequestsUseCase
     }
 
     if (param.body.scope != null && param.body.scope!.isNotEmpty) {
+      List<Future<ProofRequestEntity> Function()> closures = [];
       for (ProofScopeRequest scope in param.body.scope!) {
-        var context = await _getProofQueryContextUseCase.execute(param: scope);
-        _stacktraceManager.addTrace(
-            "[GetProofRequestsUseCase] _getProofQueryContextUseCase: $context");
-        ProofQueryParamEntity query =
-            await _getProofQueryUseCase.execute(param: scope);
-        _stacktraceManager.addTrace(
-            "[GetProofRequestsUseCase] _getProofQueryUseCase: $query");
-        proofRequests.add(ProofRequestEntity(scope, context, query));
+        closures.add(() async {
+          var context =
+              await _getProofQueryContextUseCase.execute(param: scope);
+          _stacktraceManager.addTrace(
+              "[GetProofRequestsUseCase] _getProofQueryContextUseCase: $context");
+          ProofQueryParamEntity query =
+              await _getProofQueryUseCase.execute(param: scope);
+          _stacktraceManager.addTrace(
+              "[GetProofRequestsUseCase] _getProofQueryUseCase: $query");
+          return ProofRequestEntity(scope, context, query);
+        });
       }
+      List<ProofRequestEntity> results =
+          await Future.wait(closures.map((closure) => closure()));
+      proofRequests.addAll(results);
     }
 
     return Future.value(proofRequests);

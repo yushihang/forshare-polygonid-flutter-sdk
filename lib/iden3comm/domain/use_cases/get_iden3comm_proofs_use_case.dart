@@ -75,6 +75,7 @@ class GetIden3commProofsUseCase
       _proofGenerationStepsStreamManager.add("Getting proof requests");
       List<ProofRequestEntity> requests =
           await _getProofRequestsUseCase.execute(param: param.message);
+      print("<getProofs trace> get requests: count:${requests.length}");
       _stacktraceManager
           .addTrace("[GetIden3commProofsUseCase] requests: $requests");
       logger().i(
@@ -87,7 +88,8 @@ class GetIden3commProofsUseCase
               genesisDid: param.genesisDid,
               profileNonce: param.profileNonce,
               privateKey: param.privateKey,
-              nonRevocationProofs: param.nonRevocationProofs ?? {}));
+              nonRevocationProofs: param.nonRevocationProofs ?? {},
+              requests: requests));
 
       print("<getProofs trace> claims found: ${claims.length}");
       _stacktraceManager.addTrace(
