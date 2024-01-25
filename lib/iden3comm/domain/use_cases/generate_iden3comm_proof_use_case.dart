@@ -160,6 +160,8 @@ class GenerateIden3commProofUseCase
       logger().i("GENERATION PROOF signature executed in ${stopwatch.elapsed}");
     }
 
+    print("<getProofs trace> before getDidUseCase");
+
     if (param.ethereumUrl != null &&
         param.stateContractAddr != null &&
         param.ipfsNodeURL != null) {
@@ -176,6 +178,8 @@ class GenerateIden3commProofUseCase
     _stacktraceManager.addTrace(
         "[GenerateIden3commProofUseCase] didEntity: ${didEntity.did}");
     logger().i("GENERATION PROOF didEntity executed in ${stopwatch.elapsed}");
+
+    print("<getProofs trace> before calculateAtomicQueryInputs");
 
     // Prepare atomic query inputs
     Uint8List res = await _proofRepository
@@ -207,6 +211,8 @@ class GenerateIden3commProofUseCase
     logger().i(
         "GENERATION PROOF calculateAtomicQueryInputs executed in ${stopwatch.elapsed}");
 
+    print("<getProofs trace> calculateAtomicQueryInputs");
+
     dynamic inputsJson = json.decode(Uint8ArrayUtils.uint8ListToString(res));
     Uint8List atomicQueryInputs =
         Uint8ArrayUtils.uint8ListfromString(json.encode(inputsJson["inputs"]));
@@ -219,10 +225,12 @@ class GenerateIden3commProofUseCase
     logger().i(
         "GENERATION PROOF atomicQueryInputs executed in ${stopwatch.elapsed}");
 
+    print("<getProofs trace> _proveUseCase execute begin");
     // Prove
     return _proveUseCase
         .execute(param: ProveParam(atomicQueryInputs, param.circuitData))
         .then((proof) {
+      print("<getProofs trace> _proveUseCase execute generated proof");
       _stacktraceManager.addTrace("[GenerateIden3commProofUseCase] proof");
       logger().i("[GenerateProofUseCase] proof: $proof");
 

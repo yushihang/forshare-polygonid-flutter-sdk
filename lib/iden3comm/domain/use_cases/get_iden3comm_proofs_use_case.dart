@@ -66,6 +66,8 @@ class GetIden3commProofsUseCase
       {required GetIden3commProofsParam param}) async {
     try {
       print("method channel execute: getProofs");
+
+      print("<getProofs trace> GetIden3commProofsUseCase.execute");
       List<Iden3commProofEntity> proofs = [];
 
       Stopwatch stopwatch = Stopwatch()..start();
@@ -85,11 +87,14 @@ class GetIden3commProofsUseCase
               profileNonce: param.profileNonce,
               privateKey: param.privateKey,
               nonRevocationProofs: param.nonRevocationProofs ?? {}));
+
+      print("<getProofs trace> claims found: ${claims.length}");
       _stacktraceManager.addTrace(
           "[GetIden3commProofsUseCase] claims found: ${claims.length}");
       logger().i(
           "STOPPE after _getIden3commClaimsUseCase ${stopwatch.elapsedMilliseconds}");
 
+      print("<getProofs trace> requests numbers: ${requests.length}");
       if ((requests.isNotEmpty &&
               claims.isNotEmpty &&
               requests.length == claims.length) ||
@@ -97,6 +102,7 @@ class GetIden3commProofsUseCase
         /// We got [ProofRequestEntity], let's find the associated [ClaimEntity]
         /// and generate [ProofEntity]
         for (int i = 0; i < requests.length; i++) {
+          print("<getProofs trace> requests index: $i handle begin");
           ProofRequestEntity request = requests[i];
           ClaimEntity? claim = claims[i];
           if (claim != null &&
@@ -115,6 +121,9 @@ class GetIden3commProofsUseCase
               challenge = param.challenge;
             }
 
+            print(
+                "<getProofs trace> requests index: $i handle loadCircuitFiles");
+
             var identityEntity = await _getIdentityUseCase.execute(
                 param: GetIdentityParam(
                     genesisDid: param.genesisDid,
@@ -126,6 +135,9 @@ class GetIden3commProofsUseCase
 
             _proofGenerationStepsStreamManager
                 .add("Generating proof for ${claim.type}");
+
+            print(
+                "<getProofs trace> requests index: $i generateIden3commProofUseCase execute");
             // Generate proof
             proofs.add(await _generateIden3commProofUseCase.execute(
                 param: GenerateIden3commProofParam(
@@ -144,6 +156,11 @@ class GetIden3commProofsUseCase
             logger().i(
                 "STOPPE after _generateIden3commProofUseCase $i ${stopwatch.elapsedMilliseconds}");
           }
+
+          print(
+              "<getProofs trace> requests index: $i generateIden3commProofUseCase execute complete");
+
+          print("<getProofs trace> requests index: $i handle end");
         }
       } else {
         _stacktraceManager.addTrace(

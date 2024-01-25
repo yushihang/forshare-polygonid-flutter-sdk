@@ -4,6 +4,7 @@ import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 import 'package:injectable/injectable.dart';
 import 'package:polygonid_flutter_sdk/proof/domain/exceptions/proof_generation_exceptions.dart';
+import 'package:polygonid_flutter_sdk/sdk/polygon_id_sdk.dart';
 
 import '../../../common/libs/polygonidcore/native_polygonidcore.dart';
 import '../../../common/libs/polygonidcore/pidcore_base.dart';
@@ -100,10 +101,20 @@ class PolygonIdCoreProof extends PolygonIdCore {
         malloc<ffi.Pointer<ffi.Char>>();
     ffi.Pointer<ffi.Pointer<PLGNStatus>> status =
         malloc<ffi.Pointer<PLGNStatus>>();
+
+    var line = LogHelper.getLogString(
+        "<getProofs trace> before PLGNAtomicQueryMtpV2Inputs-");
+    print(line);
     int res = PolygonIdCore.nativePolygonIdCoreLib
         .PLGNAtomicQueryMtpV2Inputs(response, in1, cfg, status);
+
+    line = LogHelper.getLogString(
+        "<getProofs trace> after PLGNAtomicQueryMtpV2Inputs-");
+    print(line);
     if (res == 0) {
+      print("<getProofs trace> before consumeStatus");
       String? consumedStatus = consumeStatus(status, "");
+      print("<getProofs trace> after consumeStatus");
       if (consumedStatus != null) {
         throw ProofInputsException(consumedStatus);
       }

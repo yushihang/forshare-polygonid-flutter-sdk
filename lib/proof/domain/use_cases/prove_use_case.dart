@@ -28,12 +28,14 @@ class ProveUseCase extends FutureUseCase<ProveParam, ZKProofEntity> {
     try {
       // Calculate witness
       logger().i("[ProveUseCase] proof: before Calculate witness");
+      print("<getProofs trace> before Calculate witness");
       Uint8List wtnsBytes = await _proofRepository.calculateWitness(
         param.circuitData,
         param.inputs,
       );
 
       logger().i("[ProveUseCase] proof: before prove");
+      print("<getProofs trace> before prove");
       // Generate proof
       ZKProofEntity zkProofEntity = await _proofRepository.prove(
         param.circuitData,
@@ -42,6 +44,8 @@ class ProveUseCase extends FutureUseCase<ProveParam, ZKProofEntity> {
 
       _stacktraceManager.addTrace("[ProveUseCase] proof");
       logger().i("[ProveUseCase] proof: $zkProofEntity");
+
+      print("<getProofs trace> after prove");
 
       return zkProofEntity;
     } catch (error) {
