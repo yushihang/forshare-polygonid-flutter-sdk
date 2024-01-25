@@ -64,10 +64,17 @@ class GetIden3commClaimsUseCase
     _stacktraceManager
         .addTrace("[GetIden3commClaimsUseCase] requests: $requests");
 
+    var requestIndex = -1;
+
     /// We got [ProofRequestEntity], let's find the associated [ClaimEntity]
     for (ProofRequestEntity request in requests) {
+      requestIndex += 1;
+      print(
+          "<getProofs trace> GetIden3commClaimsUseCase.execute: requestIndex: $requestIndex");
       if (await _isProofCircuitSupported.execute(
           param: request.scope.circuitId)) {
+        print(
+            "<getProofs trace> GetIden3commClaimsUseCase.execute: requestIndex: $requestIndex isProofCircuitSupported.execute");
         // Claims
         claims.add(
           await _iden3commCredentialRepository
@@ -85,6 +92,8 @@ class GetIden3commClaimsUseCase
             );
           }).then(
             (claims) async {
+              print(
+                  "<getProofs trace> GetIden3commClaimsUseCase.execute: requestIndex: $requestIndex filter complete");
               if (claims.isEmpty) {
                 _stacktraceManager
                     .addTrace("[GetIden3commClaimsUseCase] claims is empty");
@@ -117,6 +126,9 @@ class GetIden3commClaimsUseCase
                 }
                 return false;
               });
+
+              print(
+                  "<getProofs trace> GetIden3commClaimsUseCase.execute: requestIndex: $requestIndex firstWhereOrNull complete");
 
               if (validClaim == null) {
                 _stacktraceManager.addTrace(
@@ -167,7 +179,7 @@ class GetIden3commClaimsUseCase
                     .toList()
                     .first;
               } else {*/
-              return claims.first;
+              return validClaim;
               /*}*/
             },
           ),

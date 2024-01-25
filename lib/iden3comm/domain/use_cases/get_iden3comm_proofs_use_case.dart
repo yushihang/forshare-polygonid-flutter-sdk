@@ -80,6 +80,7 @@ class GetIden3commProofsUseCase
       logger().i(
           "STOPPE after _getProofRequestsUseCase ${stopwatch.elapsedMilliseconds}");
 
+      print("<getProofs trace> before GetIden3commClaimsUseCase.execute");
       List<ClaimEntity?> claims = await _getIden3commClaimsUseCase.execute(
           param: GetIden3commClaimsParam(
               message: param.message,
