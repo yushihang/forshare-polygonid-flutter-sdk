@@ -101,6 +101,7 @@ class GetIden3commProofsUseCase
           requests.isEmpty) {
         /// We got [ProofRequestEntity], let's find the associated [ClaimEntity]
         /// and generate [ProofEntity]
+        /*
         for (int i = 0; i < requests.length; i++) {
           print("<getProofs trace> requests index: $i handle begin");
           ProofRequestEntity request = requests[i];
@@ -161,7 +162,85 @@ class GetIden3commProofsUseCase
               "<getProofs trace> requests index: $i generateIden3commProofUseCase execute complete");
 
           print("<getProofs trace> requests index: $i handle end");
+        }*/
+
+        List<Future<Iden3commProofEntity?> Function()> closures = [];
+        for (int i = 0; i < requests.length; i++) {
+          closures.add(() async {
+            print("<getProofs trace> requests index: $i handle begin");
+            ProofRequestEntity request = requests[i];
+            ClaimEntity? claim = claims[i];
+            Iden3commProofEntity? proofReturned;
+            if (claim != null &&
+                claim.type == request.scope.query.type &&
+                await _isProofCircuitSupported.execute(
+                    param: request.scope.circuitId)) {
+              String circuitId = request.scope.circuitId;
+              CircuitDataEntity circuitData =
+                  await _proofRepository.loadCircuitFiles(circuitId);
+
+              String? challenge;
+              String? privKey;
+              if (circuitId == "credentialAtomicQuerySigV2OnChain" ||
+                  circuitId == "credentialAtomicQueryMTPV2OnChain") {
+                privKey = param.privateKey;
+                challenge = param.challenge;
+              }
+
+              print(
+                  "<getProofs trace> requests index: $i handle loadCircuitFiles");
+
+              var identityEntity = await _getIdentityUseCase.execute(
+                  param: GetIdentityParam(
+                      genesisDid: param.genesisDid,
+                      privateKey: param.privateKey));
+
+              BigInt claimSubjectProfileNonce = identityEntity.profiles.keys
+                  .firstWhere((k) => identityEntity.profiles[k] == claim.did,
+                      orElse: () => GENESIS_PROFILE_NONCE);
+
+              _proofGenerationStepsStreamManager
+                  .add("Generating proof for ${claim.type}");
+
+              print(
+                  "<getProofs trace> requests index: $i generateIden3commProofUseCase execute");
+              // Generate proof
+              proofReturned = await _generateIden3commProofUseCase.execute(
+                  param: GenerateIden3commProofParam(
+                param.genesisDid,
+                param.profileNonce,
+                claimSubjectProfileNonce,
+                claim,
+                request.scope,
+                circuitData,
+                privKey,
+                challenge,
+                param.ethereumUrl,
+                param.stateContractAddr,
+                param.ipfsNodeUrl,
+              ));
+              logger().i(
+                  "STOPPE after _generateIden3commProofUseCase $i ${stopwatch.elapsedMilliseconds}");
+            }
+
+            print(
+                "<getProofs trace> requests index: $i generateIden3commProofUseCase execute complete");
+
+            print("<getProofs trace> requests index: $i handle end");
+            return proofReturned;
+          });
         }
+
+        print("<getProofs trace> before await closures");
+        List<Iden3commProofEntity?> results =
+            await Future.wait(closures.map((closure) => closure()));
+        print("<getProofs trace> after await closures");
+        // Filter out null values
+        List<Iden3commProofEntity> nonNullResults = results
+            .where((result) => result != null)
+            .map((result) => result!)
+            .toList();
+        proofs = nonNullResults;
       } else {
         _stacktraceManager.addTrace(
             "[GetIden3commProofsUseCase] CredentialsNotFoundException - requests: $requests");
@@ -179,6 +258,7 @@ class GetIden3commProofsUseCase
         throw ProofsNotFoundException(requests);
       }
 
+      print("<getProofs trace> return proofs: count:${proofs.length}");
       return proofs;
     } catch (e) {
       _stacktraceManager.addTrace("[GetIden3commProofsUseCase] Exception: $e");
