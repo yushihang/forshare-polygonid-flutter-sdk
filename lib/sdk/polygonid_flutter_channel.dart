@@ -20,9 +20,11 @@ import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/credential/reque
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/interaction/interaction_base_entity.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/interaction/interaction_entity.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/proof/response/iden3comm_proof_entity.dart';
+import 'package:polygonid_flutter_sdk/identity/data/data_sources/lib_babyjubjub_data_source.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/entities/did_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/entities/identity_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/entities/private_identity_entity.dart';
+import 'package:polygonid_flutter_sdk/identity/libs/bjj/bjj.dart';
 import 'package:polygonid_flutter_sdk/proof/data/data_sources/circuits_download_data_source.dart';
 import 'package:polygonid_flutter_sdk/proof/data/data_sources/circuits_files_data_source.dart';
 import 'package:polygonid_flutter_sdk/proof/domain/entities/circuit_data_entity.dart';
@@ -542,10 +544,39 @@ class PolygonIdFlutterChannel
           case 'generateMnemonic':
             return () async {
               String mnemonicString = bip39.generateMnemonic();
-              print("mnemonicString: $mnemonicString");
+              print("generateMnemonic: $mnemonicString");
               List<String> mnemonicList = mnemonicString.split(" ");
               String jsonString = jsonEncode(mnemonicList);
               return jsonString;
+            }();
+
+          case 'hashPoseidon':
+            return () async {
+              var jsonString = call.arguments['strings'];
+              print("hashPoseidon: $jsonString");
+              var stringList = jsonDecode(jsonString);
+              if (stringList is! List) {
+                throw ErrorException('jsonString is not an array');
+              }
+              var len = stringList.length;
+              if (len <= 0 || len > 4) {
+                throw ErrorException('jsonString length error: $len');
+              }
+              final bjj = LibBabyJubJubDataSource(BabyjubjubLib());
+              switch (len) {
+                case 1:
+                  return await bjj.hashPoseidon(stringList[0]);
+                case 2:
+                  return await bjj.hashPoseidon2(stringList[0], stringList[1]);
+                case 3:
+                  return await bjj.hashPoseidon3(
+                      stringList[0], stringList[1], stringList[2]);
+                case 4:
+                  return await bjj.hashPoseidon4(stringList[0], stringList[1],
+                      stringList[2], stringList[3]);
+                default:
+                  throw ErrorException('jsonString length error: $len');
+              }
             }();
 
           default:
