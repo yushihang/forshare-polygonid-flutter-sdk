@@ -17,6 +17,7 @@ import 'package:polygonid_flutter_sdk/iden3comm/domain/exceptions/iden3comm_exce
 import 'package:polygonid_flutter_sdk/iden3comm/domain/use_cases/authenticate_use_case.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/use_cases/clean_schema_cache_use_case.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/use_cases/fetch_and_save_claims_use_case.dart';
+import 'package:polygonid_flutter_sdk/iden3comm/domain/use_cases/get_auth_token_use_case.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/use_cases/get_filters_use_case.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/use_cases/get_iden3comm_claims_rev_nonce_use_case.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/use_cases/get_iden3comm_claims_use_case.dart';
@@ -249,6 +250,13 @@ abstract class PolygonIdSdkIden3comm {
     required String privateKey,
     required String interactedWithDid,
   });
+
+  Future<String> generateJwzAuthToken({
+    required String genesisDid,
+    required BigInt profileNonce,
+    required String privateKey,
+    required String message,
+  });
 }
 
 @injectable
@@ -271,6 +279,7 @@ class Iden3comm implements PolygonIdSdkIden3comm {
   final GetDidProfileInfoUseCase _getDidProfileInfoUseCase;
   final GetDidProfileInfoListUseCase _getDidProfileInfoListUseCase;
   final RemoveDidProfileInfoUseCase _removeDidProfileInfoUseCase;
+  final GetAuthTokenUseCase _getAuthTokenUseCase;
 
   Iden3comm(
     this._fetchAndSaveClaimsUseCase,
@@ -291,6 +300,7 @@ class Iden3comm implements PolygonIdSdkIden3comm {
     this._getDidProfileInfoUseCase,
     this._getDidProfileInfoListUseCase,
     this._removeDidProfileInfoUseCase,
+    this._getAuthTokenUseCase,
   );
 
   @override
@@ -555,6 +565,22 @@ class Iden3comm implements PolygonIdSdkIden3comm {
         privateKey: privateKey,
         interactedWithDid: interactedWithDid,
       ),
+    );
+  }
+
+  @override
+  Future<String> generateJwzAuthToken({
+    required String genesisDid,
+    required BigInt profileNonce,
+    required String privateKey,
+    required String message,
+  }) {
+    return _getAuthTokenUseCase.execute(
+      param: GetAuthTokenParam(
+          genesisDid: genesisDid,
+          profileNonce: profileNonce,
+          privateKey: privateKey,
+          message: message),
     );
   }
 }

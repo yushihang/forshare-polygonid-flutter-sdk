@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:bip39/bip39.dart' as bip39;
 import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
 import 'package:native_flutter_proxy/custom_proxy.dart';
@@ -13,7 +14,6 @@ import 'package:polygonid_flutter_sdk/common/domain/entities/env_entity.dart';
 import 'package:polygonid_flutter_sdk/common/domain/entities/filter_entity.dart';
 import 'package:polygonid_flutter_sdk/common/domain/error_exception.dart';
 import 'package:polygonid_flutter_sdk/credential/domain/entities/claim_entity.dart';
-import 'package:polygonid_flutter_sdk/iden3comm/data/dtos/authorization/response/auth_response_dto.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/authorization/request/auth_request_iden3_message_entity.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/common/iden3_message_entity.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/credential/request/offer_iden3_message_entity.dart';
@@ -494,16 +494,58 @@ class PolygonIdFlutterChannel
               return "Proxy disabled";
             }();
 
-          case 'generateJwzAuthTokenFromZKProof':
+          case 'generateJwzAuthToken':
             return () async {
               try {
-                var authResponseDTO = AuthResponseDTO.fromJson(
-                    jsonDecode(call.arguments['authResponseDTO']));
-
-                return await generateJwzAuthTokenFromZKProof(call.arguments);
+                var genesisDid = call.arguments['genesisDid'] as String;
+                var profileNonce = BigInt.tryParse(
+                        call.arguments['profileNonce'] as String? ?? '0') ??
+                    BigInt.zero;
+                var privateKey = call.arguments['privateKey'] as String;
+                var message = call.arguments['message'] as String;
+                return await generateJwzAuthToken(
+                    genesisDid: genesisDid,
+                    profileNonce: profileNonce,
+                    privateKey: privateKey,
+                    message: '');
               } catch (e) {
                 throw ErrorException(e);
               }
+            }();
+
+          case 'validateMnemonic':
+            return () async {
+              var memonic = call.arguments['Mnemonic'];
+              var mnemonicList = jsonDecode(memonic);
+              print("validateMnemonic: ${mnemonicList.join(' ')}");
+              if (mnemonicList is! List) {
+                throw ErrorException('Mnemonic is not an array');
+              }
+              bool isValid = bip39.validateMnemonic(mnemonicList.join(' '));
+              print("validateMnemonic: $isValid");
+              return isValid;
+            }();
+
+          case 'mnemonicToSeedHex':
+            return () async {
+              var memonic = call.arguments['Mnemonic'];
+              var mnemonicList = jsonDecode(memonic);
+              print("mnemonicToSeedHex: ${mnemonicList.join(' ')}");
+              if (mnemonicList is! List) {
+                throw ErrorException('Mnemonic is not an array');
+              }
+              var seed = bip39.mnemonicToSeedHex(mnemonicList.join(' '));
+              print("mnemonicToSeedHex: $seed");
+              return seed;
+            }();
+
+          case 'generateMnemonic':
+            return () async {
+              String mnemonicString = bip39.generateMnemonic();
+              print("mnemonicString: $mnemonicString");
+              List<String> mnemonicList = mnemonicString.split(" ");
+              String jsonString = jsonEncode(mnemonicList);
+              return jsonString;
             }();
 
           default:
@@ -1048,8 +1090,18 @@ class PolygonIdFlutterChannel
     return true;
   }
 
-  Future<String> generateJwzAuthTokenFromZKProof(
-      AuthResponseDTO authResponseDTO) async {
-    return "";
+  @override
+  Future<String> generateJwzAuthToken({
+    required String genesisDid,
+    required BigInt profileNonce,
+    required String privateKey,
+    required String message,
+  }) async {
+    return _polygonIdSdk.iden3comm.generateJwzAuthToken(
+      genesisDid: genesisDid,
+      profileNonce: profileNonce,
+      privateKey: privateKey,
+      message: message,
+    );
   }
 }
