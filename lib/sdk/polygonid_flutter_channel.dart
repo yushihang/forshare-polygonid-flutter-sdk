@@ -515,7 +515,7 @@ class PolygonIdFlutterChannel
 
           case 'validateMnemonic':
             return () async {
-              var memonic = call.arguments['Mnemonic'];
+              var memonic = call.arguments['mnemonic'];
               var mnemonicList = jsonDecode(memonic);
               print("validateMnemonic: ${mnemonicList.join(' ')}");
               if (mnemonicList is! List) {
@@ -528,7 +528,7 @@ class PolygonIdFlutterChannel
 
           case 'mnemonicToSeedHex':
             return () async {
-              var memonic = call.arguments['Mnemonic'];
+              var memonic = call.arguments['mnemonic'];
               var mnemonicList = jsonDecode(memonic);
               print("mnemonicToSeedHex: ${mnemonicList.join(' ')}");
               if (mnemonicList is! List) {
