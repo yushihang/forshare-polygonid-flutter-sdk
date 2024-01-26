@@ -205,19 +205,25 @@ class PolygonIdFlutterChannel
                 .toList());
 
           case 'getProofs':
-            return getIden3Message(message: call.arguments['message'])
-                .then((message) => getProofs(
-                    message: message,
-                    genesisDid: call.arguments['genesisDid'] as String,
-                    profileNonce: BigInt.tryParse(
-                        call.arguments['profileNonce'] as String? ?? ''),
-                    privateKey: call.arguments['privateKey'] as String,
-                    ethereumUrl: call.arguments['ethereumUrl'] as String?,
-                    stateContractAddr:
-                        call.arguments['stateContractAddr'] as String?,
-                    ipfsNodeUrl: call.arguments['ipfsNodeUrl'] as String?,
-                    challenge: call.arguments['challenge'] as String?))
-                .then((message) => jsonEncode(message));
+            var time = DateTime.now().millisecondsSinceEpoch;
+
+            var returnValue =
+                getIden3Message(message: call.arguments['message'])
+                    .then((message) => getProofs(
+                        message: message,
+                        genesisDid: call.arguments['genesisDid'] as String,
+                        profileNonce: BigInt.tryParse(
+                            call.arguments['profileNonce'] as String? ?? ''),
+                        privateKey: call.arguments['privateKey'] as String,
+                        ethereumUrl: call.arguments['ethereumUrl'] as String?,
+                        stateContractAddr:
+                            call.arguments['stateContractAddr'] as String?,
+                        ipfsNodeUrl: call.arguments['ipfsNodeUrl'] as String?,
+                        challenge: call.arguments['challenge'] as String?))
+                    .then((message) => jsonEncode(message));
+            var duration = DateTime.now().millisecondsSinceEpoch - time;
+            print("<getProofs trace> getProofs cost: $duration ms");
+            return returnValue;
 
           case 'removeInteractions':
             return removeInteractions(

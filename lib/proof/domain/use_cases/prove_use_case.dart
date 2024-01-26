@@ -36,16 +36,23 @@ class ProveUseCase extends FutureUseCase<ProveParam, ZKProofEntity> {
 
       logger().i("[ProveUseCase] proof: before prove");
       print("<getProofs trace> before prove");
+
+      var time = DateTime.now().millisecondsSinceEpoch;
+
       // Generate proof
       ZKProofEntity zkProofEntity = await _proofRepository.prove(
         param.circuitData,
         wtnsBytes,
       );
 
+      var duration = DateTime.now().millisecondsSinceEpoch - time;
+
       _stacktraceManager.addTrace("[ProveUseCase] proof");
       logger().i("[ProveUseCase] proof: $zkProofEntity");
 
       print("<getProofs trace> after prove");
+
+      print("<getProofs trace> prove cost: $duration ms");
 
       return zkProofEntity;
     } catch (error) {
