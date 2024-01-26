@@ -1268,7 +1268,7 @@ extension GetItInjectableX on _i1.GetIt {
           gh<_i124.GetDidProfileInfoUseCase>(),
           gh<_i123.GetDidProfileInfoListUseCase>(),
           gh<_i133.RemoveDidProfileInfoUseCase>(),
-          gh<_i182.GetAuthTokenUseCase>(),
+          await getAsync<_i182.GetAuthTokenUseCase>(),
         ));
     gh.factoryAsync<_i202.RemoveProfileUseCase>(
         () async => _i202.RemoveProfileUseCase(
