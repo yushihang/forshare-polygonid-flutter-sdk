@@ -509,7 +509,7 @@ class PolygonIdFlutterChannel
                     genesisDid: genesisDid,
                     profileNonce: profileNonce,
                     privateKey: privateKey,
-                    message: '');
+                    message: message);
               } catch (e) {
                 throw ErrorException(e);
               }
