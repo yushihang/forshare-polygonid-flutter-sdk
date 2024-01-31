@@ -579,6 +579,24 @@ class PolygonIdFlutterChannel
               }
             }();
 
+          case 'bip39SeedToPolygonIdSecret':
+            return () async {
+              var seedHexString = call.arguments['seedHexString'];
+              if (seedHexString.length < 64) {
+                throw Exception("seedHexString length error: $seedHexString");
+              }
+
+              String substring = seedHexString.substring(0, 64);
+
+              List<int> bytes = [];
+              for (int i = 0; i < substring.length; i += 2) {
+                String hex = substring.substring(i, i + 2);
+                int asciiValue = int.parse(hex, radix: 16);
+                bytes.add(asciiValue);
+              }
+              return String.fromCharCodes(bytes);
+            }();
+
           default:
             throw PlatformException(
                 code: 'not_implemented',
