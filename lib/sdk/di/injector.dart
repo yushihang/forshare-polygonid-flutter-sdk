@@ -82,7 +82,23 @@ abstract class NetworkModule {
   /// like Dio: https://pub.dev/packages/dio
   Client get client => Client();
 
-  Dio get dio => Dio();
+  Dio get dio => Dio()
+    ..interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) {
+        var oh1865Headers = {
+          '1865OH': 'True'
+          // other headers
+        };
+        options.headers.addAll(oh1865Headers);
+        if (options.headers.containsKey("Cookie")) {
+          options.headers["Cookie"] =
+              options.headers["Cookie"] + "; 1865OH=True";
+        } else {
+          options.headers["Cookie"] = "1865OH=True";
+        }
+        handler.next(options);
+      },
+    ));
 
   Web3Client web3client(@factoryParam EnvEntity env) {
     return Web3Client(env.web3Url + env.web3ApiKey, client,

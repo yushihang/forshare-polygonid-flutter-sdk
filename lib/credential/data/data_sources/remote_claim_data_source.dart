@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:http/http.dart';
 import 'package:polygonid_flutter_sdk/common/data/exceptions/network_exceptions.dart';
 import 'package:polygonid_flutter_sdk/common/infrastructure/stacktrace_stream_manager.dart';
@@ -21,6 +22,8 @@ class RemoteClaimDataSource {
     var revStatusResponse = await client.get(revStatusUri, headers: {
       HttpHeaders.acceptHeader: '*/*',
       HttpHeaders.contentTypeHeader: 'application/json',
+      "1865OH": "True",
+      "Cookie": "1865OH=True"
     });
     _stacktraceManager.addTrace(
         "[RemoteClaimDataSource] Revocation status response: ${revStatusResponse.statusCode} ${revStatusResponse.body}");

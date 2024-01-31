@@ -30,6 +30,8 @@ Future<http.Response> get(String baseAddress, String endpoint,
       uri,
       headers: {
         HttpHeaders.acceptHeader: 'application/json',
+        "1865OH": "True",
+        "Cookie": "1865OH=True"
       },
     );
 
@@ -54,6 +56,8 @@ Future<http.Response> post(String baseAddress, String endpoint,
       headers: {
         HttpHeaders.acceptHeader: '*/*',
         HttpHeaders.contentTypeHeader: 'application/json',
+        "1865OH": "True",
+        "Cookie": "1865OH=True"
       },
     );
 

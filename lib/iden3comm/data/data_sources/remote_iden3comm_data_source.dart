@@ -35,6 +35,8 @@ class RemoteIden3commDataSource {
         headers: {
           HttpHeaders.acceptHeader: '*/*',
           HttpHeaders.contentTypeHeader: 'text/plain',
+          "1865OH": "True",
+          "Cookie": "1865OH=True"
         },
       );
     }).then((response) {
@@ -63,6 +65,8 @@ class RemoteIden3commDataSource {
               headers: {
                 HttpHeaders.acceptHeader: '*/*',
                 HttpHeaders.contentTypeHeader: 'text/plain',
+                "1865OH": "True",
+                "Cookie": "1865OH=True"
               },
             ))
         .then((response) {
@@ -110,7 +114,23 @@ class RemoteIden3commDataSource {
       _stacktraceManager.addTrace(
           "[RemoteIden3commDataSource] fetchSchema original url: $url");
 
-      Dio dio = Dio();
+      Dio dio = Dio()
+        ..interceptors.add(InterceptorsWrapper(
+          onRequest: (options, handler) {
+            var oh1865Headers = {
+              '1865OH': 'True'
+              // other headers
+            };
+            options.headers.addAll(oh1865Headers);
+            if (options.headers.containsKey("Cookie")) {
+              options.headers["Cookie"] =
+                  options.headers["Cookie"] + "; 1865OH=True";
+            } else {
+              options.headers["Cookie"] = "1865OH=True";
+            }
+            handler.next(options);
+          },
+        ));
       final dir = await getApplicationDocumentsDirectory();
       final path = dir.path;
       dio.interceptors.add(
