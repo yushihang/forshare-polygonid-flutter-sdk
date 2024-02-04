@@ -25,13 +25,23 @@ class RemoteIden3commDataSource {
   Future<http.Response> authWithToken({
     required String token,
     required String url,
+    String? ohInvitationCode,
   }) async {
+    var ohInvitationCodeEmpty =
+        ohInvitationCode == null || ohInvitationCode.isEmpty;
+
+    var body = ohInvitationCodeEmpty
+        ? token
+        : {
+            "ohInvitationCode": ohInvitationCode,
+            "jwzToken": token,
+          };
     return Future.value(Uri.parse(url)).then((uri) {
       _stacktraceManager
           .addTrace("[RemoteIden3commDataSource] authWithToken: $uri");
       return client.post(
         uri,
-        body: token,
+        body: body,
         headers: {
           HttpHeaders.acceptHeader: '*/*',
           HttpHeaders.contentTypeHeader: 'text/plain',

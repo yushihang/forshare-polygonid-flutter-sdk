@@ -149,6 +149,7 @@ abstract class PolygonIdSdkIden3comm {
     required String privateKey,
     String? pushToken,
     String? challenge,
+    String? ohInvitationCode,
   });
 
   /// Gets a list of [InteractionEntity] associated to the identity previously stored
@@ -414,6 +415,7 @@ class Iden3comm implements PolygonIdSdkIden3comm {
     String? pushToken,
     Map<int, Map<String, dynamic>>? nonRevocationProofs,
     String? challenge,
+    String? ohInvitationCode,
   }) {
     _stacktraceManager.clear();
     if (message is! AuthIden3MessageEntity) {
@@ -432,6 +434,7 @@ class Iden3comm implements PolygonIdSdkIden3comm {
         pushToken: pushToken,
         nonRevocationProofs: nonRevocationProofs,
         challenge: challenge,
+        ohInvitationCode: ohInvitationCode,
       ),
     );
   }

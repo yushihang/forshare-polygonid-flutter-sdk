@@ -138,13 +138,15 @@ class PolygonIdFlutterChannel
 
           case 'authenticate':
             return authenticate(
-                message: AuthIden3MessageEntity.fromJson(
-                    jsonDecode(call.arguments['message'])),
-                genesisDid: call.arguments['genesisDid'] as String,
-                profileNonce: BigInt.tryParse(
-                    call.arguments['profileNonce'] as String? ?? ''),
-                privateKey: call.arguments['privateKey'] as String,
-                pushToken: call.arguments['pushToken'] as String?);
+              message: AuthIden3MessageEntity.fromJson(
+                  jsonDecode(call.arguments['message'])),
+              genesisDid: call.arguments['genesisDid'] as String,
+              profileNonce: BigInt.tryParse(
+                  call.arguments['profileNonce'] as String? ?? ''),
+              privateKey: call.arguments['privateKey'] as String,
+              pushToken: call.arguments['pushToken'] as String?,
+              ohInvitationCode: call.arguments['ohInvitationCode'] as String?,
+            );
 
           case 'fetchAndSaveClaims':
             return fetchAndSaveClaims(
@@ -631,6 +633,7 @@ class PolygonIdFlutterChannel
     String? pushToken,
     Map<int, Map<String, dynamic>>? nonRevocationProofs,
     String? challenge,
+    String? ohInvitationCode,
   }) {
     return _polygonIdSdk.iden3comm.authenticate(
       message: message,
@@ -640,6 +643,7 @@ class PolygonIdFlutterChannel
       pushToken: pushToken,
       nonRevocationProofs: nonRevocationProofs,
       challenge: challenge,
+      ohInvitationCode: ohInvitationCode,
     );
   }
 

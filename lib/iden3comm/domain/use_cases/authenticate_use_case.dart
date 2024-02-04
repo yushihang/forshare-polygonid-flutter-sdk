@@ -24,6 +24,7 @@ class AuthenticateParam {
   final String? pushToken;
   final Map<int, Map<String, dynamic>>? nonRevocationProofs;
   final String? challenge;
+  final String? ohInvitationCode;
 
   AuthenticateParam({
     required this.message,
@@ -33,6 +34,7 @@ class AuthenticateParam {
     this.pushToken,
     this.nonRevocationProofs,
     this.challenge,
+    this.ohInvitationCode,
   });
 }
 
@@ -153,6 +155,7 @@ class AuthenticateUseCase extends FutureUseCase<AuthenticateParam, void> {
       return _iden3commRepository.authenticate(
         request: param.message,
         authToken: authToken,
+        ohInvitationCode: param.ohInvitationCode,
       );
     } catch (error) {
       if (error is NullAtomicQueryInputsException) {

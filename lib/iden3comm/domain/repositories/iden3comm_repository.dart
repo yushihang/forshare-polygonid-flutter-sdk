@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/authorization/request/auth_request_iden3_message_entity.dart';
-import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/authorization/response/auth_response_iden3_message_entity.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/common/response/jwz.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/proof/response/iden3comm_proof_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/entities/identity_entity.dart';
@@ -12,6 +11,7 @@ abstract class Iden3commRepository {
   Future<void> authenticate({
     required AuthIden3MessageEntity request,
     required String authToken,
+    String? ohInvitationCode,
   });
 
   Future<Uint8List> getAuthInputs(
