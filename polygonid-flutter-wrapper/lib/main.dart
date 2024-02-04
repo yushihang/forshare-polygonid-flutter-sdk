@@ -14,6 +14,8 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 }
 
+bool _ohIsForProduct = false;
+
 /// Initialize the Flutter SDK wrapper
 /// This method is called from the native side
 @pragma('vm:entry-point')
@@ -82,6 +84,7 @@ Future<void> init(List? env) async {
     },
     zoneSpecification: ZoneSpecification(
         print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
+      if (_ohIsForProduct) return;
       var newLine = LogHelper.getLogString(line);
       parent.print(zone, newLine);
     }),
