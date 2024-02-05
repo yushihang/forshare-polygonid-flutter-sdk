@@ -34,7 +34,7 @@ class LogHelper {
   static String getLogString(String line) {
     DateTime now = DateTime.now();
     String formattedTime =
-        "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}.${now.millisecond.toString().padLeft(3, '0')}";
+        "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}.${(now.microsecondsSinceEpoch % 1000000).toString().padLeft(6, '0')}";
 
     if (_currentMethod.isEmpty) {
       return "[$formattedTime]: $line";

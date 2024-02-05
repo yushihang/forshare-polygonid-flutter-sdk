@@ -50,9 +50,7 @@ class ProveUseCase extends FutureUseCase<ProveParam, ZKProofEntity> {
       _stacktraceManager.addTrace("[ProveUseCase] proof");
       logger().i("[ProveUseCase] proof: $zkProofEntity");
 
-      print("<getProofs trace> after prove");
-
-      print("<getProofs trace> prove cost: $duration ms");
+      print("<getProofs trace> after prove cost: $duration ms");
 
       return zkProofEntity;
     } catch (error) {

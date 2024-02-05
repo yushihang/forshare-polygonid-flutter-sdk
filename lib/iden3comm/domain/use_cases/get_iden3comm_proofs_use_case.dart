@@ -67,7 +67,7 @@ class GetIden3commProofsUseCase
     try {
       print("method channel execute: getProofs");
 
-      print("<getProofs trace> GetIden3commProofsUseCase.execute");
+      print("<getProofs trace> Getting proof requests");
       List<Iden3commProofEntity> proofs = [];
 
       Stopwatch stopwatch = Stopwatch()..start();
@@ -234,10 +234,12 @@ class GetIden3commProofsUseCase
           });
         }
 
-        print("<getProofs trace> before await closures");
+        print(
+            "<getProofs trace> GetIden3commProofsUseCase before await closures.count: ${closures.length}");
         List<Iden3commProofEntity?> results =
             await Future.wait(closures.map((closure) => closure()));
-        print("<getProofs trace> after await closures");
+        print(
+            "<getProofs trace> GetIden3commProofsUseCase after await closures.count: ${closures.length}");
         // Filter out null values
         List<Iden3commProofEntity> nonNullResults = results
             .where((result) => result != null)
@@ -261,7 +263,7 @@ class GetIden3commProofsUseCase
         throw ProofsNotFoundException(requests);
       }
 
-      print("<getProofs trace> return proofs: count:${proofs.length}");
+      print("<getProofs trace> return proofs with count:${proofs.length}");
       return proofs;
     } catch (e) {
       _stacktraceManager.addTrace("[GetIden3commProofsUseCase] Exception: $e");

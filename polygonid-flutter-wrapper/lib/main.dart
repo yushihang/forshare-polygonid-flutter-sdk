@@ -28,7 +28,6 @@ Future<void> init(List? env) async {
 
       if (!_ohIsForProduct) {
         await FileLogger.initializeLogger();
-        await FileLogger.logDeviceInfo();
       }
 
       bool enabled = false;
@@ -92,10 +91,14 @@ Future<void> init(List? env) async {
     zoneSpecification: ZoneSpecification(
         print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
       if (_ohIsForProduct) return;
+      var forTrace = line.startsWith("<getProofs trace>");
+
       var newLine = LogHelper.getLogString(line);
       parent.print(zone, newLine);
 
-      FileLogger.log(newLine);
+      if (forTrace && Platform.isIOS) {
+        FileLogger.log(newLine);
+      }
     }),
   );
 }

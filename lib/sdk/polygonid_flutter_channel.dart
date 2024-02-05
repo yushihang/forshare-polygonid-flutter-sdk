@@ -209,24 +209,29 @@ class PolygonIdFlutterChannel
                 .toList());
 
           case 'getProofs':
+            print("<getProofs trace> getProofs begin");
             var time = DateTime.now().millisecondsSinceEpoch;
 
             var returnValue =
                 getIden3Message(message: call.arguments['message'])
-                    .then((message) => getProofs(
-                        message: message,
-                        genesisDid: call.arguments['genesisDid'] as String,
-                        profileNonce: BigInt.tryParse(
-                            call.arguments['profileNonce'] as String? ?? ''),
-                        privateKey: call.arguments['privateKey'] as String,
-                        ethereumUrl: call.arguments['ethereumUrl'] as String?,
-                        stateContractAddr:
-                            call.arguments['stateContractAddr'] as String?,
-                        ipfsNodeUrl: call.arguments['ipfsNodeUrl'] as String?,
-                        challenge: call.arguments['challenge'] as String?))
-                    .then((message) => jsonEncode(message));
-            var duration = DateTime.now().millisecondsSinceEpoch - time;
-            print("<getProofs trace> getProofs cost: $duration ms");
+                    .then((message) {
+              print("<getProofs trace> getIden3Message finished");
+              return getProofs(
+                  message: message,
+                  genesisDid: call.arguments['genesisDid'] as String,
+                  profileNonce: BigInt.tryParse(
+                      call.arguments['profileNonce'] as String? ?? ''),
+                  privateKey: call.arguments['privateKey'] as String,
+                  ethereumUrl: call.arguments['ethereumUrl'] as String?,
+                  stateContractAddr:
+                      call.arguments['stateContractAddr'] as String?,
+                  ipfsNodeUrl: call.arguments['ipfsNodeUrl'] as String?,
+                  challenge: call.arguments['challenge'] as String?);
+            }).then((message) {
+              var duration = DateTime.now().millisecondsSinceEpoch - time;
+              print("<getProofs trace> getProofs cost: $duration ms");
+              return jsonEncode(message);
+            });
             return returnValue;
 
           case 'removeInteractions':
@@ -499,6 +504,8 @@ class PolygonIdFlutterChannel
             }();
 
           case 'generateJwzAuthToken':
+            print("<getProofs trace> generateJwzAuthToken begin");
+            var time = DateTime.now().millisecondsSinceEpoch;
             return () async {
               try {
                 var genesisDid = call.arguments['genesisDid'] as String;
@@ -507,11 +514,15 @@ class PolygonIdFlutterChannel
                     BigInt.zero;
                 var privateKey = call.arguments['privateKey'] as String;
                 var message = call.arguments['message'] as String;
-                return await generateJwzAuthToken(
+                var ret = await generateJwzAuthToken(
                     genesisDid: genesisDid,
                     profileNonce: profileNonce,
                     privateKey: privateKey,
                     message: message);
+                var duration = DateTime.now().millisecondsSinceEpoch - time;
+                print(
+                    "<getProofs trace> generateJwzAuthToken cost: $duration ms");
+                return ret;
               } catch (e) {
                 throw ErrorException(e);
               }

@@ -179,6 +179,7 @@ class GenerateIden3commProofUseCase
         "[GenerateIden3commProofUseCase] didEntity: ${didEntity.did}");
     logger().i("GENERATION PROOF didEntity executed in ${stopwatch.elapsed}");
 
+    var time = DateTime.now().millisecondsSinceEpoch;
     print("<getProofs trace> before calculateAtomicQueryInputs");
 
     // Prepare atomic query inputs
@@ -211,7 +212,9 @@ class GenerateIden3commProofUseCase
     logger().i(
         "GENERATION PROOF calculateAtomicQueryInputs executed in ${stopwatch.elapsed}");
 
-    print("<getProofs trace> calculateAtomicQueryInputs");
+    var duration = DateTime.now().millisecondsSinceEpoch - time;
+    print(
+        "<getProofs trace> calculateAtomicQueryInputs finished, cost: $duration ms");
 
     dynamic inputsJson = json.decode(Uint8ArrayUtils.uint8ListToString(res));
     Uint8List atomicQueryInputs =

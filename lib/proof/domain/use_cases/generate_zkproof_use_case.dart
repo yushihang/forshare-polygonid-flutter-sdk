@@ -62,6 +62,8 @@ class GenerateZKProofUseCase
   @override
   Future<ZKProofEntity> execute({required GenerateZKProofParam param}) async {
     print("method channel execute: prover");
+    var time = DateTime.now().millisecondsSinceEpoch;
+    print("<getProofs trace> before calculateAtomicQueryInputs");
     // Prepare atomic query inputs
     Uint8List res = await _proofRepository
         .calculateAtomicQueryInputs(
@@ -87,6 +89,10 @@ class GenerateZKProofUseCase
 
       throw error;
     });
+
+    var duration = DateTime.now().millisecondsSinceEpoch - time;
+    print(
+        "<getProofs trace> calculateAtomicQueryInputs finished, cost: $duration ms");
 
     dynamic inputsJson = json.decode(Uint8ArrayUtils.uint8ListToString(res));
     Uint8List atomicQueryInputs =
