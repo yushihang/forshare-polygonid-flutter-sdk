@@ -27,21 +27,26 @@ class RemoteIden3commDataSource {
     required String url,
     String? ohInvitationCode,
   }) async {
+    String url_ = url;
     var ohInvitationCodeEmpty =
         ohInvitationCode == null || ohInvitationCode.isEmpty;
 
-    var body = ohInvitationCodeEmpty
-        ? token
-        : {
-            "ohInvitationCode": ohInvitationCode,
-            "jwzToken": token,
-          };
-    return Future.value(Uri.parse(url)).then((uri) {
+    if (!ohInvitationCodeEmpty) {
+      Uri uri = Uri.parse(url);
+      var queryParameters = uri.queryParameters;
+      if (queryParameters.isEmpty) {
+        url_ = url_ + '?ohInvitationCode=$ohInvitationCode';
+      } else {
+        url_ = url_ + '&ohInvitationCode=$ohInvitationCode';
+      }
+    }
+
+    return Future.value(Uri.parse(url_)).then((uri) {
       _stacktraceManager
           .addTrace("[RemoteIden3commDataSource] authWithToken: $uri");
       return client.post(
         uri,
-        body: body,
+        body: token,
         headers: {
           HttpHeaders.acceptHeader: '*/*',
           HttpHeaders.contentTypeHeader: 'text/plain',
