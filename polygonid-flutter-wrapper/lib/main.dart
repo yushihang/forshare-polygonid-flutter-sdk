@@ -9,6 +9,7 @@ import 'package:native_flutter_proxy/native_proxy_reader.dart';
 import 'package:polygonid_flutter_sdk/common/domain/entities/env_entity.dart';
 import 'package:polygonid_flutter_sdk/proof/data/data_sources/circuits_download_data_source.dart';
 import 'package:polygonid_flutter_sdk/sdk/polygon_id_sdk.dart';
+import 'package:polygonid_flutter_wrapper/filelogger.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +25,12 @@ Future<void> init(List? env) async {
     () async {
       WidgetsFlutterBinding.ensureInitialized();
       print('Polygon flutter(dart) framework init');
+
+      if (!_ohIsForProduct) {
+        await FileLogger.initializeLogger();
+        await FileLogger.logDeviceInfo();
+      }
+
       bool enabled = false;
       String? host;
       int? port;
@@ -87,6 +94,8 @@ Future<void> init(List? env) async {
       if (_ohIsForProduct) return;
       var newLine = LogHelper.getLogString(line);
       parent.print(zone, newLine);
+
+      FileLogger.log(newLine);
     }),
   );
 }
