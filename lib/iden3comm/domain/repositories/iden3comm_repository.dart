@@ -8,10 +8,11 @@ import 'package:polygonid_flutter_sdk/proof/domain/entities/gist_mtproof_entity.
 import 'package:polygonid_flutter_sdk/proof/domain/entities/mtproof_entity.dart';
 
 abstract class Iden3commRepository {
-  Future<void> authenticate({
+  Future<String> authenticate({
     required AuthIden3MessageEntity request,
     required String authToken,
     String? ohInvitationCode,
+    String? ohSessionID,
   });
 
   Future<Uint8List> getAuthInputs(

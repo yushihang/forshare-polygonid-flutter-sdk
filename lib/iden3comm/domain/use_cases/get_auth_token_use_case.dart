@@ -52,6 +52,9 @@ class GetAuthTokenUseCase extends FutureUseCase<GetAuthTokenParam, String> {
       String authChallenge =
           await _getAuthChallengeUseCase.execute(param: encodedJwz);
 
+      var time = DateTime.now().millisecondsSinceEpoch;
+
+      print("<getProofs trace> GetAuthInputs begin");
       Uint8List authInputs = await _getAuthInputsUseCase.execute(
         param: GetAuthInputsParam(
           authChallenge,
@@ -61,9 +64,13 @@ class GetAuthTokenUseCase extends FutureUseCase<GetAuthTokenParam, String> {
         ),
       );
 
+      var duration = DateTime.now().millisecondsSinceEpoch - time;
+      print("<getProofs trace> GetAuthInputs finished, cost: $duration ms");
+
       CircuitDataEntity circuit =
           await _loadCircuitUseCase.execute(param: "authV2");
 
+      print("<getProofs trace> load circuit finished");
       ZKProofEntity zkProofEntity = await _proveUseCase.execute(
         param: ProveParam(
           authInputs,

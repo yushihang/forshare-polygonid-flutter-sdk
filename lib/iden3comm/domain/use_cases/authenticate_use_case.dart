@@ -25,6 +25,7 @@ class AuthenticateParam {
   final Map<int, Map<String, dynamic>>? nonRevocationProofs;
   final String? challenge;
   final String? ohInvitationCode;
+  final String? ohSessionID;
 
   AuthenticateParam({
     required this.message,
@@ -35,6 +36,7 @@ class AuthenticateParam {
     this.nonRevocationProofs,
     this.challenge,
     this.ohInvitationCode,
+    this.ohSessionID,
   });
 }
 
@@ -63,7 +65,7 @@ class AuthenticateUseCase extends FutureUseCase<AuthenticateParam, void> {
   );
 
   @override
-  Future<void> execute({required AuthenticateParam param}) async {
+  Future<String> execute({required AuthenticateParam param}) async {
     try {
       print("method channel execute: authenticate");
       // we want to misure the time of the whole process
@@ -156,6 +158,7 @@ class AuthenticateUseCase extends FutureUseCase<AuthenticateParam, void> {
         request: param.message,
         authToken: authToken,
         ohInvitationCode: param.ohInvitationCode,
+        ohSessionID: param.ohSessionID,
       );
     } catch (error) {
       if (error is NullAtomicQueryInputsException) {

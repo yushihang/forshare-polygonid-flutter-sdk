@@ -142,7 +142,7 @@ abstract class PolygonIdSdkIden3comm {
   ///
   /// The [pushToken] is the push notification registration token so the issuer/verifer
   /// can send notifications to the identity.
-  Future<void> authenticate({
+  Future<String> authenticate({
     required Iden3MessageEntity message,
     required String genesisDid,
     BigInt? profileNonce,
@@ -150,6 +150,7 @@ abstract class PolygonIdSdkIden3comm {
     String? pushToken,
     String? challenge,
     String? ohInvitationCode,
+    String? ohSessionID,
   });
 
   /// Gets a list of [InteractionEntity] associated to the identity previously stored
@@ -407,7 +408,7 @@ class Iden3comm implements PolygonIdSdkIden3comm {
   }
 
   @override
-  Future<void> authenticate({
+  Future<String> authenticate({
     required Iden3MessageEntity message,
     required String genesisDid,
     BigInt? profileNonce,
@@ -416,6 +417,7 @@ class Iden3comm implements PolygonIdSdkIden3comm {
     Map<int, Map<String, dynamic>>? nonRevocationProofs,
     String? challenge,
     String? ohInvitationCode,
+    String? ohSessionID,
   }) {
     _stacktraceManager.clear();
     if (message is! AuthIden3MessageEntity) {
@@ -435,6 +437,7 @@ class Iden3comm implements PolygonIdSdkIden3comm {
         nonRevocationProofs: nonRevocationProofs,
         challenge: challenge,
         ohInvitationCode: ohInvitationCode,
+        ohSessionID: ohSessionID,
       ),
     );
   }

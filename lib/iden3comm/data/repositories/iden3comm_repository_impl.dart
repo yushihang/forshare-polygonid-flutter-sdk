@@ -54,10 +54,11 @@ class Iden3commRepositoryImpl extends Iden3commRepository {
   );
 
   @override
-  Future<void> authenticate({
+  Future<String> authenticate({
     required AuthIden3MessageEntity request,
     required String authToken,
     String? ohInvitationCode,
+    String? ohSessionID,
   }) async {
     String? url = request.body.callbackUrl;
 
@@ -65,11 +66,14 @@ class Iden3commRepositoryImpl extends Iden3commRepository {
       throw NullAuthenticateCallbackException(request);
     }
 
-    await _remoteIden3commDataSource.authWithToken(
+    var response = await _remoteIden3commDataSource.authWithToken(
       token: authToken,
       url: url,
       ohInvitationCode: ohInvitationCode,
+      ohSessionID: ohSessionID,
     );
+
+    return response.body;
   }
 
   @override

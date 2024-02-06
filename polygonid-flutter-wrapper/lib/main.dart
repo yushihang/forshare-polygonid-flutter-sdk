@@ -91,14 +91,15 @@ Future<void> init(List? env) async {
     zoneSpecification: ZoneSpecification(
         print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
       if (_ohIsForProduct) return;
-      var forTrace = line.startsWith("<getProofs trace>");
+      //var forTrace = line.startsWith("<getProofs trace>") && line.contains("cost");
 
       var newLine = LogHelper.getLogString(line);
       parent.print(zone, newLine);
-
+      /*
       if (forTrace && Platform.isIOS) {
         FileLogger.log(newLine);
       }
+      */
     }),
   );
 }

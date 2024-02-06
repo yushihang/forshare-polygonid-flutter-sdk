@@ -26,15 +26,26 @@ class RemoteIden3commDataSource {
     required String token,
     required String url,
     String? ohInvitationCode,
+    String? ohSessionID,
   }) async {
     String url_ = url;
     var ohInvitationCodeEmpty =
         ohInvitationCode == null || ohInvitationCode.isEmpty;
+    var ohSessionIDEmpty = ohSessionID == null || ohSessionID.isEmpty;
+    Uri uri = Uri.parse(url);
 
+    var queryParametersIsEmpty = uri.queryParameters.isEmpty;
+    if (!ohSessionIDEmpty) {
+      if (queryParametersIsEmpty) {
+        url_ = url_ + '?ohSessionID=$ohSessionID';
+      } else {
+        url_ = url_ + '&ohSessionID=$ohSessionID';
+      }
+
+      queryParametersIsEmpty = false;
+    }
     if (!ohInvitationCodeEmpty) {
-      Uri uri = Uri.parse(url);
-      var queryParameters = uri.queryParameters;
-      if (queryParameters.isEmpty) {
+      if (queryParametersIsEmpty) {
         url_ = url_ + '?ohInvitationCode=$ohInvitationCode';
       } else {
         url_ = url_ + '&ohInvitationCode=$ohInvitationCode';

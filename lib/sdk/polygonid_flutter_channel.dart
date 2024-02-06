@@ -146,6 +146,7 @@ class PolygonIdFlutterChannel
               privateKey: call.arguments['privateKey'] as String,
               pushToken: call.arguments['pushToken'] as String?,
               ohInvitationCode: call.arguments['ohInvitationCode'] as String?,
+              ohSessionID: call.arguments['ohSessionID'] as String?,
             );
 
           case 'fetchAndSaveClaims':
@@ -636,7 +637,7 @@ class PolygonIdFlutterChannel
   }
 
   @override
-  Future<void> authenticate({
+  Future<String> authenticate({
     required Iden3MessageEntity message,
     required String genesisDid,
     BigInt? profileNonce,
@@ -645,6 +646,7 @@ class PolygonIdFlutterChannel
     Map<int, Map<String, dynamic>>? nonRevocationProofs,
     String? challenge,
     String? ohInvitationCode,
+    String? ohSessionID,
   }) {
     return _polygonIdSdk.iden3comm.authenticate(
       message: message,
@@ -655,6 +657,7 @@ class PolygonIdFlutterChannel
       nonRevocationProofs: nonRevocationProofs,
       challenge: challenge,
       ohInvitationCode: ohInvitationCode,
+      ohSessionID: ohSessionID,
     );
   }
 
