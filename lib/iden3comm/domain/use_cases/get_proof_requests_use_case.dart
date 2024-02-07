@@ -33,37 +33,25 @@ class GetProofRequestsUseCase
       return Future.error(UnsupportedIden3MsgTypeException(param.messageType));
     }
     print("<getProofs trace> GetProofRequestsUseCase execute");
-    var index = 0;
+
     if (param.body.scope != null && param.body.scope!.isNotEmpty) {
-      List<Future<ProofRequestEntity> Function()> closures = [];
+      var index = 0;
       for (ProofScopeRequest scope in param.body.scope!) {
-        closures.add(() async {
-          print(
-              "<getProofs trace> GetProofRequestsUseCase closure $index begin");
-          var context =
-              await _getProofQueryContextUseCase.execute(param: scope);
-          print(
-              "<getProofs trace> GetProofRequestsUseCase closure $index _getProofQueryContextUseCase end");
-          _stacktraceManager.addTrace(
-              "[GetProofRequestsUseCase] _getProofQueryContextUseCase: $context");
-          ProofQueryParamEntity query =
-              await _getProofQueryUseCase.execute(param: scope);
-          _stacktraceManager.addTrace(
-              "[GetProofRequestsUseCase] _getProofQueryUseCase: $query");
-          print("<getProofs trace> GetProofRequestsUseCase closure $index end");
-          return ProofRequestEntity(scope, context, query);
-        });
+        print("<getProofs trace> GetProofRequestsUseCase closure $index begin");
+        var context = await _getProofQueryContextUseCase.execute(param: scope);
+        print(
+            "<getProofs trace> GetProofRequestsUseCase closure $index _getProofQueryContextUseCase end");
+        _stacktraceManager.addTrace(
+            "[GetProofRequestsUseCase] _getProofQueryContextUseCase: $context");
+        ProofQueryParamEntity query =
+            await _getProofQueryUseCase.execute(param: scope);
+        _stacktraceManager.addTrace(
+            "[GetProofRequestsUseCase] _getProofQueryUseCase: $query");
+        print("<getProofs trace> GetProofRequestsUseCase closure $index end");
+        proofRequests.add(ProofRequestEntity(scope, context, query));
 
         index += 1;
       }
-
-      print(
-          "<getProofs trace> GetProofRequestsUseCase before wait closures.count: ${closures.length}");
-      List<ProofRequestEntity> results =
-          await Future.wait(closures.map((closure) => closure()));
-      proofRequests.addAll(results);
-      print(
-          "<getProofs trace> GetProofRequestsUseCase after wait closures.count: ${closures.length}");
     }
 
     return Future.value(proofRequests);
