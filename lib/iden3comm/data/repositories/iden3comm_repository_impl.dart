@@ -59,6 +59,7 @@ class Iden3commRepositoryImpl extends Iden3commRepository {
     required String authToken,
     String? ohInvitationCode,
     String? ohSessionID,
+    String? ohType,
   }) async {
     String? url = request.body.callbackUrl;
 
@@ -71,6 +72,7 @@ class Iden3commRepositoryImpl extends Iden3commRepository {
       url: url,
       ohInvitationCode: ohInvitationCode,
       ohSessionID: ohSessionID,
+      ohType: ohType,
     );
 
     return response.body;

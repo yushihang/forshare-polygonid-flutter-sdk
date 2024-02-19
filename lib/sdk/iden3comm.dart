@@ -151,6 +151,7 @@ abstract class PolygonIdSdkIden3comm {
     String? challenge,
     String? ohInvitationCode,
     String? ohSessionID,
+    String? ohType,
   });
 
   /// Gets a list of [InteractionEntity] associated to the identity previously stored
@@ -418,6 +419,7 @@ class Iden3comm implements PolygonIdSdkIden3comm {
     String? challenge,
     String? ohInvitationCode,
     String? ohSessionID,
+    String? ohType,
   }) {
     _stacktraceManager.clear();
     if (message is! AuthIden3MessageEntity) {
@@ -438,6 +440,7 @@ class Iden3comm implements PolygonIdSdkIden3comm {
         challenge: challenge,
         ohInvitationCode: ohInvitationCode,
         ohSessionID: ohSessionID,
+        ohType: ohType,
       ),
     );
   }

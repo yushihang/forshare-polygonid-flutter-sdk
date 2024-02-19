@@ -13,6 +13,7 @@ abstract class Iden3commRepository {
     required String authToken,
     String? ohInvitationCode,
     String? ohSessionID,
+    String? ohType,
   });
 
   Future<Uint8List> getAuthInputs(

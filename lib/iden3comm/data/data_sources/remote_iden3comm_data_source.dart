@@ -27,11 +27,13 @@ class RemoteIden3commDataSource {
     required String url,
     String? ohInvitationCode,
     String? ohSessionID,
+    String? ohType,
   }) async {
     String url_ = url;
     var ohInvitationCodeEmpty =
         ohInvitationCode == null || ohInvitationCode.isEmpty;
     var ohSessionIDEmpty = ohSessionID == null || ohSessionID.isEmpty;
+    var ohTypeEmpty = ohType == null || ohType.isEmpty;
     Uri uri = Uri.parse(url);
 
     var queryParametersIsEmpty = uri.queryParameters.isEmpty;
@@ -44,12 +46,25 @@ class RemoteIden3commDataSource {
 
       queryParametersIsEmpty = false;
     }
+
     if (!ohInvitationCodeEmpty) {
       if (queryParametersIsEmpty) {
         url_ = url_ + '?ohInvitationCode=$ohInvitationCode';
       } else {
         url_ = url_ + '&ohInvitationCode=$ohInvitationCode';
       }
+
+      queryParametersIsEmpty = false;
+    }
+
+    if (!ohTypeEmpty) {
+      if (queryParametersIsEmpty) {
+        url_ = url_ + '?ohType=$ohType';
+      } else {
+        url_ = url_ + '&ohType=$ohType';
+      }
+
+      queryParametersIsEmpty = false;
     }
 
     return Future.value(Uri.parse(url_)).then((uri) {

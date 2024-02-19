@@ -26,6 +26,7 @@ class AuthenticateParam {
   final String? challenge;
   final String? ohInvitationCode;
   final String? ohSessionID;
+  final String? ohType;
 
   AuthenticateParam({
     required this.message,
@@ -37,6 +38,7 @@ class AuthenticateParam {
     this.challenge,
     this.ohInvitationCode,
     this.ohSessionID,
+    this.ohType,
   });
 }
 
@@ -159,6 +161,7 @@ class AuthenticateUseCase extends FutureUseCase<AuthenticateParam, void> {
         authToken: authToken,
         ohInvitationCode: param.ohInvitationCode,
         ohSessionID: param.ohSessionID,
+        ohType: param.ohType,
       );
     } catch (error) {
       if (error is NullAtomicQueryInputsException) {

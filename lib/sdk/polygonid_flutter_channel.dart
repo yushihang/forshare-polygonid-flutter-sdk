@@ -147,6 +147,7 @@ class PolygonIdFlutterChannel
               pushToken: call.arguments['pushToken'] as String?,
               ohInvitationCode: call.arguments['ohInvitationCode'] as String?,
               ohSessionID: call.arguments['ohSessionID'] as String?,
+              ohType: call.arguments['ohType'] as String?,
             );
 
           case 'fetchAndSaveClaims':
@@ -647,6 +648,7 @@ class PolygonIdFlutterChannel
     String? challenge,
     String? ohInvitationCode,
     String? ohSessionID,
+    String? ohType,
   }) {
     return _polygonIdSdk.iden3comm.authenticate(
       message: message,
@@ -658,6 +660,7 @@ class PolygonIdFlutterChannel
       challenge: challenge,
       ohInvitationCode: ohInvitationCode,
       ohSessionID: ohSessionID,
+      ohType: ohType,
     );
   }
 
