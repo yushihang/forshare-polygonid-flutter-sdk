@@ -672,7 +672,8 @@ class PolygonIdFlutterChannel
               try {
                 var cacheString = await OHSecureStorage.read(key: OHVPCacheKey);
                 if (cacheString != null) {
-                  _vpCache = json.decode(cacheString);
+                  Map<String, String> cache = json.decode(cacheString);
+                  _vpCache.addAll(cache);
                   print("read from vp cache success");
                 } else {
                   print("read from vp cache failed");
