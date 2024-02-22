@@ -68,6 +68,7 @@ class RemoteIden3commDataSource {
     }
 
     return Future.value(Uri.parse(url_)).then((uri) {
+      print("[RemoteIden3commDataSource] authWithToken: $uri");
       _stacktraceManager
           .addTrace("[RemoteIden3commDataSource] authWithToken: $uri");
       return client.post(

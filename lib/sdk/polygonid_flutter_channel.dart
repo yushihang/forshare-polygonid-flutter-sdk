@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
+import 'package:json_sorter/json_sorter';
+import 'package:json_sorter/json_sorter.dart';
 import 'package:native_flutter_proxy/custom_proxy.dart';
 import 'package:native_flutter_proxy/native_proxy_reader.dart';
 import 'package:path/path.dart' as p;
@@ -40,6 +42,8 @@ import 'package:polygonid_flutter_sdk/sdk/proof.dart';
 
 const downloadCircuitsName = 'downloadCircuits';
 const proofGenerationStepsName = 'proofGenerationSteps';
+
+Map<String, String> _vpCache = {};
 
 /// PolygonIdSdh channel, to be able to use the SDK in native code
 /// We are implementing the interfaces of the SDK just to be sure nothing is missing
@@ -214,9 +218,31 @@ class PolygonIdFlutterChannel
             print("<getProofs trace> getProofs begin");
             var time = DateTime.now().millisecondsSinceEpoch;
 
+            var useCacheString = call.arguments['useCache'] as String?;
+            var useCache = useCacheString?.toLowerCase() == 'true' ||
+                useCacheString?.toLowerCase() == '1';
+
+            print("getProofs useCache: $useCache");
+
+            var sdrKey = "";
             var returnValue =
                 getIden3Message(message: call.arguments['message'])
                     .then((message) {
+              if (useCache) {
+                try {
+                  const encoder = JsonSortedEncoder();
+
+                  sdrKey = encoder.convert(message.body.scope);
+                } catch (e) {
+                  print("getProofs: exception: " + e.toString());
+                }
+
+                if (_vpCache.containsKey(sdrKey)) {
+                  print("<getProofs trace> getProofs cache hit: $sdrKey");
+                  return Future.value(_vpCache[sdrKey]);
+                }
+              }
+
               print("<getProofs trace> getIden3Message finished");
               return getProofs(
                   message: message,
@@ -232,7 +258,13 @@ class PolygonIdFlutterChannel
             }).then((message) {
               var duration = DateTime.now().millisecondsSinceEpoch - time;
               print("<getProofs trace> getProofs cost: $duration ms");
-              return jsonEncode(message);
+              var returnValue = jsonEncode(message);
+              if (useCache) {
+                _vpCache[sdrKey] = returnValue;
+                print("set cache: $sdrKey value: $returnValue");
+              }
+
+              return returnValue;
             });
             return returnValue;
 
