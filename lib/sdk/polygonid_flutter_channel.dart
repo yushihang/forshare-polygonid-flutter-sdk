@@ -4,8 +4,8 @@ import 'dart:io';
 
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
-import 'package:json_sorter/json_sorter';
 import 'package:json_sorter/json_sorter.dart';
 import 'package:native_flutter_proxy/custom_proxy.dart';
 import 'package:native_flutter_proxy/native_proxy_reader.dart';
@@ -43,7 +43,28 @@ import 'package:polygonid_flutter_sdk/sdk/proof.dart';
 const downloadCircuitsName = 'downloadCircuits';
 const proofGenerationStepsName = 'proofGenerationSteps';
 
+class OHSecureStorage {
+  OHSecureStorage._();
+
+  static const _storage = FlutterSecureStorage();
+
+  static Future<void> write(
+      {required String key, required String value}) async {
+    await _storage.write(key: key, value: value);
+  }
+
+  static Future<String?> read({required String key}) async {
+    return await _storage.read(key: key);
+  }
+
+  static Future<void> delete({required String key}) async {
+    await _storage.delete(key: key);
+  }
+}
+
 Map<String, String> _vpCache = {};
+
+const OHVPCacheKey = "OHVPCacheKey";
 
 /// PolygonIdSdh channel, to be able to use the SDK in native code
 /// We are implementing the interfaces of the SDK just to be sure nothing is missing
@@ -261,6 +282,8 @@ class PolygonIdFlutterChannel
               var returnValue = jsonEncode(message);
               if (useCache) {
                 _vpCache[sdrKey] = returnValue;
+                OHSecureStorage.write(
+                    key: OHVPCacheKey, value: jsonEncode(_vpCache));
                 print("set cache: $sdrKey value: $returnValue");
               }
 
@@ -642,6 +665,21 @@ class PolygonIdFlutterChannel
                 bytes.add(asciiValue);
               }
               return String.fromCharCodes(bytes);
+            }();
+
+          case 'loadFromCache':
+            return () async {
+              try {
+                var cacheString = await OHSecureStorage.read(key: OHVPCacheKey);
+                if (cacheString != null) {
+                  _vpCache = json.decode(cacheString);
+                  print("read from vp cache success");
+                } else {
+                  print("read from vp cache failed");
+                }
+              } catch (e) {
+                print("read from vp cache exception: $e");
+              }
             }();
 
           default:
