@@ -245,51 +245,51 @@ class PolygonIdFlutterChannel
 
             print("getProofs useCache: $useCache");
 
-            var sdrKey = "";
-            var returnValue =
-                getIden3Message(message: call.arguments['message'])
-                    .then((message) {
+            return () async {
+              var sdrKey = "";
+              var iden3Message =
+                  await getIden3Message(message: call.arguments['message']);
+              print("<getProofs trace> getIden3Message finished");
               if (useCache) {
                 try {
                   const encoder = JsonSortedEncoder();
 
-                  sdrKey = encoder.convert(message.body.scope);
+                  sdrKey = encoder.convert(iden3Message.body.scope);
                 } catch (e) {
                   print("getProofs: exception: " + e.toString());
+                  sdrKey = "";
                 }
 
-                if (_vpCache.containsKey(sdrKey)) {
-                  print("<getProofs trace> getProofs cache hit: $sdrKey");
-                  return Future.value(_vpCache[sdrKey]);
+                if (sdrKey.isNotEmpty && _vpCache.containsKey(sdrKey)) {
+                  print("<getProofs trace> getProofs cache hit: $sdrKey ");
+                  return _vpCache[sdrKey];
                 }
               }
 
-              print("<getProofs trace> getIden3Message finished");
-              return getProofs(
-                  message: message,
-                  genesisDid: call.arguments['genesisDid'] as String,
-                  profileNonce: BigInt.tryParse(
-                      call.arguments['profileNonce'] as String? ?? ''),
-                  privateKey: call.arguments['privateKey'] as String,
-                  ethereumUrl: call.arguments['ethereumUrl'] as String?,
-                  stateContractAddr:
-                      call.arguments['stateContractAddr'] as String?,
-                  ipfsNodeUrl: call.arguments['ipfsNodeUrl'] as String?,
-                  challenge: call.arguments['challenge'] as String?);
-            }).then((message) {
+              var proofs = getProofs(
+                message: iden3Message,
+                genesisDid: call.arguments['genesisDid'] as String,
+                profileNonce: BigInt.tryParse(
+                    call.arguments['profileNonce'] as String? ?? ''),
+                privateKey: call.arguments['privateKey'] as String,
+                ethereumUrl: call.arguments['ethereumUrl'] as String?,
+                stateContractAddr:
+                    call.arguments['stateContractAddr'] as String?,
+                ipfsNodeUrl: call.arguments['ipfsNodeUrl'] as String?,
+                challenge: call.arguments['challenge'] as String?,
+              );
+
               var duration = DateTime.now().millisecondsSinceEpoch - time;
               print("<getProofs trace> getProofs cost: $duration ms");
-              var returnValue = jsonEncode(message);
-              if (useCache) {
+              var returnValue = jsonEncode(proofs);
+              if (useCache && sdrKey.isNotEmpty) {
                 _vpCache[sdrKey] = returnValue;
                 OHSecureStorage.write(
                     key: OHVPCacheKey, value: jsonEncode(_vpCache));
-                print("set cache: $sdrKey value: $returnValue");
+                print("getProofs: set cache key $sdrKey value: $returnValue");
               }
-
               return returnValue;
-            });
-            return returnValue;
+            }();
 
           case 'removeInteractions':
             return removeInteractions(
