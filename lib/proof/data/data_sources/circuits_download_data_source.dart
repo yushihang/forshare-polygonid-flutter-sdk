@@ -44,8 +44,8 @@ class OHGlobalVariables {
         "b8778c2d45e16d274d05be84beeebd5b06e13efcf119e35edeaa79fac1f87702"),
     "credentialAtomicQuerySigV2.dat": CircuitFilesInfo(
         "credentialAtomicQuerySigV2.dat",
-        1336232,
-        "a7dfd0a1e55d40992fe95ecc40b5201758cadde69f692ca3eea6ee059c07c1df"),
+        1473256,
+        "105af251d023967e6e2898d9f3c11757efbc20dee0935bc6804dca64b6ea3a7f"),
     "credentialAtomicQuerySigV2.zkey": CircuitFilesInfo(
         "credentialAtomicQuerySigV2.zkey",
         34465605,
