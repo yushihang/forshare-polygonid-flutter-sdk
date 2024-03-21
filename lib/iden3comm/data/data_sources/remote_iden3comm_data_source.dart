@@ -99,6 +99,7 @@ class RemoteIden3commDataSource {
       {required String authToken, required String url, required String did}) {
     _stacktraceManager.addTrace(
         "[RemoteIden3commDataSource] fetchClaim: did:$did\nurl: $url\nauthToken: $authToken");
+    print("fetchClaim: url: $url\nauthToken: $authToken");
     return Future.value(Uri.parse(url))
         .then((uri) => client.post(
               uri,
@@ -133,6 +134,8 @@ class RemoteIden3commDataSource {
           throw UnsupportedFetchClaimTypeException(response);
         }
       } else {
+        print(
+            'fetchClaim Error: code: ${response.statusCode} msg: ${response.body}');
         logger().d(
             'fetchClaim Error: code: ${response.statusCode} msg: ${response.body}');
         _stacktraceManager.addError(
