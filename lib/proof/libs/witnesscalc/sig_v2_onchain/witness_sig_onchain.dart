@@ -44,6 +44,15 @@ class WitnessSigV2OnchainLib {
     int errorMaxSize = 256;
     ffi.Pointer<ffi.Char> errorMsg = malloc<ffi.Char>(errorMaxSize);
 
+    freeAllocatedMemory() {
+      malloc.free(circuitBuffer);
+      malloc.free(jsonBuffer);
+      malloc.free(wtnsSize);
+      malloc.free(wtnsBuffer);
+      malloc.free(errorMsg);
+      print("ffi memory freed");
+    }
+
     int result = _nativeWitnessSigV2OnchainLib
         .witnesscalc_credentialAtomicQuerySigV2OnChain(
             circuitBuffer,
@@ -59,6 +68,7 @@ class WitnessSigV2OnchainLib {
       for (int i = 0; i < wtnsSize.value; i++) {
         wtnsBytes[i] = wtnsBuffer[i];
       }
+      freeAllocatedMemory();
       return wtnsBytes;
     } else if (result == WITNESSCALC_ERROR) {
       ffi.Pointer<Utf8> jsonString = errorMsg.cast<Utf8>();
@@ -69,6 +79,7 @@ class WitnessSigV2OnchainLib {
       logger().e(
           "$result: ${result.toString()}. Error: Short buffer for proof or public");
     }
+    freeAllocatedMemory();
     return null;
   }
 }

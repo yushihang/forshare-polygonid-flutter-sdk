@@ -59,6 +59,17 @@ class ProverLib {
     int errorMaxSize = 256;
     ffi.Pointer<ffi.Char> errorMsg = malloc<ffi.Char>(errorMaxSize);
 
+    freeAllocatedMemory() {
+      malloc.free(zkeyBuffer);
+      malloc.free(wtnsBuffer);
+      malloc.free(proofBuffer);
+      malloc.free(publicBuffer);
+      malloc.free(errorMsg);
+      malloc.free(proofSize);
+      malloc.free(publicSize);
+      print("ffi memory freed");
+    }
+
     DateTime start = DateTime.now();
     logger().i("PROVE start ${stopwatch.elapsedMilliseconds}");
 
@@ -98,6 +109,9 @@ class ProverLib {
       (map['proof'] as Map<String, dynamic>)
           .putIfAbsent("curve", () => "bn128");
       map['pub_signals'] = json.decode(publicmsg).cast<String>();
+
+      freeAllocatedMemory();
+
       return map;
     } else if (result == PPROVER_ERROR) {
       ffi.Pointer<Utf8> jsonString = errorMsg.cast<Utf8>();
@@ -109,6 +123,7 @@ class ProverLib {
           "$result: ${result.toString()}. Error: Short buffer for proof or public");
     }
 
+    freeAllocatedMemory();
     return null;
   }
 }

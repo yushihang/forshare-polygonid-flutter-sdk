@@ -27,6 +27,9 @@ class PolygonIdCoreIden3comm extends PolygonIdCore {
       result = jsonString.toDartString();
     }
 
+    malloc.free(response);
+    malloc.free(status);
+    print("ffi memory freed");
     return result;
   }
 }

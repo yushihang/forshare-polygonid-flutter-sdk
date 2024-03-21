@@ -17,11 +17,19 @@ class PolygonIdCoreProof extends PolygonIdCore {
         malloc<ffi.Pointer<ffi.Char>>();
     ffi.Pointer<ffi.Pointer<PLGNStatus>> status =
         malloc<ffi.Pointer<PLGNStatus>>();
+
+    freeAllocatedMemory() {
+      malloc.free(response);
+      malloc.free(status);
+      print("ffi memory freed");
+    }
+
     int res = PolygonIdCore.nativePolygonIdCoreLib
         .PLGNProofFromSmartContract(response, in1, status);
     if (res == 0) {
       String? consumedStatus = consumeStatus(status, "");
       if (consumedStatus != null) {
+        freeAllocatedMemory();
         throw ProofInputsException(consumedStatus);
       }
     }
@@ -32,6 +40,7 @@ class PolygonIdCoreProof extends PolygonIdCore {
       result = jsonString.toDartString();
     }
 
+    freeAllocatedMemory();
     return result;
   }
 
@@ -45,11 +54,19 @@ class PolygonIdCoreProof extends PolygonIdCore {
         malloc<ffi.Pointer<ffi.Char>>();
     ffi.Pointer<ffi.Pointer<PLGNStatus>> status =
         malloc<ffi.Pointer<PLGNStatus>>();
+
+    freeAllocatedMemory() {
+      malloc.free(response);
+      malloc.free(status);
+      print("ffi memory freed");
+    }
+
     int res = PolygonIdCore.nativePolygonIdCoreLib
         .PLGNAtomicQuerySigV2Inputs(response, in1, cfg, status);
     if (res == 0) {
       String? consumedStatus = consumeStatus(status, "");
       if (consumedStatus != null) {
+        freeAllocatedMemory();
         throw ProofInputsException(consumedStatus);
       }
     }
@@ -59,6 +76,8 @@ class PolygonIdCoreProof extends PolygonIdCore {
     if (jsonString != ffi.nullptr) {
       result = jsonString.toDartString();
     }
+
+    freeAllocatedMemory();
 
     return result;
   }
@@ -73,11 +92,19 @@ class PolygonIdCoreProof extends PolygonIdCore {
         malloc<ffi.Pointer<ffi.Char>>();
     ffi.Pointer<ffi.Pointer<PLGNStatus>> status =
         malloc<ffi.Pointer<PLGNStatus>>();
+
+    freeAllocatedMemory() {
+      malloc.free(response);
+      malloc.free(status);
+      print("ffi memory freed");
+    }
+
     int res = PolygonIdCore.nativePolygonIdCoreLib
         .PLGNAtomicQuerySigV2OnChainInputs(response, in1, cfg, status);
     if (res == 0) {
       String? consumedStatus = consumeStatus(status, "");
       if (consumedStatus != null) {
+        freeAllocatedMemory();
         throw ProofInputsException(consumedStatus);
       }
     }
@@ -88,6 +115,7 @@ class PolygonIdCoreProof extends PolygonIdCore {
       result = jsonString.toDartString();
     }
 
+    freeAllocatedMemory();
     return result;
   }
 
@@ -101,6 +129,12 @@ class PolygonIdCoreProof extends PolygonIdCore {
         malloc<ffi.Pointer<ffi.Char>>();
     ffi.Pointer<ffi.Pointer<PLGNStatus>> status =
         malloc<ffi.Pointer<PLGNStatus>>();
+
+    freeAllocatedMemory() {
+      malloc.free(response);
+      malloc.free(status);
+      print("ffi memory freed");
+    }
 
     var line = LogHelper.getLogString(
         "<getProofs trace> before PLGNAtomicQueryMtpV2Inputs-");
@@ -116,6 +150,7 @@ class PolygonIdCoreProof extends PolygonIdCore {
       String? consumedStatus = consumeStatus(status, "");
       print("<getProofs trace> after consumeStatus");
       if (consumedStatus != null) {
+        freeAllocatedMemory();
         throw ProofInputsException(consumedStatus);
       }
     }
@@ -125,6 +160,8 @@ class PolygonIdCoreProof extends PolygonIdCore {
     if (jsonString != ffi.nullptr) {
       result = jsonString.toDartString();
     }
+
+    freeAllocatedMemory();
 
     return result;
   }
@@ -139,11 +176,19 @@ class PolygonIdCoreProof extends PolygonIdCore {
         malloc<ffi.Pointer<ffi.Char>>();
     ffi.Pointer<ffi.Pointer<PLGNStatus>> status =
         malloc<ffi.Pointer<PLGNStatus>>();
+
+    freeAllocatedMemory() {
+      malloc.free(response);
+      malloc.free(status);
+      print("ffi memory freed");
+    }
+
     int res = PolygonIdCore.nativePolygonIdCoreLib
         .PLGNAtomicQueryMtpV2OnChainInputs(response, in1, cfg, status);
     if (res == 0) {
       String? consumedStatus = consumeStatus(status, "");
       if (consumedStatus != null) {
+        freeAllocatedMemory();
         throw ProofInputsException(consumedStatus);
       }
     }
@@ -153,6 +198,8 @@ class PolygonIdCoreProof extends PolygonIdCore {
     if (jsonString != ffi.nullptr) {
       result = jsonString.toDartString();
     }
+
+    freeAllocatedMemory();
 
     return result;
   }

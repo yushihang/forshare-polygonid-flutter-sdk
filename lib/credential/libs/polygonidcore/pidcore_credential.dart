@@ -26,7 +26,10 @@ class PolygonIdCoreCredential extends PolygonIdCore {
     if (jsonString != ffi.nullptr) {
       result = jsonString.toDartString();
     }
+    malloc.free(response);
+    malloc.free(status);
 
+    print("ffi memory freed");
     return result;
   }
 }
