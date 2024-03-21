@@ -27,6 +27,9 @@ class PolygonIdCoreIdentity extends PolygonIdCore {
       result = jsonString.toDartString();
     }
 
+    PolygonIdCore.nativePolygonIdCoreLib.PLGNFreeCString(jsonResponse);
+    print("jsonResponse freed");
+
     malloc.free(response);
     malloc.free(status);
     print("ffi memory freed");
@@ -50,6 +53,9 @@ class PolygonIdCoreIdentity extends PolygonIdCore {
     if (jsonString != ffi.nullptr) {
       result = jsonString.toDartString();
     }
+
+    PolygonIdCore.nativePolygonIdCoreLib.PLGNFreeCString(jsonResponse);
+    print("jsonResponse freed");
 
     malloc.free(response);
     malloc.free(status);
@@ -78,6 +84,9 @@ class PolygonIdCoreIdentity extends PolygonIdCore {
     if (jsonString != ffi.nullptr) {
       result = jsonString.toDartString();
     }
+
+    PolygonIdCore.nativePolygonIdCoreLib.PLGNFreeCString(jsonResponse);
+    print("jsonResponse freed");
 
     malloc.free(response);
     malloc.free(status);

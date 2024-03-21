@@ -40,6 +40,9 @@ class PolygonIdCoreProof extends PolygonIdCore {
       result = jsonString.toDartString();
     }
 
+    PolygonIdCore.nativePolygonIdCoreLib.PLGNFreeCString(jsonResponse);
+    print("jsonResponse freed");
+
     freeAllocatedMemory();
     return result;
   }
@@ -76,6 +79,9 @@ class PolygonIdCoreProof extends PolygonIdCore {
     if (jsonString != ffi.nullptr) {
       result = jsonString.toDartString();
     }
+
+    PolygonIdCore.nativePolygonIdCoreLib.PLGNFreeCString(jsonResponse);
+    print("jsonResponse freed");
 
     freeAllocatedMemory();
 
@@ -114,6 +120,9 @@ class PolygonIdCoreProof extends PolygonIdCore {
     if (jsonString != ffi.nullptr) {
       result = jsonString.toDartString();
     }
+
+    PolygonIdCore.nativePolygonIdCoreLib.PLGNFreeCString(jsonResponse);
+    print("jsonResponse freed");
 
     freeAllocatedMemory();
     return result;
@@ -161,6 +170,9 @@ class PolygonIdCoreProof extends PolygonIdCore {
       result = jsonString.toDartString();
     }
 
+    PolygonIdCore.nativePolygonIdCoreLib.PLGNFreeCString(jsonResponse);
+    print("jsonResponse freed");
+
     freeAllocatedMemory();
 
     return result;
@@ -198,6 +210,9 @@ class PolygonIdCoreProof extends PolygonIdCore {
     if (jsonString != ffi.nullptr) {
       result = jsonString.toDartString();
     }
+
+    PolygonIdCore.nativePolygonIdCoreLib.PLGNFreeCString(jsonResponse);
+    print("jsonResponse freed");
 
     freeAllocatedMemory();
 
