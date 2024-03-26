@@ -96,11 +96,11 @@ rm -rf "$babyjubjub_with_exception_handing_libs_path"
 cp -rf "$framework_path/$xcframework_name.xcframework" "$babyjubjub_with_exception_handing_path/babyjubjub_with_exception_handing"
 
 available_sdks=$(xcodebuild -showsdks)
-ios_simulator_sdk=$(echo "$available_sdks" | grep -o "iphonesimulator[0-9.]*")
+ios_simulator_sdk=$(echo "$available_sdks" | grep -o "iphonesimulator[0-9.]*"  | head -n 1 )
 echo "Available iOS Simulator SDKs: $ios_simulator_sdk"
 
 #available_sdks=$(xcodebuild -showsdks)
-ios_device_sdk=$(echo "$available_sdks" | grep -o "iphoneos[0-9.]*")
+ios_device_sdk=$(echo "$available_sdks" | grep -o "iphoneos[0-9.]*" | head -n 1 )
 echo "Available iOS Device SDKs: $ios_device_sdk"
 
 scheme="babyjubjub_with_exception_handing"
