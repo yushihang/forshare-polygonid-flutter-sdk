@@ -7,6 +7,7 @@
 #rustup component add rust-src --toolchain nightly-aarch64-apple-darwin
 #rustup target add aarch64-apple-ios-sim --toolchain nightly
 #rustup target add aarch64-apple-ios x86_64-apple-ios aarch64-apple-ios-sim
+#rustup target add aarch64-apple-ios x86_64-apple-ios aarch64-apple-ios-sim --toolchain nightly
 
 set -e
 
