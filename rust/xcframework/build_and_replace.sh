@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#export PATH="$HOME/.cargo/bin"
+#export PATH="$HOME/.cargo/bin:$PATH"
 #brew install rust
 #rustup toolchain install nightly
 #rustup toolchain install nightly-aarch64-apple-darwin
