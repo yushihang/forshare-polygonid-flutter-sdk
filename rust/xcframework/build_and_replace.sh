@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#brew install rust
+#rustup toolchain install nightly
 #rustup toolchain install nightly-aarch64-apple-darwin
 #rustup component add rust-src --toolchain nightly-aarch64-apple-darwin
 #rustup target add aarch64-apple-ios-sim --toolchain nightly
